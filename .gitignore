@@ -1,0 +1,47 @@
+# =========================================
+# Sistema y editor
+# =========================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# =========================================
+# MySQL / Base de datos
+# =========================================
+/db_data/
+
+# =========================================
+# Laravel / PHP
+# =========================================
+/vendor/
+/node_modules/
+.env
+.env.*.backup
+/storage/*.key
+/storage/framework/cache/data/
+/storage/logs/*.log
+/storage/app/public/
+/bootstrap/cache/*.php
+
+# =========================================
+# Frontend
+# =========================================
+/frontend/node_modules/
+/frontend/dist/
+
+# =========================================
+# Configuración Docker / Docker Compose
+# =========================================
+*.log
+*.tmp
+*.pid
+
+# =========================================
+# Archivos generados
+# =========================================
+*.bak
+*.swp
+*.swo
+*.tmp
+

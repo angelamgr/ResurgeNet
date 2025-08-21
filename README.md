@@ -1,30 +1,35 @@
 # 🌟 ResurgeNet 🌟
 
-Bienvenido al repositorio de mi TFG,el proyecto se basa en la gestión de comercios afectados por una catastrofe natural.
-Este proyecto está compuesto por un frontend con HTML,CSS y JS, un backend con PHP y el marco Laravel, y una base de datos MySQL desplegada en Docker.
+Bienvenido al repositorio de mi TFG. El proyecto se basa en la gestión de comercios afectados por una catástrofe natural.  
+Este proyecto está compuesto por un **frontend** con HTML, CSS y JS, un **backend** con PHP y el marco **Laravel**, y una base de datos **MySQL**, todo desplegado en **Docker**.
+
+---
 
 ## 📁 Estructura del Proyecto
 
-El proyecto está ordenado por servicios de la siguiente forma:
-
 ```plaintext
 📂 
-├── 📁 api
-├── 📁 frontend
-├── 📁 nginx
-├── 📁 db_data
+├── 📁 api          # Código PHP del backend con Laravel
+├── 📁 frontend     # Archivos HTML, CSS, JS del frontend
+├── 📁 nginx        # Configuraciones de Nginx para frontend y backend
+├── 📁 db_data      # Datos persistentes de la base de datos MySQL
+├── docker-compose.yml # Orquesta todos los contenedores
+
 ```
 
-
 ### 📂 api
-Servicio Api contiene el código PHP del backend, vamos a utilizar el marco Laravel para el desarrollo del back. 
+Contiene el código PHP del backend. Utilizamos el framework Laravel para su desarrollo
 
 
 ### 📂 frontend
 Aquí van los archivos HTML, CSS, JS del frontend para el que usaremos el marco jQuery
 
 ### 📂 nginx
-Contiene el archivo default.conf, es decir, la configuración de nginx 
+Contiene las configuraciones de Nginx:
+
+- front.conf → configura Nginx para servir el frontend estático en el puerto 3000.
+
+- back.conf → configura Nginx para hacer proxy hacia la API Laravel en el puerto 8080
 
 ### 📂 db_data
 Contiene los archivos de datos de la base de datos montada en MySQL, son archivos binarios que MySQL utiliza para gestionar los datos de cada base de datos. También contiene los archivos de configuración y logs.
@@ -117,3 +122,5 @@ docker compose down
 # si he cambiado la configuración -> reconstruir
 docker compose up --build
 ```
+
+
