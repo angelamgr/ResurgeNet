@@ -36,6 +36,8 @@ node_modules/
 *.log
 *.tmp
 *.pid
+*.ibd
+*.ibt
 
 # =========================================
 # Archivos generados
