@@ -9,13 +9,13 @@ Thumbs.db
 # =========================================
 # MySQL / Base de datos
 # =========================================
-/db_data/
+db_data/
 
 # =========================================
 # Laravel / PHP
 # =========================================
-/vendor/
-/node_modules/
+vendor/
+node_modules/
 .env
 .env.*.backup
 /storage/*.key

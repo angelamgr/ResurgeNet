@@ -155,7 +155,8 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN'),
+    //'domain' => env('SESSION_DOMAIN'),
+    'domain' => null, // cookie disponible en todos los dominios
 
     /*
     |--------------------------------------------------------------------------
@@ -168,7 +169,8 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    //'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => true, // cookies solo se envian por HTTPS
 
     /*
     |--------------------------------------------------------------------------
@@ -196,7 +198,7 @@ return [
     |
     */
 
-    'same_site' => 'lax',
+    'same_site' => 'none', //cookies disponibles en contextos cross-site
 
     /*
     |--------------------------------------------------------------------------

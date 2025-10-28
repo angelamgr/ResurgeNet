@@ -22,7 +22,7 @@ Contiene el código PHP del backend. Utilizamos el framework Laravel para su des
 
 
 ### 📂 frontend
-Aquí van los archivos HTML, CSS, JS del frontend para el que usaremos el marco jQuery
+Aquí van los archivos HTML, CSS, JS del frontend para el que usaremos la librería jQuery de JavaScrpit. Esta librería no hay que instalarla para usarla es suficiente añadirla como un script en los HTMLs.
 
 ### 📂 nginx
 Contiene las configuraciones de Nginx:

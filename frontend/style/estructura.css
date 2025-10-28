@@ -1,0 +1,47 @@
+header {
+    background-color: #06314C;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-family: Railway, sans-serif;
+}
+
+header img {
+    position: absolute;
+    top: 4.3%;
+    left: 3%;
+    border-radius: 50px;
+}
+
+header button {
+    background-color: #7a0c00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 6.7%;
+    right: 3%;
+}
+
+footer {
+    font-family: Railway, sans-serif;
+    background-color: #06314C;
+    color: white;
+    text-align: left;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin-left: 30px;
+}
+
+body {
+    background-color: #d2e3ee;
+}
+

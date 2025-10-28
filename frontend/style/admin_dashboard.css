@@ -1,0 +1,106 @@
+/* Sidebar lateral izquierdo */
+.sidebar {
+    width: 22.22vw; /* 1/3 del ancho de la pantalla */
+    position: fixed;
+    top: 127px; /* altura del header */
+    bottom: 105px; /* altura del footer */
+    left: -33.33vw; /* inicialmente oculto */
+    background-color: #5089A5;
+    padding: 0;
+    transition: left 0.3s;
+    z-index: 1000;
+    overflow-y: auto; /* scrollear si hay muchos enlaces */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;  
+}
+
+/* Cuando el sidebar está abierto */
+.sidebar.open {
+    left: 0;
+}
+
+/* Botón para desplegar/cerrar el menú */
+.toggle-btn {
+    position: fixed; /* siempre visible */
+    top: 110px; /* debajo del header */
+    left: 10px; /* posición inicial visible */
+    background-color: #5089A5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1100; /* encima del sidebar */
+    transition: opacity 0.3s;
+}
+
+/* Oculta el botón cuando el sidebar está abierto */
+.sidebar.open + .toggle-btn,
+.sidebar.open ~ .toggle-btn {
+    opacity: 0;
+    pointer-events: none; /* evita que se pueda clickar mientras está oculto */
+}
+
+
+/* Lista de enlaces */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    display: block;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+
+.sidebar ul li a:hover {
+    background-color: #3B6F89;
+    border-radius: 4px;
+}
+
+/* Contenido principal */
+.dashboard-content {
+    margin-left: 20px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.open ~ .dashboard-content {
+    margin-left: 33.33vw;
+}
+
+main {
+    text-align: center;
+}
+
+button {
+    font-family: Railway, sans-serif;
+    background-color: #7a0c00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+header img#admin-icon {
+    position: absolute;
+    top: 2%;
+    left: 90%;
+    border-radius: 50px;
+}
+header p {
+    position: absolute;
+    top: 11%;
+    left: 90%;
+}
