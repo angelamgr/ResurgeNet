@@ -47,3 +47,7 @@ node_modules/
 *.swo
 *.tmp
 
+db_data/
+db_data_backup/
+node_modules/
+.DS_Store

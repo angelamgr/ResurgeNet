@@ -1,0 +1,113 @@
+.tabla-header {
+    display: flex;
+    align-items: center;
+    padding: 0 75px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+}
+
+/* espacio para el nombre del comercio */
+.header-nombre {
+    flex: 1;
+}
+
+/* motivo solicitud */
+.motivo-solicitud {
+    width: 200px;
+    text-align: left;
+    font-size: 1.1rem;
+    margin-right: 90px;
+}
+
+/* aceptar / denegar */
+.header-label {
+    width: 80px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.comercio-row {
+    background-color: white;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 75px;
+    margin-bottom: 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comercio-nombre {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.btn-icon {
+    width: 80px; 
+    height: 40px;
+    border: none;
+    background: none !important; 
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.btn-icon span {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-aceptar span {
+    background-color: #2ecc71;
+}
+.btn-aceptar span::before { content: "✓"; }
+
+.btn-denegar span {
+    background-color: #e74c3c;
+}
+.btn-denegar span::before { content: "✕"; }
+
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 0 20px;
+    color: black;
+}
+
+.motivo-solicitud-texto{
+    width:200px;
+    text-align:center;
+}
+
+.acciones{
+    display:flex;
+}
+
+#logout-btn {
+    margin-top: 130px; 
+    margin-left: 15px;
+}

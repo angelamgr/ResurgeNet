@@ -1,0 +1,120 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 0 20px; /* Padding responsivo en lugar de fijo */
+}
+
+#altaProduForm {
+    background-color: #5089a5d1; 
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+}
+
+#altaProduForm h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px 25px;
+    padding: 10px 0;
+}
+
+.form-grid > div {
+    display: flex;
+    align-items: center; 
+    gap: 15px;
+}
+
+/* 4. Etiquetas e Inputs */
+.form-grid label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    width: 120px; 
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.form-grid input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* 5. Estilo especial para Input de Imagen */
+.form-grid input[type="file"] {
+    background-color: #ffffff;
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.form-grid input[type="file"]::file-selector-button {
+    background-color: #7a0c00;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 12px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-grid input[type="file"]::file-selector-button:hover {
+    background-color: #a31100;
+}
+
+/* 6. Botón de Envío */
+section button {
+    display: block;
+    margin: 20px auto 0; /* Centrado */
+    background-color: #7a0c00;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.error-list {
+    list-style: none;
+    padding: 0;
+}
+
+.error-list li {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-left: 5px solid #d9534f;
+    background-color: #fcebeb;
+    color: #a94442;
+    border-radius: 6px;
+}

@@ -36,7 +36,7 @@ Contiene los archivos de datos de la base de datos montada en MySQL, son archivo
 
 He creado una BD dentro de MySQL para el proyecto, que se llama ResurgeNet. Para conectarnos a la BD tenemos que hacer los siguientes pasos:
 
-    docker exec -it db bash #Comando en la terminal para acceder a MySQL
+    docker exec -it bd_new bash #Comando en la terminal para acceder a MySQL
     mysql -u root -p #ponemos la contraseña rootpassword
     USE ResurgeNet #una vez dentro de MySQL nos conectamos a la BD del proyecto
 

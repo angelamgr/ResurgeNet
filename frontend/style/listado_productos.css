@@ -1,0 +1,75 @@
+.tabla-header {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 75px; 
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    gap: 20 px; 
+}
+
+.header-label {
+    width: 80px; 
+    text-align: center;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+
+.comercio-row {
+    background-color: white;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 75px;
+    margin-bottom: 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comercio-nombre {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.btn-icon {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-icon span {
+    all: unset;              /* 🔥 limpia todos los estilos anteriores */
+    font-size: 20px;         /* tamaño del lápiz */
+    cursor: pointer;
+}
+
+/*boton de edicion para los productos*/
+.btn-editar span::before { content: "✏️"; }
+
+.btn-editar span {
+margin-left: -80px}
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Navegación inferior */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 0 20px;
+    color: black;
+}
+
+
+
+
+

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title> Controles Administrador </title>
+        <title> Gestion de comercios en espera </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style/estructura.css" />
         <link rel="stylesheet" type="text/css" href="style/admin_dashboard.css" />
+        <link rel="stylesheet" type="text/css" href="style/gestion_cons_comer_admin.css" />
+        
 
     </head>
 
@@ -21,21 +23,48 @@
         <nav class="sidebar">
             <p class="toggle-btn">☰</p>
             <ul class="menu-items">
-                <li><a href="gestion_comercios_admin_espera.html">Gestion de Comercios en Espera</a></li>
+                <li><a href="admin_dashboard.html">Panel Administración</a></li>
                 <li><a href="gestion_comercios_alta_admin.html">Gestion de Comercios dados de alta</a></li>
                 <li><a href="gestion_consumidores_admin.html">Gestion de Consumidores</a></li>
                 <li><a href="#">Buzón de Peticiones</a></li>
 
             </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
+            <button id="logout-btn" type="submit" name="hecho">Cerrar
+                Sesión</button>
 
         </nav>
 
-        <main>
-            <h2>Panel de Administración</h2>
-            <p>Bienvenido al panel de administración. Despliega el menú para
-                acceder a las funcionalidades.</p>
-        </main>
+       <section class="form-container">
+            <h2>Listado de Comercios en Espera</h2>
+            
+            <div class="grid-comercios">
+                <div class="comercio-item">
+                    <div class="caja-blanca">Comercio 1</div>
+                    <div class="botones-acciones">
+                        <button class="btn-alta" type="button">Dar de alta</button>
+                    </div>
+                </div>
+
+                <div class="comercio-item">
+                    <div class="caja-blanca">Comercio 2</div>
+                    <div class="botones-acciones">
+                        <button class="btn-alta" type="button">Dar de alta</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controles-inferiores">
+                <div class="nav-izq">
+                    <span class="flecha">◀</span>
+                    <h3>Anterior</h3>
+                </div>
+                                
+                <div class="nav-der">
+                    <span class="flecha">▶</span>
+                    <h3>Siguiente</h3>
+                </div>
+            </div>
+        </section>
 
         <footer>
             <p>Quien somos</p>
@@ -52,6 +81,7 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/menu_dashboard.js"></script>
+        <script src="js/gestion_comercios_espera.js"></script>
         <script src="js/cierre_sesion_admin.js"></script>
         <script src="js/evitar_atras.js"></script>
     </body>

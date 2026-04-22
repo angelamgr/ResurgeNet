@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +25,15 @@ Route::get('/api/checkUserSession', function (Request $request) {
     ]);
 })->middleware('web');
 
-
-// Ruta para el dashboard del administrador con control de caché para que al volver atras no muestre datos almacenados
 Route::get('/admin_dashboard.html', function () {
+    // 1. Verificación de Sesión: Si no hay sesión, redirige inmediatamente.
     if (!session()->has('id_usuario')) {
-        return redirect('/login.html');
+        return redirect('/login.html'); 
     }
+    
+    // 2. Control de Caché: Devuelve la vista con las cabeceras de NO-CACHE.
     return response()->view('admin_dashboard')
-                   ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                   ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
                    ->header('Pragma', 'no-cache')
                    ->header('Expires', '0');
 });

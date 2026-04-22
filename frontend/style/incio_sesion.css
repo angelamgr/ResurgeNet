@@ -78,3 +78,119 @@ section button {
     cursor: pointer;
     font-size: 16px;
 }
+
+.modal {
+    display: none;             
+    position: fixed;
+    z-index: 1000;             
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.6); 
+    
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    
+    width: 90%; 
+    max-width: 500px;
+    max-height: 80vh; 
+    
+    display: flex;
+    flex-direction: column;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+    align-self: flex-end; 
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #d9534f;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.error-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    max-height: 250px;       
+    overflow-y: auto;        
+    overflow-x: hidden;
+    padding-right: 15px;     
+}
+
+.error-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 5px solid #d9534f;  
+    background-color: #fcebeb; 
+    color: #a94442;
+    border-radius: 6px;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.error-list li strong {
+    color: #333;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.error-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 5px solid #d9534f; 
+    background-color: #fcebeb; 
+    color: #a94442;
+    border-radius: 6px;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+
+.modal.modal-success .modal-content h3 {
+    border-bottom: 2px solid #c3e6cb; 
+}
+
+.modal.modal-success .error-list li {
+    border-left: 5px solid #28a745;  
+    background-color: #d4edda;      
+    color: #155724;                  
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #28a745; 
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.error-list li strong {
+    color: #333;
+    display: block;
+    margin-bottom: 3px;
+}

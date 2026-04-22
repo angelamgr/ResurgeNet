@@ -1,0 +1,117 @@
+.tabla-header {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 75px; 
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: black;
+    gap: 20 px; 
+}
+
+.header-label {
+    width: 80px; 
+    text-align: center;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+
+.comercio-row {
+    background-color: white;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 75px;
+    margin-bottom: 15px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comercio-nombre {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.acciones {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.btn-icon {
+    width: 80px; 
+    height: 40px;
+    border: none;
+    background: none !important; 
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.btn-icon span {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.btn-activar span {
+    background-color: #2ecc71;
+}
+.btn-activar span::before { content: "✓"; }
+
+.btn-desactivar span {
+    background-color: #e74c3c;
+}
+.btn-desactivar span::before { content: "✕"; }
+
+.btn-eliminar span {
+    background-color: transparent !important; 
+    color: #6a93b0;
+    font-size: 24px;
+    box-shadow: none !important; 
+}
+.btn-eliminar span::before {
+    content: "🗑️"; 
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Navegación inferior */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 0 20px;
+    color: black;
+}
+
+/* Clase para botones deshabilitados */
+.btn-disabled {
+    opacity: 0.3;      /* Lo hace transparente/opaco */
+    cursor: not-allowed; /* Cambia el cursor a un símbolo de prohibido */
+    filter: grayscale(100%); /* Opcional: lo pone en blanco y negro */
+}
+
+/* Asegúrate de que el hover no afecte a los deshabilitados */
+.btn-disabled:hover {
+    background-color: transparent !important;
+    transform: none !important;
+}
+
+
+/*boton de edicion para los productos*/
+.btn-editar {
+    background-color: #3498db;
+}
+.btn-editar span::before { content: "✏️"; }

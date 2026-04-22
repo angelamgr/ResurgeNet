@@ -37,7 +37,7 @@ services:
 
   db:
     image: mysql:latest
-    container_name: db
+    container_name: bd_new
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
