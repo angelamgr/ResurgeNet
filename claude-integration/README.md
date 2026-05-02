@@ -18,36 +18,52 @@ El proyecto ResurgeNet ha sido desarrollado íntegramente por la alumna utilizan
 
 En la **última iteración del proyecto**, se tomó la decisión de incorporar un asistente de inteligencia artificial con un objetivo concreto y acotado: explorar el enfoque de **trabajador supervisado**, es decir, delegar en la IA tareas bien definidas sobre el repositorio (análisis de configuración, corrección de errores, generación de documentación) mientras la alumna actúa como supervisora que revisa, valida y decide qué cambios se aplican. Este experimento forma parte del TFG como caso práctico de uso de IA en el ciclo de vida del desarrollo software.
 
-### Herramienta considerada previamente — GitHub Copilot Chat
+### Herramienta considerada en primer lugar — GitHub Copilot en la nube
 
-Antes de decantarse por Claude, se consideró usar el **chat de GitHub Copilot** integrado en Visual Studio Code para esta fase final. Sin embargo, presentó dos limitaciones que lo hicieron inviable:
+Antes de decantarse por Claude, se intentó usar **GitHub Copilot** en su modalidad de chat en la nube para esta fase final. La idea era aprovechar el plan de estudiante ya disponible y, si era necesario, mejorarlo para tener más capacidad. Sin embargo, esto no fue posible por razones externas al proyecto:
 
-**1. Límite de tokens fijo**
+**El 20 de abril de 2026, GitHub pausó los nuevos registros y las mejoras de plan para Copilot Pro, Pro+ y Student.** La razón oficial fue que el uso del modo agente se había intensificado de forma inesperada — era habitual que unos pocos requests de agente generaran un coste que superaba el precio del plan mensual completo, lo que comprometió la infraestructura y la estructura de precios de GitHub. Para proteger a los usuarios existentes, GitHub bloqueó temporalmente tanto los nuevos registros como las actualizaciones de plan.
 
-El plan gratuito o de estudiante de GitHub Copilot impone un límite mensual de uso del chat basado en tokens. Para una fase de experimentación intensiva como la que se planteaba — analizar el proyecto completo, detectar problemas, generar documentación extensa — este límite resultaba demasiado restrictivo y habría interrumpido el flujo de trabajo antes de completar los objetivos.
+Además, los usuarios del plan Student comenzaron a encontrar el límite semanal de tokens agotado tras apenas unas pocas sesiones de trabajo intenso, haciendo inviable su uso para un experimento de la envergadura que se planteaba en el TFG.
 
-**2. Carga computacional en el ordenador local**
+GitHub anunció que estos límites se relajarían a partir del 1 de junio de 2026, cuando se complete la transición a un modelo de facturación basado en uso real de tokens. Pero en el momento en que se necesitaba la herramienta, la mejora de plan estaba bloqueada y el plan Student era insuficiente.
 
-Las funcionalidades avanzadas del modo agente de Copilot, que permiten operar sobre el proyecto de forma más autónoma, requieren que parte del procesamiento se ejecute en la máquina local. El hardware disponible para este TFG no contaba con los recursos suficientes para soportar esta carga de forma fluida, lo que hacía inviable su uso en modo agente.
+### Cómo se accedía al proyecto sin instalar nada en local — GitHub Codespaces
 
-### Por qué Claude fue la alternativa más viable
+Dado que uno de los requisitos era no depender del hardware del ordenador local, durante esta fase se utilizó **GitHub Codespaces** para acceder y editar el repositorio directamente desde el navegador, sin clonar el proyecto en local.
 
-Claude, accesible desde [claude.ai](https://claude.ai), resolvía ambas limitaciones y además se ajustaba perfectamente al enfoque de trabajador supervisado que se quería explorar:
+GitHub Codespaces es un entorno de desarrollo completo alojado en la nube que proporciona una instancia de Visual Studio Code accesible desde el navegador, con terminal, extensiones y acceso completo al repositorio. El plan gratuito de GitHub incluye 60 horas mensuales de uso en una máquina de 2 núcleos, suficiente para el trabajo realizado.
+
+**Cómo abrir el repositorio ResurgeNet en Codespaces:**
+
+1. Ir a [github.com/angelamgr/ResurgeNet](https://github.com/angelamgr/ResurgeNet)
+2. Hacer clic en el botón verde **Code**
+3. Seleccionar la pestaña **Codespaces**
+4. Hacer clic en **Create codespace on main**
+5. En unos segundos se abre un VS Code completo en el navegador con el repositorio listo para editar
+
+Desde Codespaces se puede editar código, usar la terminal, hacer commits y push directamente al repositorio, todo sin instalar nada en el ordenador local y sin consumir recursos de la máquina.
+
+> **Nota:** GitHub también ofrece una alternativa más ligera llamada **github.dev**, que se abre pulsando la tecla `.` desde cualquier repositorio. Es gratuita e instantánea, pero no tiene terminal ni puede ejecutar código — solo sirve para editar ficheros y hacer commits. Para este proyecto se eligió Codespaces por necesitar terminal.
+
+### Por qué Claude fue la alternativa más viable para el asistente de IA
+
+Con Codespaces resuelto el problema del entorno de desarrollo en la nube, quedaba pendiente el asistente de IA. Claude, accesible desde [claude.ai](https://claude.ai), fue la alternativa elegida por los siguientes motivos:
+
+**Sin bloqueo de plan ni límites semanales restrictivos**
+A diferencia de GitHub Copilot, Claude no tenía el plan bloqueado ni imponía límites semanales que interrumpieran sesiones de trabajo largas. Esto permitió completar el experimento en una única sesión continua sin cortes.
 
 **Funcionamiento completamente en la nube**
-Todo el procesamiento ocurre en los servidores de Anthropic. El ordenador local no interviene más allá de mostrar el navegador, lo que elimina por completo el problema de rendimiento.
-
-**Sin límite de tokens que interrumpa el trabajo**
-El plan utilizado permite sesiones de trabajo largas e intensivas sin cortes, adecuado para analizar el proyecto completo y generar documentación detallada en una sola sesión.
+Todo el procesamiento ocurre en los servidores de Anthropic. El ordenador local no interviene más allá de mostrar el navegador, eliminando por completo cualquier dependencia del hardware disponible.
 
 **Integración real con GitHub mediante Git MCP**
 A través del conector **Claude Github MCP Connector**, Claude puede leer y escribir directamente sobre el repositorio — hacer commits, crear ficheros, modificar configuraciones — todo desde el chat. Esto permite el modelo de trabajador supervisado de forma natural: Claude propone y ejecuta, la alumna revisa y aprueba.
 
 **Capacidad de razonamiento sobre el proyecto completo**
-Claude puede analizar la arquitectura global del proyecto, detectar problemas de configuración que afectan a varias capas (como el problema del despliegue de la BD documentado en este directorio) y explicar razonadamente cada decisión, lo que facilita la supervisión y el aprendizaje.
+Claude puede analizar la arquitectura global del proyecto, detectar problemas de configuración que afectan a varias capas y explicar razonadamente cada decisión, lo que facilita la supervisión y el aprendizaje.
 
 **Accesible desde el navegador sin instalaciones**
-No requiere ninguna configuración adicional en el entorno de desarrollo. Basta con abrir [claude.ai](https://claude.ai) en el navegador.
+No requiere ninguna configuración adicional. Basta con abrir [claude.ai](https://claude.ai) en el navegador, compatible con el entorno de Codespaces.
 
 ### El enfoque de trabajador supervisado
 
