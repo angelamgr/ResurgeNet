@@ -239,3 +239,67 @@ La base de datos arrancará automáticamente con todas las tablas y datos del fi
 | Gestionar issues | Crear, comentar y cerrar issues |
 | Listar commits | Ver el historial de cambios |
 | Eliminar ficheros | Borrar ficheros del repositorio |
+
+---
+
+## Referencias bibliográficas
+
+### GitHub Copilot — Cambios de planes y limitaciones
+
+[1] Binder, J. (2026, 20 de abril). *Changes to GitHub Copilot Individual plans*. The GitHub Blog.
+https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/
+
+[2] GitHub. (2026, 20 de abril). *Changes to GitHub Copilot plans for individuals*. GitHub Changelog.
+https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/
+
+[3] GitHub. (2026, 10 de abril). *Pausing new GitHub Copilot Pro trials*. GitHub Changelog.
+https://github.blog/changelog/2026-04-10-pausing-new-github-copilot-pro-trials/
+
+[4] GitHub Community. (2026, 24 de abril). *Announcement & FAQ: Changes to GitHub Copilot Individual Plans* [Discusión en foro].
+https://github.com/orgs/community/discussions/192963
+
+[5] GitHub. (2026). *Plans for GitHub Copilot*. GitHub Docs.
+https://docs.github.com/en/copilot/get-started/plans
+
+[6] GitHub. (2026). *About individual GitHub Copilot plans and benefits*. GitHub Docs.
+https://docs.github.com/en/copilot/concepts/billing/individual-plans
+
+### GitHub Copilot — Transición a facturación por uso
+
+[7] GitHub. (2026, 27 de abril). *GitHub Copilot is moving to usage-based billing*. The GitHub Blog.
+https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/
+
+### Model Context Protocol (MCP)
+
+[8] Anthropic. (2024, noviembre). *Introducing the Model Context Protocol*. Anthropic Blog.
+https://www.anthropic.com/news/model-context-protocol
+
+[9] Model Context Protocol. (2025). *Specification — Model Context Protocol* (versión 2025-11-25).
+https://modelcontextprotocol.io/specification/2025-11-25
+
+[10] Model Context Protocol. (s.f.). *Repositorio oficial de especificación y documentación* [Repositorio GitHub].
+https://github.com/modelcontextprotocol/modelcontextprotocol
+
+[11] Wikipedia. (2026). *Model Context Protocol*. Wikipedia, la enciclopedia libre.
+https://en.wikipedia.org/wiki/Model_Context_Protocol
+
+### OAuth 2.0
+
+[12] Hardt, D. (Ed.). (2012, octubre). *RFC 6749: The OAuth 2.0 Authorization Framework*. Internet Engineering Task Force (IETF).
+https://www.rfc-editor.org/rfc/rfc6749
+
+### Claude y Anthropic
+
+[13] Anthropic. (2026). *Claude* [Herramienta de inteligencia artificial, versión Sonnet 4.6].
+https://claude.ai
+
+[14] Anthropic. (2026). *Claude documentation*. Anthropic Docs.
+https://docs.anthropic.com
+
+### GitHub — Documentación oficial
+
+[15] GitHub. (2026). *Viewing and changing your GitHub Copilot plan*. GitHub Docs.
+https://docs.github.com/en/copilot/how-tos/manage-your-account/view-and-change-your-copilot-plan
+
+[16] GitHub. (2026). *About GitHub Apps*. GitHub Docs.
+https://docs.github.com/en/apps/overview
