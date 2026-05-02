@@ -58,28 +58,99 @@ Este enfoque permite explorar de forma controlada cómo la IA puede integrarse e
 ## Proceso de integración de Claude con GitHub
 
 ### Objetivo
-Conseguir que Claude pueda leer y escribir directamente sobre los repositorios de GitHub: leer ficheros, hacer commits, crear issues y pull requests, todo desde el chat de claude.ai sin instalar herramientas locales.
 
-### Pasos realizados
+El objetivo de esta integración era conseguir que Claude pudiera no solo leer el código del repositorio, sino también escribir sobre él directamente: crear ficheros, modificar configuraciones y hacer commits, todo desde el chat de [claude.ai](https://claude.ai) sin salir del navegador.
+
+Para entender por qué esto requirió un proceso de varios intentos, es necesario comprender primero algunos conceptos clave.
+
+### Conceptos previos
+
+#### ¿Qué es un conector o integración?
+
+Claude, como herramienta de IA, funciona de forma aislada por defecto: responde preguntas y genera texto, pero no tiene acceso a sistemas externos como GitHub. Para que pueda interactuar con servicios externos, necesita conectarse a ellos a través de **conectores** — puentes que autorizan a Claude a comunicarse con esos servicios en nombre del usuario.
+
+En Claude, estos conectores se gestionan desde **Settings → Integrations** o desde el menú `+` del chat.
+
+#### ¿Qué es MCP?
+
+**MCP (Model Context Protocol)** es un protocolo estándar creado por Anthropic que define cómo los asistentes de IA como Claude pueden conectarse e interactuar con herramientas y servicios externos de forma segura y estructurada. Es, en términos sencillos, el "lenguaje común" que permite a Claude hablar con GitHub, Figma, u otros servicios.
+
+Un **servidor MCP** es el componente que expone las operaciones de un servicio (por ejemplo, "leer un fichero", "hacer un commit", "crear un issue") de forma que Claude pueda invocarlas. Cuando Claude tiene acceso a un servidor MCP de GitHub, puede ejecutar esas operaciones directamente desde el chat.
+
+#### ¿Qué diferencia hay entre leer y escribir en un repositorio?
+
+Cuando Claude accede a un repositorio de GitHub puede hacerlo con distintos niveles de permiso:
+
+- **Solo lectura:** Claude puede ver el contenido de los ficheros, listar ramas, leer el historial de commits, etc. Pero no puede modificar nada — es como poder abrir y leer un documento sin poder editarlo.
+- **Lectura y escritura:** Claude puede además crear ficheros, modificarlos, hacer commits y push al repositorio. Es como tener acceso completo de edición.
+
+La diferencia es importante porque no todos los conectores conceden permisos de escritura — algunos, por diseño, son de solo lectura por razones de seguridad.
+
+#### ¿Qué es OAuth y por qué GitHub pide autorización?
+
+**OAuth** es un mecanismo de autorización estándar que permite que una aplicación (en este caso Claude) acceda a los recursos de otra (GitHub) en nombre del usuario, sin que el usuario tenga que compartir su contraseña. Cuando GitHub muestra una pantalla preguntando "¿Quieres autorizar a esta aplicación?", está usando OAuth para que el usuario conceda explícitamente el acceso. Este paso es obligatorio por seguridad: sin él, Claude no puede interactuar con el repositorio.
+
+Además de la autorización OAuth, las GitHub Apps (aplicaciones instaladas en GitHub) necesitan ser también **instaladas** en la cuenta y **configuradas** para indicar a qué repositorios concretos tienen acceso. Autorizar y instalar son dos pasos distintos.
+
+---
+
+### Pasos realizados para conseguir la integración
 
 #### 1. Primer intento — Integración nativa de GitHub en Claude
+
+Lo primero que se probó fue el conector que aparece por defecto en Claude bajo el nombre **"Integración con GitHub"**.
+
+**Cómo se activó:**
 1. Acceder a [claude.ai](https://claude.ai) → avatar → **Settings** → **Integrations**
-2. Conectar la **"Integración con GitHub"** (conector nativo de Anthropic)
-3. Resultado: Claude puede leer ficheros y listar repositorios, pero **no tiene permisos de escritura** (no puede hacer commits). Este conector está diseñado para adjuntar ficheros como contexto en el chat y sincronizar repos en Proyectos de Claude, no para operar sobre el repositorio.
+2. Conectar la **"Integración con GitHub"** y autorizar el acceso con la cuenta de GitHub
+
+**Resultado:** Claude podía leer ficheros del repositorio y listar su contenido, pero al intentar hacer un commit devolvía un error 403 (acceso denegado). Este conector está diseñado por Anthropic para adjuntar ficheros de GitHub como contexto en el chat y sincronizar repositorios en los Proyectos de Claude — no para operar sobre el repositorio con permisos de escritura.
 
 #### 2. Segundo intento — GitHub Copilot MCP
-Se probó también el conector de **GitHub Copilot** disponible en el listado de integraciones.
-- Resultado: igualmente de **solo lectura**. Está orientado a asistencia de código en el IDE, no a operaciones de escritura sobre repos.
+
+Se probó también el conector de **GitHub Copilot** disponible en el listado de integraciones de Claude, pensando que al ser un conector específico de GitHub podría tener más permisos.
+
+**Resultado:** Igualmente de solo lectura. Este conector está orientado a asistencia de código en el IDE de Visual Studio Code y no expone operaciones de escritura sobre repositorios a través de MCP.
 
 #### 3. Solución final — Claude Github MCP Connector
-1. En claude.ai → **Settings** → **Conectores** → desconectar cualquier conector de GitHub previo
-2. Revocar todos los accesos previos desde [github.com/settings/apps/authorizations](https://github.com/settings/apps/authorizations)
-3. Volver a claude.ai → **Settings** → **Conectores** → conectar **Git MCP**
-4. GitHub muestra la pantalla de autorización del **Claude Github MCP Connector by Anthropic**
-5. Hacer clic en **Authorize**
-6. Verificar que aparece en **Installed GitHub Apps** en [github.com/settings/installations](https://github.com/settings/installations)
-7. Hacer clic en **Configure** y dar acceso al repositorio **ResurgeNet**
-8. Volver al chat de claude.ai y activar **Git MCP** desde el botón `+` → **Conectores**
+
+La solución llegó a través de un conector diferente llamado **Git MCP**, que aparece en el menú `+` del chat de Claude (en la sección **Conectores**) pero no en el listado de integraciones de Settings. Este conector corresponde a la aplicación **Claude Github MCP Connector**, desarrollada por Anthropic específicamente para permitir que Claude opere sobre repositorios de GitHub con permisos completos de lectura y escritura.
+
+El proceso de activación fue el siguiente:
+
+**Paso 1 — Limpiar autorizaciones anteriores**
+
+Antes de conectar el nuevo conector, fue necesario revocar los accesos anteriores desde GitHub para forzar que el flujo de autorización OAuth se iniciara de cero:
+1. Ir a [github.com/settings/apps/authorizations](https://github.com/settings/apps/authorizations)
+2. Revocar el acceso de **Claude** y **Claude Github MCP Connector** si aparecían en la lista
+
+**Paso 2 — Conectar Git MCP desde Claude**
+1. En claude.ai → **Settings** → **Conectores**
+2. Buscar y conectar **Git MCP**
+3. GitHub muestra la pantalla de autorización OAuth del **Claude Github MCP Connector by Anthropic**, solicitando permiso para verificar la identidad de GitHub y actuar en nombre del usuario
+4. Hacer clic en **Authorize**
+
+Este paso autoriza la aplicación a nivel de cuenta de GitHub (OAuth), pero aún no le da acceso a ningún repositorio concreto.
+
+**Paso 3 — Instalar la aplicación y dar acceso al repositorio**
+
+Tras la autorización OAuth, la aplicación queda instalada como una **GitHub App** en la cuenta. Hay que configurar a qué repositorios puede acceder:
+1. Ir a [github.com/settings/installations](https://github.com/settings/installations)
+2. Verificar que **Claude Github MCP Connector** aparece en la pestaña **Installed GitHub Apps**
+3. Hacer clic en **Configure**
+4. En **Repository access**, seleccionar **"Only select repositories"** y añadir **ResurgeNet**
+5. Guardar los cambios
+
+Este paso es el que realmente otorga a Claude permiso de escritura sobre el repositorio ResurgeNet.
+
+**Paso 4 — Activar Git MCP en la conversación**
+
+Los conectores en Claude deben activarse también por conversación. En el chat de claude.ai:
+1. Hacer clic en el botón **`+`** de la barra de escritura
+2. Ir a **Conectores**
+3. Activar el toggle de **Git MCP**
+
+A partir de este momento, Claude tiene acceso completo de lectura y escritura sobre el repositorio ResurgeNet y puede hacer commits, crear ficheros y modificar el código directamente desde el chat.
 
 ### Resumen de conectores probados
 
@@ -87,7 +158,7 @@ Se probó también el conector de **GitHub Copilot** disponible en el listado de
 |---|---|---|---|
 | Integración con GitHub (nativa) | ✅ | ❌ | Settings → Integrations |
 | GitHub Copilot MCP | ✅ | ❌ | Settings → Integrations |
-| **Claude Github MCP Connector** | ✅ | ✅ | Settings → Conectores → Git MCP |
+| **Claude Github MCP Connector** | ✅ | ✅ | Settings → Conectores → Git MCP + instalación en GitHub |
 
 ---
 
