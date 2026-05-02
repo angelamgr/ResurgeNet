@@ -10,53 +10,50 @@ Claude es un asistente de inteligencia artificial desarrollado por Anthropic. En
 
 ---
 
-## Motivación: por qué se decidió usar Claude
+## Motivación: por qué se decidió usar Claude en la última iteración del TFG
 
-### Punto de partida — GitHub Copilot en Visual Studio Code
+### Contexto del proyecto
 
-Durante el desarrollo del proyecto se utilizó inicialmente **GitHub Copilot** integrado en Visual Studio Code como asistente de inteligencia artificial. Copilot es una herramienta ampliamente extendida en el mundo del desarrollo software que ofrece sugerencias de código en tiempo real directamente en el editor.
+El proyecto ResurgeNet ha sido desarrollado íntegramente por la alumna utilizando **Visual Studio Code** como editor de código, sin asistencia de IA durante las fases de desarrollo principales. El diseño de la arquitectura, la programación del frontend, el backend en Laravel y la configuración de la infraestructura Docker son fruto del trabajo propio.
 
-Sin embargo, esta solución presentó dos problemas importantes que limitaron su utilidad en el contexto de este TFG:
+En la **última iteración del proyecto**, se tomó la decisión de incorporar un asistente de inteligencia artificial con un objetivo concreto y acotado: explorar el enfoque de **trabajador supervisado**, es decir, delegar en la IA tareas bien definidas sobre el repositorio (análisis de configuración, corrección de errores, generación de documentación) mientras la alumna actúa como supervisora que revisa, valida y decide qué cambios se aplican. Este experimento forma parte del TFG como caso práctico de uso de IA en el ciclo de vida del desarrollo software.
+
+### Herramienta considerada previamente — GitHub Copilot Chat
+
+Antes de decantarse por Claude, se consideró usar el **chat de GitHub Copilot** integrado en Visual Studio Code para esta fase final. Sin embargo, presentó dos limitaciones que lo hicieron inviable:
 
 **1. Límite de tokens fijo**
 
-GitHub Copilot en su versión gratuita o de estudiante impone un límite de uso mensual basado en tokens (unidad que mide el volumen de texto procesado por el modelo de IA). Al tratarse de un proyecto de TFG con sesiones de trabajo intensas, este límite se agotaba con relativa rapidez, dejando al asistente inutilizable hasta el siguiente ciclo de renovación. Esto interrumpía el flujo de trabajo en momentos críticos del desarrollo y obligaba a buscar alternativas manuales.
+El plan gratuito o de estudiante de GitHub Copilot impone un límite mensual de uso del chat basado en tokens. Para una fase de experimentación intensiva como la que se planteaba — analizar el proyecto completo, detectar problemas, generar documentación extensa — este límite resultaba demasiado restrictivo y habría interrumpido el flujo de trabajo antes de completar los objetivos.
 
-**2. Carga de trabajo excesiva para el hardware disponible**
+**2. Carga computacional en el ordenador local**
 
-Algunas funcionalidades avanzadas de Copilot, como el modo agente o la generación de contexto amplio sobre el proyecto, requerían que el propio ordenador procesara parte de la carga computacional. El equipo disponible para el desarrollo de este TFG no contaba con los recursos de hardware suficientes (memoria RAM, capacidad de CPU) para soportar esta carga de trabajo de forma fluida, lo que provocaba ralentizaciones y en ocasiones hacía inviable el uso de estas funcionalidades.
+Las funcionalidades avanzadas del modo agente de Copilot, que permiten operar sobre el proyecto de forma más autónoma, requieren que parte del procesamiento se ejecute en la máquina local. El hardware disponible para este TFG no contaba con los recursos suficientes para soportar esta carga de forma fluida, lo que hacía inviable su uso en modo agente.
 
-### Búsqueda de una alternativa
+### Por qué Claude fue la alternativa más viable
 
-Ante estas limitaciones se buscó una alternativa que cumpliera los siguientes requisitos:
+Claude, accesible desde [claude.ai](https://claude.ai), resolvía ambas limitaciones y además se ajustaba perfectamente al enfoque de trabajador supervisado que se quería explorar:
 
-- **Sin límite de tokens restrictivo** que interrumpiera el flujo de trabajo
-- **Totalmente en la nube**, sin depender de los recursos del ordenador local
-- **Capaz de integrarse con el repositorio de GitHub** para poder actuar directamente sobre el código, no solo sugerir cambios
-- **Accesible desde el navegador**, sin necesidad de instalar herramientas adicionales en local
+**Funcionamiento completamente en la nube**
+Todo el procesamiento ocurre en los servidores de Anthropic. El ordenador local no interviene más allá de mostrar el navegador, lo que elimina por completo el problema de rendimiento.
 
-### Por qué Claude resultó ser la opción más viable
+**Sin límite de tokens que interrumpa el trabajo**
+El plan utilizado permite sesiones de trabajo largas e intensivas sin cortes, adecuado para analizar el proyecto completo y generar documentación detallada en una sola sesión.
 
-Claude, desarrollado por Anthropic, cumplía todos los requisitos anteriores y además ofrecía ventajas adicionales que lo hicieron especialmente adecuado para este caso de uso:
-
-**Ejecución completamente en la nube**
-Claude funciona íntegramente desde [claude.ai](https://claude.ai) a través del navegador. Todo el procesamiento ocurre en los servidores de Anthropic, sin consumir recursos del ordenador local. Esto elimina por completo el problema de rendimiento que presentaba Copilot.
-
-**Contexto de conversación amplio**
-Claude mantiene un contexto de conversación muy amplio, lo que le permite analizar ficheros completos, entender la estructura global del proyecto y razonar sobre múltiples ficheros a la vez sin perder el hilo. Esto es especialmente útil en un proyecto con varias capas (frontend, backend, base de datos, infraestructura Docker) donde los cambios en una parte afectan a otras.
-
-**Integración directa con GitHub mediante Git MCP**
-A través del conector **Claude Github MCP Connector** (desarrollado por Anthropic), Claude puede no solo leer el código del repositorio sino también escribir directamente sobre él: hacer commits, crear ficheros, modificar configuraciones y gestionar issues, todo desde el chat sin salir del navegador. Esto convierte a Claude en un colaborador activo del proyecto, no solo en un asistente de sugerencias.
-
-**Sin dependencia de herramientas locales**
-No requiere instalar extensiones en el editor, no consume RAM ni CPU del ordenador de desarrollo, y no necesita que el proyecto esté abierto en ningún IDE. Basta con tener acceso a [claude.ai](https://claude.ai) desde cualquier navegador.
+**Integración real con GitHub mediante Git MCP**
+A través del conector **Claude Github MCP Connector**, Claude puede leer y escribir directamente sobre el repositorio — hacer commits, crear ficheros, modificar configuraciones — todo desde el chat. Esto permite el modelo de trabajador supervisado de forma natural: Claude propone y ejecuta, la alumna revisa y aprueba.
 
 **Capacidad de razonamiento sobre el proyecto completo**
-A diferencia de Copilot, que trabaja principalmente a nivel de fichero o función, Claude puede recibir como contexto la descripción completa del proyecto, analizar problemas de configuración, detectar errores de arquitectura y proponer soluciones razonadas explicando el porqué de cada decisión. Esto resultó especialmente valioso para detectar y corregir el problema del despliegue de la base de datos documentado en este directorio.
+Claude puede analizar la arquitectura global del proyecto, detectar problemas de configuración que afectan a varias capas (como el problema del despliegue de la BD documentado en este directorio) y explicar razonadamente cada decisión, lo que facilita la supervisión y el aprendizaje.
 
-### Conclusión
+**Accesible desde el navegador sin instalaciones**
+No requiere ninguna configuración adicional en el entorno de desarrollo. Basta con abrir [claude.ai](https://claude.ai) en el navegador.
 
-La combinación de funcionamiento en la nube, contexto amplio, integración real con GitHub y capacidad de razonamiento sobre el proyecto completo hizo de Claude la alternativa más viable para sustituir a GitHub Copilot en el desarrollo de este TFG, resolviendo todos los problemas que motivaron el cambio y aportando además capacidades que Copilot no ofrecía.
+### El enfoque de trabajador supervisado
+
+El modelo de uso adoptado en esta fase es deliberadamente el de **trabajador supervisado**: Claude actúa como un colaborador que ejecuta tareas técnicas concretas sobre el repositorio, pero siempre bajo la dirección y supervisión de la alumna. En ningún momento Claude toma decisiones de forma autónoma — cada cambio es revisado y validado antes de considerarse parte del proyecto.
+
+Este enfoque permite explorar de forma controlada cómo la IA puede integrarse en un flujo de trabajo de desarrollo real, qué tipo de tareas delega mejor y cuáles requieren más supervisión, y cómo documentar ese proceso de forma transparente como parte del TFG.
 
 ---
 
