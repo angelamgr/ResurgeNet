@@ -28,27 +28,9 @@ Además, los usuarios del plan Student comenzaron a encontrar el límite semanal
 
 GitHub anunció que estos límites se relajarían a partir del 1 de junio de 2026, cuando se complete la transición a un modelo de facturación basado en uso real de tokens. Pero en el momento en que se necesitaba la herramienta, la mejora de plan estaba bloqueada y el plan Student era insuficiente.
 
-### Cómo se accedía al proyecto sin instalar nada en local — GitHub Codespaces
+### Por qué Claude fue la alternativa más viable
 
-Dado que uno de los requisitos era no depender del hardware del ordenador local, durante esta fase se utilizó **GitHub Codespaces** para acceder y editar el repositorio directamente desde el navegador, sin clonar el proyecto en local.
-
-GitHub Codespaces es un entorno de desarrollo completo alojado en la nube que proporciona una instancia de Visual Studio Code accesible desde el navegador, con terminal, extensiones y acceso completo al repositorio. El plan gratuito de GitHub incluye 60 horas mensuales de uso en una máquina de 2 núcleos, suficiente para el trabajo realizado.
-
-**Cómo abrir el repositorio ResurgeNet en Codespaces:**
-
-1. Ir a [github.com/angelamgr/ResurgeNet](https://github.com/angelamgr/ResurgeNet)
-2. Hacer clic en el botón verde **Code**
-3. Seleccionar la pestaña **Codespaces**
-4. Hacer clic en **Create codespace on main**
-5. En unos segundos se abre un VS Code completo en el navegador con el repositorio listo para editar
-
-Desde Codespaces se puede editar código, usar la terminal, hacer commits y push directamente al repositorio, todo sin instalar nada en el ordenador local y sin consumir recursos de la máquina.
-
-> **Nota:** GitHub también ofrece una alternativa más ligera llamada **github.dev**, que se abre pulsando la tecla `.` desde cualquier repositorio. Es gratuita e instantánea, pero no tiene terminal ni puede ejecutar código — solo sirve para editar ficheros y hacer commits. Para este proyecto se eligió Codespaces por necesitar terminal.
-
-### Por qué Claude fue la alternativa más viable para el asistente de IA
-
-Con Codespaces resuelto el problema del entorno de desarrollo en la nube, quedaba pendiente el asistente de IA. Claude, accesible desde [claude.ai](https://claude.ai), fue la alternativa elegida por los siguientes motivos:
+Ante la imposibilidad de usar GitHub Copilot, se buscó una alternativa que cumpliera los mismos objetivos: un asistente de IA en la nube capaz de integrarse con el repositorio y operar sobre él de forma autónoma bajo supervisión. Claude, accesible desde [claude.ai](https://claude.ai), fue la alternativa elegida por los siguientes motivos:
 
 **Sin bloqueo de plan ni límites semanales restrictivos**
 A diferencia de GitHub Copilot, Claude no tenía el plan bloqueado ni imponía límites semanales que interrumpieran sesiones de trabajo largas. Esto permitió completar el experimento en una única sesión continua sin cortes.
@@ -63,7 +45,7 @@ A través del conector **Claude Github MCP Connector**, Claude puede leer y escr
 Claude puede analizar la arquitectura global del proyecto, detectar problemas de configuración que afectan a varias capas y explicar razonadamente cada decisión, lo que facilita la supervisión y el aprendizaje.
 
 **Accesible desde el navegador sin instalaciones**
-No requiere ninguna configuración adicional. Basta con abrir [claude.ai](https://claude.ai) en el navegador, compatible con el entorno de Codespaces.
+No requiere ninguna configuración adicional. Basta con abrir [claude.ai](https://claude.ai) en el navegador.
 
 ### El enfoque de trabajador supervisado
 
