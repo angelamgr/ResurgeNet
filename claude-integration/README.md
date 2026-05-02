@@ -10,6 +10,56 @@ Claude es un asistente de inteligencia artificial desarrollado por Anthropic. En
 
 ---
 
+## Motivación: por qué se decidió usar Claude
+
+### Punto de partida — GitHub Copilot en Visual Studio Code
+
+Durante el desarrollo del proyecto se utilizó inicialmente **GitHub Copilot** integrado en Visual Studio Code como asistente de inteligencia artificial. Copilot es una herramienta ampliamente extendida en el mundo del desarrollo software que ofrece sugerencias de código en tiempo real directamente en el editor.
+
+Sin embargo, esta solución presentó dos problemas importantes que limitaron su utilidad en el contexto de este TFG:
+
+**1. Límite de tokens fijo**
+
+GitHub Copilot en su versión gratuita o de estudiante impone un límite de uso mensual basado en tokens (unidad que mide el volumen de texto procesado por el modelo de IA). Al tratarse de un proyecto de TFG con sesiones de trabajo intensas, este límite se agotaba con relativa rapidez, dejando al asistente inutilizable hasta el siguiente ciclo de renovación. Esto interrumpía el flujo de trabajo en momentos críticos del desarrollo y obligaba a buscar alternativas manuales.
+
+**2. Carga de trabajo excesiva para el hardware disponible**
+
+Algunas funcionalidades avanzadas de Copilot, como el modo agente o la generación de contexto amplio sobre el proyecto, requerían que el propio ordenador procesara parte de la carga computacional. El equipo disponible para el desarrollo de este TFG no contaba con los recursos de hardware suficientes (memoria RAM, capacidad de CPU) para soportar esta carga de trabajo de forma fluida, lo que provocaba ralentizaciones y en ocasiones hacía inviable el uso de estas funcionalidades.
+
+### Búsqueda de una alternativa
+
+Ante estas limitaciones se buscó una alternativa que cumpliera los siguientes requisitos:
+
+- **Sin límite de tokens restrictivo** que interrumpiera el flujo de trabajo
+- **Totalmente en la nube**, sin depender de los recursos del ordenador local
+- **Capaz de integrarse con el repositorio de GitHub** para poder actuar directamente sobre el código, no solo sugerir cambios
+- **Accesible desde el navegador**, sin necesidad de instalar herramientas adicionales en local
+
+### Por qué Claude resultó ser la opción más viable
+
+Claude, desarrollado por Anthropic, cumplía todos los requisitos anteriores y además ofrecía ventajas adicionales que lo hicieron especialmente adecuado para este caso de uso:
+
+**Ejecución completamente en la nube**
+Claude funciona íntegramente desde [claude.ai](https://claude.ai) a través del navegador. Todo el procesamiento ocurre en los servidores de Anthropic, sin consumir recursos del ordenador local. Esto elimina por completo el problema de rendimiento que presentaba Copilot.
+
+**Contexto de conversación amplio**
+Claude mantiene un contexto de conversación muy amplio, lo que le permite analizar ficheros completos, entender la estructura global del proyecto y razonar sobre múltiples ficheros a la vez sin perder el hilo. Esto es especialmente útil en un proyecto con varias capas (frontend, backend, base de datos, infraestructura Docker) donde los cambios en una parte afectan a otras.
+
+**Integración directa con GitHub mediante Git MCP**
+A través del conector **Claude Github MCP Connector** (desarrollado por Anthropic), Claude puede no solo leer el código del repositorio sino también escribir directamente sobre él: hacer commits, crear ficheros, modificar configuraciones y gestionar issues, todo desde el chat sin salir del navegador. Esto convierte a Claude en un colaborador activo del proyecto, no solo en un asistente de sugerencias.
+
+**Sin dependencia de herramientas locales**
+No requiere instalar extensiones en el editor, no consume RAM ni CPU del ordenador de desarrollo, y no necesita que el proyecto esté abierto en ningún IDE. Basta con tener acceso a [claude.ai](https://claude.ai) desde cualquier navegador.
+
+**Capacidad de razonamiento sobre el proyecto completo**
+A diferencia de Copilot, que trabaja principalmente a nivel de fichero o función, Claude puede recibir como contexto la descripción completa del proyecto, analizar problemas de configuración, detectar errores de arquitectura y proponer soluciones razonadas explicando el porqué de cada decisión. Esto resultó especialmente valioso para detectar y corregir el problema del despliegue de la base de datos documentado en este directorio.
+
+### Conclusión
+
+La combinación de funcionamiento en la nube, contexto amplio, integración real con GitHub y capacidad de razonamiento sobre el proyecto completo hizo de Claude la alternativa más viable para sustituir a GitHub Copilot en el desarrollo de este TFG, resolviendo todos los problemas que motivaron el cambio y aportando además capacidades que Copilot no ofrecía.
+
+---
+
 ## Proceso de integración de Claude con GitHub
 
 ### Objetivo
