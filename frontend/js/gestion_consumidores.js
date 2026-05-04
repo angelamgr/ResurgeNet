@@ -1,37 +1,28 @@
 $(document).ready(function () {
-    // Configuración global para CSRF
     $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
 
-    // --- 1. FUNCIÓN DE MODAL UNIFICADA ---
     function showModal(title, content, type = 'error', callback = null) {
         const modal = $('#errorModal');
         const errorList = $('#errorList');
         const modalTitle = modal.find('h3');
         
-        // Buscamos o creamos el botón
         let btnConfirm = $('#modal-confirm-btn');
         if (btnConfirm.length === 0) {
             $('.modal-content').append('<button id="modal-confirm-btn"></button>');
             btnConfirm = $('#modal-confirm-btn');
         }
 
-        // --- CLAVE: OCULTAR SIEMPRE AL EMPEZAR ---
         btnConfirm.hide().off('click'); 
 
         modalTitle.text(title);
         errorList.empty();
-        
-        // Limpiar clases previas y aplicar la nueva
         modal.removeClass('modal-success modal-error modal-confirm').addClass(`modal-${type}`);
         
         const colors = { success: '#155724', confirm: '#d9534f', error: '#a94442' };
         modalTitle.css('color', colors[type] || colors.error);
 
-        // Solo mostrar y configurar si es tipo 'confirm'
         if (type === 'confirm') {
             btnConfirm.show()
                 .text('Eliminar permanentemente')
@@ -45,7 +36,6 @@ $(document).ready(function () {
                     'border-radius': '4px',
                     'width': '100%'
                 });
-            
             btnConfirm.on('click', function() {
                 if (callback) callback();
                 hideModal();
@@ -63,17 +53,15 @@ $(document).ready(function () {
 
     function hideModal() {
         $('#errorModal').hide();
-        // Aseguramos que se oculte al cerrar por si acaso
         $('#modal-confirm-btn').hide(); 
     }
 
     $('.close-button').on('click', hideModal);
     $(window).on('click', (e) => { if (e.target === $('#errorModal')[0]) hideModal(); });
 
-    // --- 2. CARGAR CONSUMIDORES (Igual que antes) ---
     function cargarConsumidores() {
         $.ajax({
-            url: 'http://localhost:8080/api/gestion_consumidores',
+            url: `${API_BASE}/gestion_consumidores`,
             method: 'GET',
             success: function (usuarios) {
                 let contenedor = $('#lista-consumidores');
@@ -99,7 +87,6 @@ $(document).ready(function () {
         });
     }
 
-    // --- 3. EVENTO ELIMINAR ---
     $(document).on('click', '.btn-eliminar', function () {
         const userId = $(this).attr('data-id');
         const nombre = $(this).attr('data-nombre');
@@ -116,13 +103,10 @@ $(document).ready(function () {
             function() {
                 const elementoAEliminar = $(`#fila-user-${userId}`);
                 $.ajax({
-                    url: `http://localhost:8080/api/gestion_consumidores/${userId}`,
+                    url: `${API_BASE}/gestion_consumidores/${userId}`,
                     type: 'DELETE',
                     success: function (response) {
-                        elementoAEliminar.fadeOut(400, function () {
-                            $(this).remove();
-                        });
-                        // Aquí el tipo es 'success', por lo que el botón se ocultará
+                        elementoAEliminar.fadeOut(400, function () { $(this).remove(); });
                         showModal("Eliminado", response.message || "Usuario eliminado.", "success");
                     },
                     error: function (xhr) {

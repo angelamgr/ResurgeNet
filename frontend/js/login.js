@@ -25,7 +25,7 @@ $(document).ready(function () {
             });
             // Si el contenido es un mensaje de servidor (una cadena simple)
         } else if (typeof errorContent === 'string') {
-            const li = $('<li>').text(errorContent); // Muestra solo el texto, sin prefijos (e.g., "Sesión iniciada")
+            const li = $('<li>').text(errorContent);
             errorList.append(li);
         }
 
@@ -69,7 +69,6 @@ $(document).ready(function () {
         usuarioInput.css('border', '1px solid #ddd');
         passwordInput.css('border', '1px solid #ddd');
 
-
         // Validación de campo vacío (Usuario)
         if (usuario === "") {
             errors.push({
@@ -90,7 +89,7 @@ $(document).ready(function () {
             isValid = false;
         }
 
-        // Validación de longitud mínima (Ejemplo: 6 caracteres para la contraseña)
+        // Validación de longitud mínima
         if (password !== "" && password.length < 6) {
             errors.push({
                 campo: "Contraseña",
@@ -100,26 +99,23 @@ $(document).ready(function () {
             isValid = false;
         }
 
-
         // --- Manejo de Errores de Validación de Cliente ---
         if (!isValid) {
-            // Muestra errores de cliente (type='error' por defecto)
             showModal("Errores de Validación de Datos", errors);
-            return; // Detiene el envío de AJAX
+            return;
         }
 
         // --- 3. Envío AJAX si la validación del cliente es exitosa ---
         $.ajax({
-            url: 'http://localhost:8080/api/loginUser',
+            url: `${API_BASE}/loginUser`,
             type: 'POST',
             xhrFields: { withCredentials: true },
             data: {
                 usuario: usuario,
                 password: password
             },
-
             success: function (response) {
-                console.log("Datos recibidos en login:", response); // Para verificar que llega el id_usuario
+                console.log("Datos recibidos en login:", response);
 
                 if (response.id_usuario) {
                     localStorage.setItem('id_usuario_comercio', response.id_usuario);
@@ -133,18 +129,13 @@ $(document).ready(function () {
                 }, 1500);
             },
             error: function (xhr) {
-                // Muestra error de servidor (ej. Credenciales incorrectas) en modal
                 let msg = (xhr.responseJSON && xhr.responseJSON.message)
                     ? xhr.responseJSON.message
                     : 'Error de conexión con el servidor.';
 
                 showModal("Error al Iniciar Sesión", msg, 'error');
-
-                // Limpiar campos de contraseña por seguridad
                 passwordInput.val('');
             }
         });
-        
     });
-
 });

@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let isValid = true;
         let errors = [];
 
-        // Selección de campos específicos de Comercio
         const nombrePers = form.querySelector("[name='nombre_personal']");
         const nombreCom  = form.querySelector("[name='nombre_comercio']");
         const telefono   = form.querySelector("[name='telefono']");
@@ -59,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // --- 1. Validaciones de campo vacío ---
         campoVacio(nombrePers, "Nombre personal", "Ej: Juan Pérez");
         campoVacio(nombreCom, "Nombre comercio", "Ej: Panadería El Sol");
         campoVacio(telefono, "Número de teléfono", "Ej: 600112233");
@@ -68,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
         campoVacio(ciudad, "Ciudad", "Ej: Granada");
         campoVacio(web, "¿Web operativa?", "Selecciona Sí o No");
 
-        // --- 2. Validaciones de formato ---
         if (email.value.trim() !== "" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
             addError(email, "Email", "Formato de correo no válido.", "Ej: nombre@dominio.com");
         }
@@ -87,13 +84,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             
-            // Usamos la URL que definiste en tus rutas de Laravel
-            fetch('http://localhost:8080/api/enviar_solicitud', {
+            fetch(`${API_BASE}/enviar_solicitud`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': data._token // Sacamos el token del formData
+                    'X-CSRF-TOKEN': data._token
                 },
                 body: JSON.stringify(data),
             })

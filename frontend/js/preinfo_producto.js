@@ -8,12 +8,11 @@ $(document).ready(function () {
     }
 
     $.ajax({
-        url: `http://localhost:8080/api/cargar_producto/${id_producto}`,
+        url: `${API_BASE}/cargar_producto/${id_producto}`,
         type: 'GET',
         dataType: 'json',
         success: function(producto) {
             if (!producto) return;
-            console.log("Producto cargado:", producto);
             $('#nombre_prod').val(producto.nombre);
             $('#tipo').val(producto.tipo);
             $('#descripcion').val(producto.descripcion);

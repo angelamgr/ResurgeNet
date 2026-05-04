@@ -2,7 +2,6 @@ $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const id_producto = urlParams.get('id');
 
-    // --- Función reutilizada del modal ---
     function showModal(title, content, type = 'error') {
         const modal = $('#errorModal');
         const errorList = $('#errorList');
@@ -10,7 +9,6 @@ $(document).ready(function() {
 
         modalTitle.text(title);
         errorList.empty();
-
         modal.removeClass('modal-success modal-error').addClass(`modal-${type}`);
         modalTitle.css('color', type === 'success' ? '#155724' : '#a94442');
 
@@ -23,11 +21,9 @@ $(document).ready(function() {
             const li = $('<li>').text(content);
             errorList.append(li);
         }
-
         modal.css('display', 'flex');
     }
 
-    // Lógica para cerrar el modal (importante si no está en un archivo global)
     $('.close-button').on('click', () => $('#errorModal').hide());
 
     $('#altaProduForm').on('submit', function(e) {
@@ -41,34 +37,24 @@ $(document).ready(function() {
         formData.append('stock', $('#stock').val());
 
         const fileInput = $('#imagen')[0].files[0];
-        if (fileInput) {
-            formData.append('imagen', fileInput);
-        }
+        if (fileInput) formData.append('imagen', fileInput);
 
         formData.append('_method', 'PUT');
 
         $.ajax({
-            url: `http://localhost:8080/api/actualizar_producto/${id_producto}`,
+            url: `${API_BASE}/actualizar_producto/${id_producto}`,
             type: 'POST', 
             data: formData,
             processData: false,
             contentType: false,
             success: function(response) {
-                // CAMBIO: Ahora usa el modal en lugar de alert
                 showModal("Éxito", "Producto actualizado correctamente. Redirigiendo...", 'success');
-                
-                // Pausa de 2 segundos para que el usuario vea el mensaje de éxito
-                setTimeout(() => {
-                    window.location.href = 'listado_productos_comercio.html';
-                }, 2000);
+                setTimeout(() => { window.location.href = 'listado_productos_comercio.html'; }, 2000);
             },
             error: function(err) {
-                console.error(err);
-                // CAMBIO: Captura el mensaje del servidor si existe, sino usa uno genérico
                 let msg = (err.responseJSON && err.responseJSON.message) 
-                            ? err.responseJSON.message 
-                            : 'Error al actualizar el producto';
-                
+                    ? err.responseJSON.message 
+                    : 'Error al actualizar el producto';
                 showModal("Error de Actualización", msg, 'error');
             }
         });

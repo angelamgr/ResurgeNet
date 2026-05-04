@@ -32,7 +32,6 @@ function showModal(title, content, type = 'error', callback = null) {
                 'border-radius': '4px',
                 'width': '100%'
             });
-        
         btnConfirm.on('click', function() {
             if (callback) callback();
             modal.hide();
@@ -48,19 +47,15 @@ function showModal(title, content, type = 'error', callback = null) {
     modal.css('display', 'flex');
 }
 
-// Lógica de cierre para el modal
 $(document).ready(function() {
     $('.close-button').on('click', () => $('#errorModal').hide());
     $(window).on('click', (e) => { if (e.target === $('#errorModal')[0]) $('#errorModal').hide(); });
 });
 
-// --- LÓGICA DE SOLICITUDES ---
-
 async function cargarSolicitudes() {
     try {
-        const response = await fetch('http://localhost:8080/api/solicitudes_comercios');
+        const response = await fetch(`${API_BASE}/solicitudes_comercios`);
         const data = await response.json();
-
         const container = document.querySelector('.comercios-container');
         container.innerHTML = ''; 
 
@@ -72,7 +67,6 @@ async function cargarSolicitudes() {
         data.forEach(solicitud => {
             const row = document.createElement('div');
             row.classList.add('comercio-row');
-
             row.innerHTML = `
                 <span class="comercio-nombre">${solicitud.nombreComercio}</span>
                 <span class="motivo-solicitud-texto">${solicitud.motivoSolicitud}</span>
@@ -87,7 +81,6 @@ async function cargarSolicitudes() {
             `;
             container.appendChild(row);
         });
-
     } catch (error) {
         console.error('Error cargando solicitudes:', error);
         showModal("Error", "No se pudieron cargar las solicitudes", "error");
@@ -101,13 +94,11 @@ async function denegar(id, nombre) {
         'confirm', 
         async function() {
             try {
-                const response = await fetch(`http://localhost:8080/api/denegar_solicitud/${id}`, {
+                const response = await fetch(`${API_BASE}/denegar_solicitud/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' }
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     showModal("Éxito", data.message || "Solicitud denegada", "success");
                     const btn = document.querySelector(`.btn-denegar[onclick*="denegar(${id}"]`);
@@ -129,13 +120,11 @@ async function aceptar(id, nombre) {
         'confirm', 
         async function() {
             try {
-                const response = await fetch(`http://localhost:8080/api/aceptar_solicitud/${id}`, {
+                const response = await fetch(`${API_BASE}/aceptar_solicitud/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' }
                 });
-
                 const data = await response.json();
-
                 if (response.ok) {
                     showModal("Éxito", data.message || "Solicitud aceptada", "success");
                     const btn = document.querySelector(`.btn-aceptar[onclick*="aceptar(${id}"]`);

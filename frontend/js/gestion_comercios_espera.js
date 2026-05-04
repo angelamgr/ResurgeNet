@@ -16,7 +16,6 @@ $(document).ready(function () {
         errorList.empty();
         modal.removeClass('modal-success modal-error modal-confirm').addClass(`modal-${type}`);
         
-        // Colores dinámicos para el título
         const colors = { success: '#155724', confirm: '#856404', error: '#a94442' };
         modalTitle.css('color', colors[type] || colors.error);
 
@@ -26,7 +25,7 @@ $(document).ready(function () {
             btnConfirm.show()
                 .text('Validar y Activar')
                 .css({
-                    'background-color': '#28a745', // Verde para dar de alta
+                    'background-color': '#28a745',
                     'color': 'white',
                     'border': 'none',
                     'padding': '10px 20px',
@@ -51,18 +50,15 @@ $(document).ready(function () {
         modal.css('display', 'flex');
     }
 
-    function hideModal() {
-        $('#errorModal').hide();
-    }
+    function hideModal() { $('#errorModal').hide(); }
 
     $('.close-button').on('click', hideModal);
     $(window).on('click', (e) => { if (e.target === $('#errorModal')[0]) hideModal(); });
 
-
     // --- 2. LÓGICA DE CARGA ---
     function cargarComerciosEspera() {
         $.ajax({
-            url: 'http://localhost:8080/api/gestion_comercios_espera',
+            url: `${API_BASE}/gestion_comercios_espera`,
             method: 'GET',
             success: function (comercios) {
                 let contenedor = $('.grid-comercios');
@@ -91,28 +87,25 @@ $(document).ready(function () {
         });
     }
 
-    // --- 3. EVENTO PARA DAR DE ALTA (CONFIRMACIÓN + AJAX) ---
+    // --- 3. EVENTO PARA DAR DE ALTA ---
     $(document).on('click', '.btn-alta', function () {
         const comercioId = $(this).attr('data-id');
         const nombre = $(this).attr('data-nombre');
         const elementoHTML = $(`#fila-comercio-${comercioId}`);
 
-        // Reemplazo del confirm nativo
         showModal(
             "Confirmar Alta", 
             `¿Deseas validar el comercio "${nombre}" y cambiar su estado a Activo?`, 
             'confirm', 
             function() {
-                // Si el usuario confirma, ejecutamos el AJAX
                 $.ajax({
-                    url: `http://localhost:8080/api/activar_comercio/${comercioId}`,
+                    url: `${API_BASE}/activar_comercio/${comercioId}`,
                     type: 'PUT',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (response) {
                         showModal("Éxito", "Comercio activado correctamente", "success");
-                        
                         elementoHTML.fadeOut(400, function () {
                             $(this).remove();
                             if ($('.grid-comercios').children().length === 0) {
