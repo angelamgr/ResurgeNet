@@ -1,89 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title> Gestion de comercios en espera </title>
+        <title> Gestión Comercios en Espera - ResurgeNet </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style/estructura.css" />
-        <link rel="stylesheet" type="text/css" href="style/admin_dashboard.css" />
-        <link rel="stylesheet" type="text/css" href="style/gestion_cons_comer_admin.css" />
-        
-
+        <link rel="stylesheet" type="text/css" href="style/gestion_comercio_alta_admin.css" />
     </head>
-
     <body>
         <header>
             <h1 id="nombre"> ResurgeNet </h1>
-            <a href="index.html"> <img id="logo" src="imagenes/logo .png" alt="Imagen logo " width="80" height="80" /> </a>
-            <img id="admin-icon" src="imagenes/foto_ini.png"
-                alt="Icono Administrador" width="100" height="100" />
-            <p> Administrador</p>
+            <button id="logout-btn" type="button">Cerrar sesión</button>
         </header>
-
-        <nav class="sidebar">
-            <p class="toggle-btn">☰</p>
-            <ul class="menu-items">
-                <li><a href="admin_dashboard.html">Panel Administración</a></li>
-                <li><a href="gestion_comercios_alta_admin.html">Gestion de Comercios dados de alta</a></li>
-                <li><a href="gestion_consumidores_admin.html">Gestion de Consumidores</a></li>
-                <li><a href="#">Buzón de Peticiones</a></li>
-
-            </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar
-                Sesión</button>
-
-        </nav>
-
-       <section class="form-container">
-            <h2>Listado de Comercios en Espera</h2>
-            
-            <div class="grid-comercios">
-                <div class="comercio-item">
-                    <div class="caja-blanca">Comercio 1</div>
-                    <div class="botones-acciones">
-                        <button class="btn-alta" type="button">Dar de alta</button>
-                    </div>
-                </div>
-
-                <div class="comercio-item">
-                    <div class="caja-blanca">Comercio 2</div>
-                    <div class="botones-acciones">
-                        <button class="btn-alta" type="button">Dar de alta</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="controles-inferiores">
-                <div class="nav-izq">
-                    <span class="flecha">◀</span>
-                    <h3>Anterior</h3>
-                </div>
-                                
-                <div class="nav-der">
-                    <span class="flecha">▶</span>
-                    <h3>Siguiente</h3>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <p>Quien somos</p>
-            <p>Contacto</p>
-        </footer>
+        <main>
+            <h2>Comercios pendientes de validación</h2>
+            <div class="grid-comercios"></div>
+        </main>
         <div id="errorModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
-                <h3>Mensaje</h3>
-                <p>Información:</p>
-                <ul id="errorList" class="error-list">
-                </ul>
+                <h3>Información</h3>
+                <ul id="errorList" class="error-list"></ul>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="js/menu_dashboard.js"></script>
+        <script src="js/config.js"></script>
         <script src="js/gestion_comercios_espera.js"></script>
         <script src="js/cierre_sesion_admin.js"></script>
-        <script src="js/evitar_atras.js"></script>
     </body>
-
 </html>
