@@ -41,7 +41,6 @@ Route::post('/registerProduct', [AuthController::class, 'registerProduct']);
 Route::get('gestion_consumidores', [AuthController::class, 'getConsumers']);
 Route::delete('gestion_consumidores/{id}', [AuthController::class, 'deleteConsumer']);
 
-
 //rutas para la gestion de comercios en espera de validacion
 Route::get('gestion_comercios_espera', [AuthController::class, 'getComerciosEspera']);
 Route::put('activar_comercio/{id}', [AuthController::class, 'activarComercio']);
@@ -72,3 +71,6 @@ Route::get('/cargar_producto/{id_producto}', [AuthController::class, 'getInfoPro
 
 //ruta para actualizar la información de un producto específico (solo para comercio)
 Route::put('/actualizar_producto/{id_producto}', [AuthController::class, 'actualizarProducto']);
+
+//ruta para obtener el perfil completo del consumidor (datos personales para el formulario)
+Route::get('/perfil_consumidor/{id}', [AuthController::class, 'getPerfilConsumidor']);

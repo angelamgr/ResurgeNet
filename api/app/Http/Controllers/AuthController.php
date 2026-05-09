@@ -484,6 +484,41 @@ class AuthController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    // -------------------------------------------------------
+    // Función para obtener el perfil completo del consumidor
+    // Devuelve datos de 'usuario' + 'consumidor' unidos por id
+    // -------------------------------------------------------
+    public function getPerfilConsumidor($id) {
+        try {
+            $perfil = DB::table('usuario')
+                ->join('consumidor', 'usuario.id_usuario', '=', 'consumidor.id')
+                ->where('usuario.id_usuario', $id)
+                ->select(
+                    'usuario.nombre',
+                    'consumidor.email',
+                    'consumidor.ciudad',
+                    'consumidor.n_telefono',
+                    'consumidor.direccion',
+                    'consumidor.cod_postal',
+                    'consumidor.fecha_nac'
+                )
+                ->first();
+
+            if (!$perfil) {
+                return response()->json(['error' => 'Consumidor no encontrado'], 404);
+            }
+
+            // Convertimos fecha_nac de YYYY-MM-DD a DD/MM/AAAA para el frontend
+            if ($perfil->fecha_nac) {
+                $perfil->fecha_nac = \DateTime::createFromFormat('Y-m-d', $perfil->fecha_nac)
+                    ->format('d/m/Y');
+            }
+
+            return response()->json($perfil);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
-
-
