@@ -26,51 +26,52 @@
             <button id="logout-btn" type="button">Cerrar Sesión</button>
         </nav>
 
-        <main class="datos-main">
-            <section class="datos-container">
-                <h2>Modificación de tus datos</h2>
-                <div class="datos-grid">
-                    <div class="campo">
-                        <label for="nombre_campo">Nombre</label>
-                        <input type="text" id="nombre_campo" name="nombre" placeholder="" />
+        <main>
+            <h2>Modificación de tus datos</h2>
+            <section class="form-container">
+                <form id="misDatosForm">
+                    <h3>Actualiza tu información personal</h3>
+                    <div class="form-grid">
+                        <div>
+                            <label for="nombre_campo">Nombre</label>
+                            <input type="text" id="nombre_campo" name="nombre" />
+                        </div>
+                        <div>
+                            <label for="ciudad">Ciudad</label>
+                            <input type="text" id="ciudad" name="ciudad" />
+                        </div>
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" />
+                        </div>
+                        <div>
+                            <label for="telefono">Nº Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" />
+                        </div>
+                        <div>
+                            <label for="direccion">Dirección</label>
+                            <input type="text" id="direccion" name="direccion" />
+                        </div>
+                        <div>
+                            <label for="fecha_nacimiento">Fecha Nacimiento</label>
+                            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="DD/MM/AAAA" />
+                        </div>
+                        <div>
+                            <label for="cod_postal">Cod. Postal</label>
+                            <input type="text" id="cod_postal" name="cod_postal" />
+                        </div>
+                        <div>
+                            <label for="contrasena">Contraseña</label>
+                            <input type="password" id="contrasena" name="contrasena" />
+                        </div>
                     </div>
-                    <div class="campo">
-                        <label for="ciudad">Ciudad</label>
-                        <input type="text" id="ciudad" name="ciudad" placeholder="" />
-                    </div>
-                    <div class="campo">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="" />
-                    </div>
-                    <div class="campo">
-                        <label for="telefono">N&#186; Teléfono</label>
-                        <input type="tel" id="telefono" name="telefono" placeholder="" />
-                    </div>
-                    <div class="campo">
-                        <label for="direccion">Dirección</label>
-                        <input type="text" id="direccion" name="direccion" placeholder="" />
-                    </div>
-                    <div class="campo">
-                        <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                        <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="DD/MM/YYYY" />
-                    </div>
-                    <div class="campo">
-                        <label for="cod_postal">Cod. Postal</label>
-                        <input type="text" id="cod_postal" name="cod_postal" placeholder="" />
-                    </div>
-                    <div class="campo">
-                        <label for="contrasena">Contraseña</label>
-                        <input type="password" id="contrasena" name="contrasena" placeholder="" />
-                    </div>
-                </div>
-                <div class="datos-btn-container">
-                    <button type="button" id="guardar-btn">Guardar</button>
-                </div>
+                    <button type="submit" name="guardar">Guardar</button>
+                </form>
             </section>
         </main>
 
         <footer>
-            <p>Quién somos</p>
+            <p>Quien somos</p>
             <p>Contacto</p>
         </footer>
 
@@ -84,6 +85,7 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="js/config.js"></script>
         <script src="js/menu_dashboard.js"></script>
         <script src="js/cierre_sesion_admin.js"></script>
         <script src="js/evitar_atras.js"></script>

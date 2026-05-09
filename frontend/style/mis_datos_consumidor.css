@@ -1,103 +1,114 @@
 /* =====================================================
    mis_datos_consumidor.css
-   Estilos específicos para la página de modificación
-   de datos del consumidor.
-   Depende de: estructura.css, admin_dashboard.css
+   Estética idéntica a alta_productos.css
+   Sin scroll: el contenido encaja en la pantalla
    ===================================================== */
 
-/* Evita scroll en la página entera */
+/* Evita scroll global */
 html, body {
     height: 100%;
     overflow: hidden;
 }
 
-/* Área principal: ocupa exactamente el espacio entre header y footer */
-.datos-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* El main ocupa exactamente el espacio entre header y footer */
+main {
     position: fixed;
-    top: 127px;    /* altura del header */
-    bottom: 43px;  /* altura del footer */
+    top: 127px;
+    bottom: 43px;
     left: 0;
     right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
     box-sizing: border-box;
-    padding: 10px 20px;
+    padding: 0 20px;
 }
 
-/* Tarjeta/panel central con fondo azul oscuro redondeado */
-.datos-container {
-    background-color: #2C6080;
-    border-radius: 20px;
-    padding: 18px 40px;
-    width: 100%;
-    max-width: 820px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-}
-
-.datos-container h2 {
-    text-align: center;
-    color: #ffffff;
+main h2 {
     font-family: Railway, sans-serif;
     font-size: 1.3rem;
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 12px 0;
+    text-align: center;
 }
 
-/* Grid de 2 columnas para los campos del formulario */
-.datos-grid {
+/* Tarjeta del formulario: igual que #altaProduForm */
+#misDatosForm {
+    background-color: #5089a5d1;
+    padding: 22px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+}
+
+#misDatosForm h3 {
+    text-align: center;
+    margin: 0 0 16px 0;
+    color: #333;
+    font-family: Railway, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Grid 2 columnas igual que en alta_productos */
+.form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px 40px;
+    gap: 12px 25px;
+    padding: 0;
 }
 
-/* Cada campo: label + input en fila */
-.campo {
+.form-grid > div {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
-.campo label {
-    font-size: 13px;
+.form-grid label {
+    font-size: 15px;
     font-weight: bold;
-    color: #ffffff;
-    font-family: Railway, sans-serif;
-    text-align: right;
-    width: 120px;
+    color: #000;
+    width: 130px;
     flex-shrink: 0;
+    text-align: right;
+    font-family: Railway, sans-serif;
 }
 
-.campo input {
+.form-grid input {
     flex-grow: 1;
-    padding: 7px 14px;
-    font-size: 13px;
-    border: none;
+    padding: 9px 14px;
+    border: 1px solid #ccc;
     border-radius: 50px;
-    background-color: #ffffff;
-    color: #333;
+    font-size: 14px;
     box-sizing: border-box;
+    background-color: #ffffff;
     outline: none;
 }
 
-.campo input:focus {
+.form-grid input:focus {
     box-shadow: 0 0 0 2px #5089A5;
+    border-color: #5089A5;
 }
 
-/* Contenedor del botón Guardar */
-.datos-btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
+/* Botón Guardar centrado, igual que en alta_productos */
+#misDatosForm button[type="submit"] {
+    display: block;
+    margin: 18px auto 0;
+    background-color: #7a0c00;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: Railway, sans-serif;
 }
 
-/* El botón Guardar reutiliza el estilo global de button
-   definido en admin_dashboard.css (fondo #7a0c00, borde redondeado).
-   Solo se ajusta el tamaño. */
-.datos-btn-container button {
-    padding: 10px 32px;
-    font-size: 15px;
+#misDatosForm button[type="submit"]:hover {
+    background-color: #a31100;
 }
