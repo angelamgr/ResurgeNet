@@ -24,6 +24,8 @@ main {
     overflow: hidden;
     box-sizing: border-box;
     padding: 0 20px;
+    /* Compensamos el toggle-btn del sidebar que ocupa ~50px bajo el header */
+    padding-top: 30px;
 }
 
 main h2 {
@@ -31,14 +33,14 @@ main h2 {
     font-size: 1.3rem;
     font-weight: bold;
     color: #333;
-    margin: 0 0 12px 0;
+    margin: 0 0 10px 0;
     text-align: center;
 }
 
 /* Tarjeta del formulario: igual que #altaProduForm */
 #misDatosForm {
     background-color: #5089a5d1;
-    padding: 22px 30px;
+    padding: 20px 30px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -48,7 +50,7 @@ main h2 {
 
 #misDatosForm h3 {
     text-align: center;
-    margin: 0 0 16px 0;
+    margin: 0 0 14px 0;
     color: #333;
     font-family: Railway, sans-serif;
     font-size: 1rem;
@@ -59,7 +61,7 @@ main h2 {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px 25px;
+    gap: 11px 25px;
     padding: 0;
 }
 
@@ -98,7 +100,7 @@ main h2 {
 /* Botón Guardar centrado, igual que en alta_productos */
 #misDatosForm button[type="submit"] {
     display: block;
-    margin: 18px auto 0;
+    margin: 16px auto 0;
     background-color: #7a0c00;
     color: white;
     border: none;
