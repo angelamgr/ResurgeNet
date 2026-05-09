@@ -5,34 +5,44 @@
    Depende de: estructura.css, admin_dashboard.css
    ===================================================== */
 
-/* Área principal: centrado vertical y horizontal */
+/* Evita scroll en la página entera */
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Área principal: ocupa exactamente el espacio entre header y footer */
 .datos-main {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 230px); /* descuenta header (~127px) y footer (~103px) */
-    padding: 20px;
-    margin-top: 127px;  /* altura del header */
-    margin-bottom: 103px; /* altura del footer */
+    position: fixed;
+    top: 127px;    /* altura del header */
+    bottom: 43px;  /* altura del footer */
+    left: 0;
+    right: 0;
+    overflow: hidden;
     box-sizing: border-box;
+    padding: 10px 20px;
 }
 
 /* Tarjeta/panel central con fondo azul oscuro redondeado */
 .datos-container {
     background-color: #2C6080;
     border-radius: 20px;
-    padding: 30px 40px;
+    padding: 18px 40px;
     width: 100%;
     max-width: 820px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
 }
 
 .datos-container h2 {
     text-align: center;
     color: #ffffff;
     font-family: Railway, sans-serif;
-    font-size: 1.4rem;
-    margin-bottom: 24px;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
     margin-top: 0;
 }
 
@@ -40,7 +50,7 @@
 .datos-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px 40px;
+    gap: 10px 40px;
 }
 
 /* Cada campo: label + input en fila */
@@ -63,7 +73,7 @@
 
 .campo input {
     flex-grow: 1;
-    padding: 8px 14px;
+    padding: 7px 14px;
     font-size: 13px;
     border: none;
     border-radius: 50px;
@@ -81,7 +91,7 @@
 .datos-btn-container {
     display: flex;
     justify-content: center;
-    margin-top: 24px;
+    margin-top: 16px;
 }
 
 /* El botón Guardar reutiliza el estilo global de button
