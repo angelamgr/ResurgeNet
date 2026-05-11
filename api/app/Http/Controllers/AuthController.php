@@ -405,7 +405,6 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Consumidor no encontrado'], 404);
             }
 
-            // Convertimos fecha_nac de YYYY-MM-DD a DD/MM/AAAA para el frontend
             if ($perfil->fecha_nac) {
                 $perfil->fecha_nac = \DateTime::createFromFormat('Y-m-d', $perfil->fecha_nac)
                     ->format('d/m/Y');
@@ -419,10 +418,31 @@ class AuthController extends Controller
 
     // -------------------------------------------------------
     // Actualizar perfil del consumidor (PUT)
+    // Solo actualiza los campos que han cambiado realmente
+    // respecto a los valores actuales en la BD.
     // -------------------------------------------------------
     public function actualizarPerfilConsumidor(Request $request, $id) {
         try {
-            // --- Validación de fecha: no puede ser hoy ni futura ---
+            // --- 1. Cargamos los datos actuales de la BD ---
+            $actual = DB::table('usuario')
+                ->join('consumidor', 'usuario.id_usuario', '=', 'consumidor.id')
+                ->where('usuario.id_usuario', $id)
+                ->select(
+                    'usuario.nombre',
+                    'consumidor.email',
+                    'consumidor.ciudad',
+                    'consumidor.n_telefono',
+                    'consumidor.direccion',
+                    'consumidor.cod_postal',
+                    'consumidor.fecha_nac'
+                )
+                ->first();
+
+            if (!$actual) {
+                return response()->json(['error' => 'Consumidor no encontrado'], 404);
+            }
+
+            // --- 2. Validación y conversión de la fecha si viene informada ---
             $fecha_raw = $request->input('fecha_nacimiento');
             $fecha_sql = null;
 
@@ -441,36 +461,52 @@ class AuthController extends Controller
                 $fecha_sql = $date_object->format('Y-m-d');
             }
 
-            // --- Actualizamos la tabla 'usuario' (nombre) ---
-            DB::table('usuario')
-                ->where('id_usuario', $id)
-                ->update(['nombre' => $request->input('nombre')]);
+            // --- 3. Comparamos campo a campo y construimos solo los diffs ---
 
-            // --- Preparamos los datos para la tabla 'consumidor' ---
-            $datosConsumidor = [
-                'ciudad'     => $request->input('ciudad'),
-                'n_telefono' => $request->input('n_telefono'),
-                'email'      => $request->input('email'),
-                'direccion'  => $request->input('direccion'),
-                'cod_postal' => $request->input('cod_postal'),
-            ];
+            // Campos de la tabla 'usuario'
+            $datosUsuario = [];
+            if ($request->input('nombre') !== $actual->nombre) {
+                $datosUsuario['nombre'] = $request->input('nombre');
+            }
+            // La contraseña solo se actualiza si el campo viene relleno
+            if ($request->input('password')) {
+                $datosUsuario['password'] = hash('sha256', $request->input('password'));
+            }
 
-            // Solo actualizamos la fecha si viene informada
-            if ($fecha_sql) {
+            // Campos de la tabla 'consumidor'
+            $datosConsumidor = [];
+            if ($request->input('email') !== $actual->email) {
+                $datosConsumidor['email'] = $request->input('email');
+            }
+            if ($request->input('ciudad') !== $actual->ciudad) {
+                $datosConsumidor['ciudad'] = $request->input('ciudad');
+            }
+            if ($request->input('n_telefono') !== $actual->n_telefono) {
+                $datosConsumidor['n_telefono'] = $request->input('n_telefono');
+            }
+            if ($request->input('direccion') !== $actual->direccion) {
+                $datosConsumidor['direccion'] = $request->input('direccion');
+            }
+            if ($request->input('cod_postal') !== $actual->cod_postal) {
+                $datosConsumidor['cod_postal'] = $request->input('cod_postal');
+            }
+            // La fecha solo se compara si viene informada y es distinta a la BD
+            if ($fecha_sql && $fecha_sql !== $actual->fecha_nac) {
                 $datosConsumidor['fecha_nac'] = $fecha_sql;
             }
 
-            // Solo actualizamos la contraseña si el campo no viene vacío
-            if ($request->input('password')) {
-                DB::table('usuario')
-                    ->where('id_usuario', $id)
-                    ->update(['password' => hash('sha256', $request->input('password'))]);
+            // --- 4. Solo lanzamos UPDATE si hay algo que cambiar ---
+            if (empty($datosUsuario) && empty($datosConsumidor)) {
+                return response()->json(['message' => 'No se detectaron cambios en tus datos.']);
             }
 
-            // --- Actualizamos la tabla 'consumidor' ---
-            DB::table('consumidor')
-                ->where('id', $id)
-                ->update($datosConsumidor);
+            if (!empty($datosUsuario)) {
+                DB::table('usuario')->where('id_usuario', $id)->update($datosUsuario);
+            }
+
+            if (!empty($datosConsumidor)) {
+                DB::table('consumidor')->where('id', $id)->update($datosConsumidor);
+            }
 
             return response()->json(['message' => 'Tus datos se han actualizado correctamente.']);
 
