@@ -1,0 +1,106 @@
+/* =====================================================
+   mis_pedidos_consumidor.css
+   Estética consistente con el resto de listados del
+   proyecto (gestion_comercio_alta_admin.css como base)
+   ===================================================== */
+
+/* Contenedor principal azul */
+.form-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding: 0 20px;
+}
+
+.main-card {
+    background-color: #5b8da5;
+    border-radius: 30px;
+    padding: 30px 50px;
+    width: 100%;
+    max-width: 950px;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* Título */
+.titulo-listado {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: white;
+}
+
+/* Cabecera de columnas */
+.tabla-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin-bottom: 12px;
+    font-weight: bold;
+    color: white;
+    font-size: 1rem;
+}
+
+.col-id      { flex: 1; text-align: left; }
+.col-comercio { flex: 2; text-align: center; }
+.col-estado  { flex: 1.5; text-align: right; }
+
+/* Filas de pedido (píldoras blancas) */
+.pedido-row {
+    background-color: white;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    margin-bottom: 14px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.pedido-row .col-id      { flex: 1; text-align: left; }
+.pedido-row .col-comercio { flex: 2; text-align: center; }
+.pedido-row .col-estado  { flex: 1.5; text-align: right; }
+
+/* Mensaje cuando no hay pedidos */
+.sin-pedidos {
+    text-align: center;
+    color: white;
+    font-size: 1rem;
+    padding: 20px 0;
+}
+
+/* Navegación inferior */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding: 0 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    user-select: none;
+}
+
+.nav-item:hover { opacity: 0.75; }
+
+.flecha-nav { font-size: 2rem; line-height: 1; }
+.texto-nav  { font-size: 1rem; }
+
+/* Botones deshabilitados */
+.nav-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
