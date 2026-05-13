@@ -4,17 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -26,9 +15,7 @@ Route::post('/loginUser', [AuthController::class, 'loginUser']);
 Route::middleware('web')->post('/logoutUser', [AuthController::class, 'logoutUser']);
 
 Route::get('/checkUserSession', function (Request $request) {
-    return response()->json([
-        'active' => $request->session()->has('id_user')
-    ]);
+    return response()->json(['active' => $request->session()->has('id_user')]);
 })->middleware('web');
 
 //Ruta para el registro de nuevos consumidores
@@ -51,10 +38,10 @@ Route::put('estado_activar_comercio/{id}/activar', [AuthController::class, 'esta
 Route::put('estado_desactivar_comercio/{id}/desactivar', [AuthController::class, 'estadoDesactivarComercio']);
 Route::delete('eliminar_comercio/{id}', [AuthController::class, 'deleteComercio']);
 
-//ruta para la gestión del formulario de contacto del comercio
+//ruta para la gestion del formulario de contacto del comercio
 Route::post('/enviar_solicitud', [AuthController::class, 'solicitudComercio']);
 
-//ruta para ver el listado de las solicitudes que tenemos almacenadas en la base de datos
+//ruta para ver el listado de las solicitudes almacenadas en la base de datos
 Route::get('/solicitudes_comercios', [AuthController::class, 'getSolicitudesComercio']);
 
 //ruta para denegar las solicitudes de los comercios (solo para el validador)
@@ -63,13 +50,13 @@ Route::put('/denegar_solicitud/{id}', [AuthController::class, 'denegarSolicitudC
 //ruta para aceptar las solicitudes de los comercios (solo para el validador)
 Route::put('/aceptar_solicitud/{id}', [AuthController::class, 'aceptarSolicitudComercio']);
 
-//ruta para obtener el listado de productos de un comercio (solo para comercio)
+//ruta para obtener el listado de productos de un comercio
 Route::get('/listado_productos_comercio/{id_comercio}', [AuthController::class, 'getProductosComercio']);
 
-//ruta para cargar la información de un producto específico (solo para comercio)
+//ruta para cargar la informacion de un producto especifico
 Route::get('/cargar_producto/{id_producto}', [AuthController::class, 'getInfoProducto']);
 
-//ruta para actualizar la información de un producto específico (solo para comercio)
+//ruta para actualizar la informacion de un producto especifico
 Route::put('/actualizar_producto/{id_producto}', [AuthController::class, 'actualizarProducto']);
 
 //ruta para obtener el perfil del consumidor logueado
@@ -77,3 +64,6 @@ Route::get('/perfil_consumidor/{id}', [AuthController::class, 'getPerfilConsumid
 
 //ruta para actualizar el perfil del consumidor logueado
 Route::put('/perfil_consumidor/{id}', [AuthController::class, 'actualizarPerfilConsumidor']);
+
+//ruta para obtener los pedidos del consumidor con paginacion
+Route::get('/pedidos_consumidor/{id}', [AuthController::class, 'getPedidosConsumidor']);
