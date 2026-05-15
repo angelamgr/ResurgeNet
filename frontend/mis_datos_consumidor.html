@@ -11,74 +11,82 @@
 
     <body>
         <header>
-            <h1 id="nombre"> ResurgeNet </h1>
-            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Imagen logo" width="80" height="80" /></a>
-            <img id="admin-icon" src="imagenes/foto_ini.png" alt="Icono Consumidor" width="100" height="100" />
+            <h1 id="nombre">ResurgeNet</h1>
+            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Ir a inicio - ResurgeNet" width="80" height="80" /></a>
+            <img id="admin-icon" src="imagenes/foto_ini.png" alt="" aria-hidden="true" width="100" height="100" />
             <p>Consumidor</p>
         </header>
 
-        <nav class="sidebar">
-            <p class="toggle-btn">&#9776;</p>
+        <button class="toggle-btn" aria-expanded="false" aria-controls="sidebar-nav" aria-label="Abrir menú de navegación">&#9776;</button>
+
+        <nav class="sidebar" id="sidebar-nav" aria-label="Menú lateral">
             <ul class="menu-items">
                 <li><a href="consumidor_dashboard.html">Inicio</a></li>
                 <li><a href="mis_pedidos_consumidor.html">Mis pedidos</a></li>
             </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
+            <button id="logout-btn" type="button">Cerrar Sesión</button>
         </nav>
 
         <main>
             <h2>Modificación de tus datos</h2>
             <section class="form-container">
-                <form id="misDatosForm">
+                <form id="misDatosForm" novalidate>
                     <h3>Actualiza tu información personal</h3>
                     <div class="form-grid">
                         <div>
                             <label for="nombre_campo">Nombre</label>
-                            <input type="text" id="nombre_campo" name="nombre" />
+                            <input type="text" id="nombre_campo" name="nombre" autocomplete="name" />
                         </div>
                         <div>
                             <label for="ciudad">Ciudad</label>
-                            <input type="text" id="ciudad" name="ciudad" />
+                            <input type="text" id="ciudad" name="ciudad" autocomplete="address-level2" />
                         </div>
                         <div>
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" />
+                            <input type="email" id="email" name="email" autocomplete="email" />
                         </div>
                         <div>
                             <label for="telefono">Nº Teléfono</label>
-                            <input type="tel" id="telefono" name="telefono" />
+                            <input type="tel" id="telefono" name="telefono" autocomplete="tel" />
                         </div>
                         <div>
                             <label for="direccion">Dirección</label>
-                            <input type="text" id="direccion" name="direccion" />
+                            <input type="text" id="direccion" name="direccion" autocomplete="street-address" />
                         </div>
                         <div>
                             <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="DD/MM/AAAA" />
+                            <input type="text" id="fecha_nacimiento" name="fecha_nacimiento"
+                                placeholder="DD/MM/AAAA" autocomplete="bday"
+                                aria-describedby="fecha-hint" />
+                            <span id="fecha-hint" class="sr-only">Formato: día/mes/año. No puede ser una fecha futura.</span>
                         </div>
                         <div>
                             <label for="cod_postal">Cod. Postal</label>
-                            <input type="text" id="cod_postal" name="cod_postal" />
+                            <input type="text" id="cod_postal" name="cod_postal" autocomplete="postal-code" />
                         </div>
                         <div>
                             <label for="contrasena">Contraseña</label>
-                            <input type="password" id="contrasena" name="contrasena" placeholder="Dejar en blanco para no cambiar" />
+                            <input type="password" id="contrasena" name="contrasena"
+                                placeholder="Dejar en blanco para no cambiar"
+                                autocomplete="new-password"
+                                aria-describedby="pass-hint" />
+                            <span id="pass-hint" class="sr-only">Deja este campo en blanco si no quieres cambiar tu contraseña.</span>
                         </div>
                     </div>
-                    <button type="submit" name="guardar">Guardar</button>
+                    <button type="submit">Guardar</button>
                 </form>
             </section>
         </main>
 
         <footer>
-            <p>Quien somos</p>
+            <p>Quién somos</p>
             <p>Contacto</p>
         </footer>
 
-        <div id="errorModal" class="modal">
+        <div id="errorModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
             <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>Mensaje</h3>
+                <button class="close-button" aria-label="Cerrar mensaje">&times;</button>
+                <h3 id="modalTitle">Mensaje</h3>
                 <p>Información:</p>
                 <ul id="errorList" class="error-list"></ul>
             </div>

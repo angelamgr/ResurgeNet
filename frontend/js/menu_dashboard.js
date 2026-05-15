@@ -1,34 +1,43 @@
 $(document).ready(function() {
 
-    // Botón de desplegar/cerrar el sidebar
-    $('.toggle-btn').click(function(e) {
-        e.stopPropagation(); // evita que el click se propague al body
-        $('.sidebar').toggleClass('open');
+    var toggleBtn = $('.toggle-btn');
+    var sidebar   = $('.sidebar');
 
-        // Oculta el botón si sidebar está abierto
-        if ($('.sidebar').hasClass('open')) {
-            $(this).hide();
+    // Abre/cierra el sidebar y actualiza aria-expanded
+    toggleBtn.on('click', function(e) {
+        e.stopPropagation();
+        var isOpen = sidebar.hasClass('open');
+        sidebar.toggleClass('open');
+        toggleBtn.attr('aria-expanded', !isOpen);
+
+        if (!isOpen) {
+            // Sidebar abre: mueve el foco al primer enlace del menú
+            sidebar.find('a, button').first().focus();
+            toggleBtn.hide();
         } else {
-            $(this).show();
+            toggleBtn.show();
         }
     });
 
-    // Detecta clicks fuera del sidebar
-    $(document).click(function(e) {
-        var sidebar = $('.sidebar');
-        var toggleBtn = $('.toggle-btn');
-
-        // Si el sidebar está abierto y el click no es dentro del sidebar
+    // Cierra el sidebar al hacer click fuera
+    $(document).on('click', function(e) {
         if (sidebar.hasClass('open') && !$(e.target).closest('.sidebar').length) {
             sidebar.removeClass('open');
-            toggleBtn.show(); // volver a mostrar el botón
+            toggleBtn.attr('aria-expanded', 'false').show();
         }
     });
 
-    // Evita que clicks dentro del sidebar cierren el menú
-    $('.sidebar').click(function(e){
+    // Cierra el sidebar al pulsar Escape
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.hasClass('open')) {
+            sidebar.removeClass('open');
+            toggleBtn.attr('aria-expanded', 'false').show().focus();
+        }
+    });
+
+    // Evita que clicks dentro del sidebar lo cierren
+    sidebar.on('click', function(e) {
         e.stopPropagation();
     });
 
 });
-

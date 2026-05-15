@@ -1,48 +1,50 @@
 /* Sidebar lateral izquierdo */
 .sidebar {
-    width: 22.22vw; /* 1/3 del ancho de la pantalla */
+    width: 22.22vw;
     position: fixed;
-    top: 127px; /* altura del header */
-    bottom: 105px; /* altura del footer */
-    left: -33.33vw; /* inicialmente oculto */
+    top: 127px;
+    bottom: 105px;
+    left: -33.33vw;
     background-color: #5089A5;
     padding: 0;
     transition: left 0.3s;
     z-index: 1000;
-    overflow-y: auto; /* scrollear si hay muchos enlaces */
-
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center;  
+    justify-content: center;
+    align-items: center;
 }
 
-/* Cuando el sidebar está abierto */
 .sidebar.open {
     left: 0;
 }
 
-/* Botón para desplegar/cerrar el menú */
+/* Botón toggle del sidebar: ahora es <button> para ser focusable por teclado */
 .toggle-btn {
-    position: fixed; /* siempre visible */
-    top: 110px; /* debajo del header */
-    left: 10px; /* posición inicial visible */
+    position: fixed;
+    top: 110px;
+    left: 10px;
     background-color: #06314C;
     color: white;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
-    z-index: 1100; /* encima del sidebar */
+    z-index: 1100;
     transition: opacity 0.3s;
+    font-size: 1.2rem;
+    border-radius: 4px;
 }
 
-/* Oculta el botón cuando el sidebar está abierto */
-.sidebar.open + .toggle-btn,
+.toggle-btn:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
 .sidebar.open ~ .toggle-btn {
     opacity: 0;
-    pointer-events: none; /* evita que se pueda clickar mientras está oculto */
+    pointer-events: none;
 }
-
 
 /* Lista de enlaces */
 .sidebar ul {
@@ -60,11 +62,13 @@
     color: black;
     padding: 10px 20px;
     text-decoration: none;
+    border-radius: 4px;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li a:hover,
+.sidebar ul li a:focus {
     background-color: #3B6F89;
-    border-radius: 4px;
+    outline: none;
 }
 
 /* Contenido principal */
@@ -93,6 +97,11 @@ button {
     font-size: 16px;
 }
 
+button:focus {
+    outline: 2px solid #06314C;
+    outline-offset: 2px;
+}
+
 header img#admin-icon {
     position: absolute;
     top: 2%;
@@ -105,18 +114,29 @@ header p {
     left: 90%;
 }
 
+/* Clase utilitaria para texto solo para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 
 .modal {
-    display: none;             
+    display: none;
     position: fixed;
-    z-index: 1000;             
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: rgba(0,0,0,0.6); 
-    
+    background-color: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
 }
@@ -127,28 +147,32 @@ header p {
     border: 1px solid #ddd;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    
-    width: 90%; 
+    width: 90%;
     max-width: 500px;
-    max-height: 80vh; 
-    
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Botón cerrar del modal: ahora es <button> para ser focusable */
 .close-button {
+    background: none;
+    border: none;
     color: #aaa;
     font-size: 28px;
     font-weight: bold;
     line-height: 1;
-    align-self: flex-end; 
+    align-self: flex-end;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 4px;
 }
 
 .close-button:hover,
 .close-button:focus {
     color: #d9534f;
-    text-decoration: none;
-    cursor: pointer;
+    outline: 2px solid #d9534f;
+    outline-offset: 2px;
 }
 
 .modal-content h3 {
@@ -163,18 +187,17 @@ header p {
     list-style: none;
     padding: 0;
     margin: 0;
-    
-    max-height: 250px;       
-    overflow-y: auto;        
+    max-height: 250px;
+    overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 15px;     
+    padding-right: 15px;
 }
 
 .error-list li {
     margin-bottom: 10px;
     padding: 10px;
-    border-left: 5px solid #d9534f;  
-    background-color: #fcebeb; 
+    border-left: 5px solid #d9534f;
+    background-color: #fcebeb;
     color: #a94442;
     border-radius: 6px;
     font-size: 0.95em;
@@ -187,42 +210,12 @@ header p {
     margin-bottom: 3px;
 }
 
-/* --- Estilos para la Lista de Errores (LI) - ERROR/VALIDACIÓN --- */
-.error-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    /* Colores ROJOS para errores */
-    border-left: 5px solid #d9534f;  /* Barra roja de error */
-    background-color: #fcebeb; 
-    color: #a94442;
-    border-radius: 6px;
-    font-size: 0.95em;
-    line-height: 1.4;
-}
-
-
 .modal.modal-success .modal-content h3 {
-    border-bottom: 2px solid #c3e6cb; /* Borde inferior verde claro */
+    border-bottom: 2px solid #c3e6cb;
 }
 
 .modal.modal-success .error-list li {
-    /* Colores VERDES para éxito */
-    border-left: 5px solid #28a745;  /* Barra verde de éxito */
-    background-color: #d4edda;       /* Fondo verde claro */
-    color: #155724;                  /* Texto verde oscuro */
-}
-
-/* Estilo para el botón de cerrar en éxito */
-.close-button:hover,
-.close-button:focus {
-    color: #28a745; /* Color verde al pasar el ratón */
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Estilo general para el contenido de lista */
-.error-list li strong {
-    color: #333;
-    display: block;
-    margin-bottom: 3px;
+    border-left: 5px solid #28a745;
+    background-color: #d4edda;
+    color: #155724;
 }

@@ -3,10 +3,10 @@ $(document).ready(function () {
     // -------------------------------------------------------
     // MODAL
     // -------------------------------------------------------
-    const modal      = $('#errorModal');
-    const errorList  = $('#errorList');
-    const modalTitle = modal.find('h3');
-    const closeBtn   = modal.find('.close-button');
+    var modal      = $('#errorModal');
+    var errorList  = $('#errorList');
+    var modalTitle = modal.find('#modalTitle');
+    var closeBtn   = modal.find('.close-button');
 
     function showModal(title, content, type) {
         type = type || 'error';
@@ -16,15 +16,21 @@ $(document).ready(function () {
         modalTitle.css('color', type === 'success' ? '#155724' : '#a94442');
         errorList.append($('<li>').text(content));
         modal.css('display', 'flex');
+        // Mueve el foco al botón de cerrar para que el lector de pantalla lo anuncie
+        closeBtn.focus();
     }
 
     function hideModal() {
         modal.css('display', 'none');
+        modal.removeClass('modal-success modal-error');
     }
 
     closeBtn.on('click', hideModal);
     $(window).on('click', function (e) {
         if (e.target === modal[0]) hideModal();
+    });
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape' && modal.css('display') !== 'none') hideModal();
     });
 
     // -------------------------------------------------------
@@ -38,7 +44,6 @@ $(document).ready(function () {
     // COMPROBACION DE SESION
     // -------------------------------------------------------
     var idUsuario = localStorage.getItem('id_usuario_comercio');
-
     if (!idUsuario) {
         window.location.href = 'inicio_sesion.html';
         return;
@@ -53,35 +58,37 @@ $(document).ready(function () {
             type: 'GET',
             xhrFields: { withCredentials: true },
             success: function (data) {
-                totalPaginas = data.total_paginas || 1;
-                paginaActual = data.pagina_actual || 1;
+                totalPaginas  = data.total_paginas || 1;
+                paginaActual  = data.pagina_actual || 1;
 
-                var contenedor = $('#lista-pedidos');
-                contenedor.empty();
+                var tbody = $('#lista-pedidos');
+                tbody.empty();
 
                 if (!data.pedidos || data.pedidos.length === 0) {
-                    contenedor.append('<p class="sin-pedidos">No tienes pedidos registrados.</p>');
+                    tbody.append('<tr><td colspan="3" class="sin-pedidos">No tienes pedidos registrados.</td></tr>');
                 } else {
                     $.each(data.pedidos, function (i, pedido) {
-                        var fila = $('<div class="pedido-row">')
-                            .append($('<span class="col-id">').text('#' + pedido.id_pedido))
-                            .append($('<span class="col-comercio">').text(pedido.nombreComercio))
-                            .append($('<span class="col-estado">').text(pedido.estado));
-                        contenedor.append(fila);
+                        // Fila con datos
+                        var fila = $('<tr class="pedido-row">')
+                            .append($('<td>').text('#' + pedido.id_pedido))
+                            .append($('<td>').text(pedido.nombreComercio))
+                            .append($('<td>').text(pedido.estado));
+                        tbody.append(fila);
+                        // Fila separadora visual
+                        tbody.append('<tr class="spacer"><td colspan="3"></td></tr>');
                     });
                 }
 
-                // Actualizar estado de botones de paginación
+                // Estado de botones de paginación
                 if (paginaActual <= 1) {
-                    $('#btn-anterior').addClass('nav-disabled');
+                    $('#btn-anterior').addClass('nav-disabled').attr('disabled', true);
                 } else {
-                    $('#btn-anterior').removeClass('nav-disabled');
+                    $('#btn-anterior').removeClass('nav-disabled').removeAttr('disabled');
                 }
-
                 if (paginaActual >= totalPaginas) {
-                    $('#btn-siguiente').addClass('nav-disabled');
+                    $('#btn-siguiente').addClass('nav-disabled').attr('disabled', true);
                 } else {
-                    $('#btn-siguiente').removeClass('nav-disabled');
+                    $('#btn-siguiente').removeClass('nav-disabled').removeAttr('disabled');
                 }
             },
             error: function (xhr) {
@@ -93,22 +100,17 @@ $(document).ready(function () {
         });
     }
 
-    // Carga inicial
     cargarPedidos(paginaActual);
 
     // -------------------------------------------------------
     // BOTONES DE PAGINACION
     // -------------------------------------------------------
     $('#btn-anterior').on('click', function () {
-        if (paginaActual > 1) {
-            cargarPedidos(paginaActual - 1);
-        }
+        if (paginaActual > 1) cargarPedidos(paginaActual - 1);
     });
 
     $('#btn-siguiente').on('click', function () {
-        if (paginaActual < totalPaginas) {
-            cargarPedidos(paginaActual + 1);
-        }
+        if (paginaActual < totalPaginas) cargarPedidos(paginaActual + 1);
     });
 
 });

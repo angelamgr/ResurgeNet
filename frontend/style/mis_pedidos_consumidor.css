@@ -1,10 +1,7 @@
 /* =====================================================
    mis_pedidos_consumidor.css
-   Estética consistente con el resto de listados del
-   proyecto (gestion_comercio_alta_admin.css como base)
    ===================================================== */
 
-/* Contenedor principal azul */
 .form-container {
     display: flex;
     justify-content: center;
@@ -22,7 +19,6 @@
     box-sizing: border-box;
 }
 
-/* Título */
 .titulo-listado {
     text-align: center;
     font-size: 1.8rem;
@@ -31,46 +27,63 @@
     color: white;
 }
 
-/* Cabecera de columnas */
-.tabla-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 30px;
-    margin-bottom: 12px;
+/* Tabla semántica de pedidos */
+.pedidos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+.pedidos-table thead th {
     font-weight: bold;
     color: white;
     font-size: 1rem;
+    padding: 8px 16px;
+    text-align: left;
 }
 
-.col-id      { flex: 1; text-align: left; }
-.col-comercio { flex: 2; text-align: center; }
-.col-estado  { flex: 1.5; text-align: right; }
+.pedidos-table thead th:nth-child(2) { text-align: center; }
+.pedidos-table thead th:nth-child(3) { text-align: right; }
 
 /* Filas de pedido (píldoras blancas) */
-.pedido-row {
+.pedidos-table tbody tr.pedido-row td {
     background-color: white;
     color: #333;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 30px;
-    margin-bottom: 14px;
-    border-radius: 50px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-weight: bold;
     font-size: 1rem;
+    padding: 12px 16px;
 }
 
-.pedido-row .col-id      { flex: 1; text-align: left; }
-.pedido-row .col-comercio { flex: 2; text-align: center; }
-.pedido-row .col-estado  { flex: 1.5; text-align: right; }
+/* Efecto píldora: bordes redondeados en la primera y última celda de cada fila */
+.pedidos-table tbody tr.pedido-row td:first-child {
+    border-radius: 50px 0 0 50px;
+    padding-left: 30px;
+}
+.pedidos-table tbody tr.pedido-row td:last-child {
+    border-radius: 0 50px 50px 0;
+    padding-right: 30px;
+    text-align: right;
+}
+.pedidos-table tbody tr.pedido-row td:nth-child(2) {
+    text-align: center;
+}
 
-/* Mensaje cuando no hay pedidos */
+/* Separación entre filas */
+.pedidos-table tbody tr.pedido-row {
+    margin-bottom: 14px;
+}
+.pedidos-table tbody tr.spacer td {
+    height: 14px;
+    background: transparent;
+}
+
+/* Mensaje sin pedidos */
 .sin-pedidos {
     text-align: center;
     color: white;
     font-size: 1rem;
     padding: 20px 0;
+    background: transparent !important;
 }
 
 /* Navegación inferior */
@@ -82,23 +95,27 @@
     padding: 0 10px;
 }
 
+/* Botones de paginación como <button> accesibles */
 .nav-item {
     display: flex;
     align-items: center;
     gap: 8px;
+    background: none;
+    border: none;
     cursor: pointer;
     color: white;
     font-weight: bold;
     font-size: 1rem;
-    user-select: none;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
-.nav-item:hover { opacity: 0.75; }
+.nav-item:hover  { opacity: 0.75; }
+.nav-item:focus  { outline: 2px solid white; outline-offset: 2px; }
 
 .flecha-nav { font-size: 2rem; line-height: 1; }
 .texto-nav  { font-size: 1rem; }
 
-/* Botones deshabilitados */
 .nav-disabled {
     opacity: 0.3;
     cursor: not-allowed;

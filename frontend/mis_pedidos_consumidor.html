@@ -11,19 +11,20 @@
 
     <body>
         <header>
-            <h1 id="nombre"> ResurgeNet </h1>
-            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Imagen logo" width="80" height="80" /></a>
-            <img id="admin-icon" src="imagenes/foto_ini.png" alt="Icono Consumidor" width="100" height="100" />
+            <h1 id="nombre">ResurgeNet</h1>
+            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Ir a inicio - ResurgeNet" width="80" height="80" /></a>
+            <img id="admin-icon" src="imagenes/foto_ini.png" alt="" aria-hidden="true" width="100" height="100" />
             <p>Consumidor</p>
         </header>
 
-        <nav class="sidebar">
-            <p class="toggle-btn">&#9776;</p>
+        <button class="toggle-btn" aria-expanded="false" aria-controls="sidebar-nav" aria-label="Abrir menú de navegación">&#9776;</button>
+
+        <nav class="sidebar" id="sidebar-nav" aria-label="Menú lateral">
             <ul class="menu-items">
                 <li><a href="consumidor_dashboard.html">Inicio</a></li>
                 <li><a href="mis_datos_consumidor.html">Mis datos</a></li>
             </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
+            <button id="logout-btn" type="button">Cerrar Sesión</button>
         </nav>
 
         <main>
@@ -31,39 +32,44 @@
                 <div class="main-card">
                     <h2 class="titulo-listado">Estado de mis pedidos</h2>
 
-                    <div class="tabla-header">
-                        <span class="col-id">Nº de pedido</span>
-                        <span class="col-comercio">Nombre Comercio</span>
-                        <span class="col-estado">Estado del pedido</span>
-                    </div>
-
-                    <div id="lista-pedidos">
-                        <p class="sin-pedidos">Cargando pedidos...</p>
-                    </div>
+                    <table class="pedidos-table" aria-label="Listado de pedidos">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº de pedido</th>
+                                <th scope="col">Nombre Comercio</th>
+                                <th scope="col">Estado del pedido</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-pedidos">
+                            <tr>
+                                <td colspan="3" class="sin-pedidos">Cargando pedidos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <div class="pagination-container">
-                        <div class="nav-item" id="btn-anterior">
-                            <span class="flecha-nav">&#9664;</span>
+                        <button class="nav-item" id="btn-anterior" aria-label="Página anterior">
+                            <span class="flecha-nav" aria-hidden="true">&#9664;</span>
                             <span class="texto-nav">Anterior</span>
-                        </div>
-                        <div class="nav-item" id="btn-siguiente">
+                        </button>
+                        <button class="nav-item" id="btn-siguiente" aria-label="Página siguiente">
                             <span class="texto-nav">Siguiente</span>
-                            <span class="flecha-nav">&#9654;</span>
-                        </div>
+                            <span class="flecha-nav" aria-hidden="true">&#9654;</span>
+                        </button>
                     </div>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>Quien somos</p>
+            <p>Quién somos</p>
             <p>Contacto</p>
         </footer>
 
-        <div id="errorModal" class="modal">
+        <div id="errorModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
             <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>Mensaje</h3>
+                <button class="close-button" aria-label="Cerrar mensaje">&times;</button>
+                <h3 id="modalTitle">Mensaje</h3>
                 <p>Información:</p>
                 <ul id="errorList" class="error-list"></ul>
             </div>
