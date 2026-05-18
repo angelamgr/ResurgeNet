@@ -6,34 +6,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="style/estructura.css" />
         <link rel="stylesheet" type="text/css" href="style/incio_sesion.css" />
-
     </head>
 
     <body>
         <header>
             <h1 id="nombre"> ResurgeNet </h1>
             <a href="index.html"> <img id="logo" src="imagenes/logo .png" alt="Imagen logo " width="80" height="80" /> </a>
-
-            <a href="registro_consumidores.html"><button type="submit"
-                    name="hecho">Registro</button></a> </header>
+            <a href="registro_consumidores.html"><button type="submit" name="hecho">Registro</button></a>
+        </header>
 
         <main>
-
             <section class="form-container">
-                <img id="logo" src="imagenes/icono_ini.png" alt="Imagen icono "
-                    width="90" height="90" />
-
+                <img id="logo" src="imagenes/icono_ini.png" alt="Imagen icono " width="90" height="90" />
                 <form id="loginForm">
-                    <input type="text" name="usuario"
-                        placeholder="Nombre de usuario">
-                    <input type="password" name="password"
-                        placeholder="Contraseña" />
-
+                    <input type="text" name="usuario" placeholder="Nombre de usuario">
+                    <input type="password" name="password" placeholder="Contraseña" />
                     <button type="submit" name="hecho">Iniciar Sesión</button>
-
                     <h3>¿Has olvidado tu contraseña?</h3>
                 </form>
-
             </section>
         </main>
 
@@ -41,19 +31,18 @@
             <p>Quien somos</p>
             <p>Contacto</p>
         </footer>
+
         <div id="errorModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
                 <h3>Errores de Validación</h3>
                 <p>Por favor, revisa la siguiente información:</p>
-                <ul id="errorList" class="error-list">
-                </ul>
+                <ul id="errorList" class="error-list"></ul>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/config.js"></script>
+        <script src="js/utils.js"></script>
         <script src="js/login.js"></script>
-
     </body>
-
 </html>
