@@ -5,12 +5,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        
         <link rel="stylesheet" type="text/css" href="style/estructura.css" />
         <link rel="stylesheet" type="text/css" href="style/admin_dashboard.css" />
         <link rel="stylesheet" type="text/css" href="style/gestion_cons_comer_admin.css" />
     </head>
-
     <body>
         <header>
             <h1 id="nombre"> ResurgeNet </h1>
@@ -30,19 +28,16 @@
             <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
         </nav>
 
-       <section class="form-container">
+        <section class="form-container">
             <h2>Listado de Consumidores</h2>
-            
             <div class="grid-comercios" id="lista-consumidores">
                 <p>Cargando consumidores...</p>
             </div>
-
             <div class="controles-inferiores">
                 <div class="nav-izq" id="btn-anterior">
                     <span class="flecha">&#9664;</span>
                     <h3>Anterior</h3>
                 </div>
-                                
                 <div class="nav-der" id="btn-siguiente">
                     <span class="flecha">&#9654;</span>
                     <h3>Siguiente</h3>
@@ -63,13 +58,12 @@
                 <ul id="errorList" class="error-list"></ul>
             </div>
         </div>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/config.js"></script>
+        <script src="js/utils.js"></script>
         <script src="js/menu_dashboard.js"></script>
         <script src="js/gestion_consumidores.js"></script>
         <script src="js/cierre_sesion_admin.js"></script>
         <script src="js/evitar_atras.js"></script>
-
     </body>
 </html>
