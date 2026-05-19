@@ -10,7 +10,7 @@ $(document).ready(function () {
                 contenedor.empty();
 
                 if (comercios.length === 0) {
-                    contenedor.append('<p style="text-align:center; width:100%;">No hay comercios pendientes de validación.</p>');
+                    contenedor.append('<p class="lista-vacia">No hay comercios pendientes de validación.</p>');
                     return;
                 }
 
@@ -26,8 +26,7 @@ $(document).ready(function () {
                 });
             },
             error: function (xhr) {
-                console.error('Error al cargar comercios:', xhr.responseText);
-                $('.grid-comercios').html('<p>Error al conectar con el servidor.</p>');
+                $('.grid-comercios').html('<p class="lista-vacia">Error al conectar con el servidor.</p>');
             }
         });
     }
@@ -53,7 +52,7 @@ $(document).ready(function () {
                             elementoHTML.fadeOut(400, function () {
                                 $(this).remove();
                                 if ($('.grid-comercios').children().length === 0) {
-                                    $('.grid-comercios').html('<p style="text-align:center; width:100%;">No hay comercios pendientes de validación.</p>');
+                                    $('.grid-comercios').html('<p class="lista-vacia">No hay comercios pendientes de validación.</p>');
                                 }
                             });
                         },

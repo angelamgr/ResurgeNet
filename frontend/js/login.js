@@ -13,24 +13,24 @@ $(document).ready(function () {
         var usuario  = usuarioInput.val().trim();
         var password = passwordInput.val().trim();
 
-        usuarioInput.css('border',  '1px solid #ddd');
-        passwordInput.css('border', '1px solid #ddd');
+        inputOk(usuarioInput);
+        inputOk(passwordInput);
 
         if (usuario === '') {
             errors.push({ campo: 'Nombre de usuario', problema: 'El campo no puede estar vacío.' });
-            usuarioInput.css('border', '2px solid red');
+            inputError(usuarioInput);
             isValid = false;
         }
 
         if (password === '') {
             errors.push({ campo: 'Contraseña', problema: 'El campo no puede estar vacío.' });
-            passwordInput.css('border', '2px solid red');
+            inputError(passwordInput);
             isValid = false;
         }
 
         if (password !== '' && password.length < 6) {
             errors.push({ campo: 'Contraseña', problema: 'Debe tener al menos 6 caracteres.' });
-            passwordInput.css('border', '2px solid red');
+            inputError(passwordInput);
             isValid = false;
         }
 

@@ -18,7 +18,7 @@ $(document).ready(function () {
 
         function addError(input, campo, problema, ejemplo) {
             errors.push({ campo: campo, problema: problema, ejemplo: ejemplo });
-            input.css('border', '2px solid red');
+            inputError(input);
             isValid = false;
         }
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
             if (!input.length || input.val().trim() === '') {
                 addError(input, campo, 'No puede estar vacío.', ejemplo);
             } else {
-                input.css('border', '1px solid #ddd');
+                inputOk(input);
             }
         }
 

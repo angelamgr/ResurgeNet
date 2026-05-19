@@ -13,7 +13,7 @@ function cargarSolicitudes() {
             container.empty();
 
             if (data.length === 0) {
-                container.append('<p style="text-align:center; padding:20px;">No hay solicitudes pendientes.</p>');
+                container.append('<p class="lista-vacia">No hay solicitudes pendientes.</p>');
                 return;
             }
 

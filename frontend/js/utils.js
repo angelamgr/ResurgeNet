@@ -41,13 +41,10 @@ function showModal(title, content, type, options) {
     }
     btnConfirm.hide().off('click');
 
-    // --- Título y clases de tipo ---
+    // --- Tipo: clases CSS en el modal (controlan color del h3 vía components.css) ---
     modalTitle.text(title);
     errorList.empty();
     modal.removeClass('modal-success modal-error modal-confirm').addClass('modal-' + type);
-
-    var colors = { success: '#155724', confirm: '#856404', error: '#a94442' };
-    modalTitle.css('color', colors[type] || colors.error);
 
     // --- Botón confirm ---
     if (type === 'confirm') {
@@ -55,19 +52,11 @@ function showModal(title, content, type, options) {
         var confirmColor = options.confirmColor || '#28a745';
         var onConfirm    = options.onConfirm    || null;
 
+        // El color de fondo es dinámico (varía por acción), el resto lo da components.css
         btnConfirm
             .show()
             .text(confirmText)
-            .css({
-                'background-color': confirmColor,
-                'color':            'white',
-                'border':           'none',
-                'padding':          '10px 20px',
-                'margin-top':       '15px',
-                'cursor':           'pointer',
-                'border-radius':    '4px',
-                'width':            '100%'
-            });
+            .css('background-color', confirmColor);
 
         btnConfirm.on('click', function () {
             if (onConfirm) onConfirm();
@@ -77,7 +66,6 @@ function showModal(title, content, type, options) {
 
     // --- Contenido de la lista ---
     if (content === null || content === undefined) {
-        // Sin contenido (p.ej. modal de éxito sin detalle)
         errorList.hide();
     } else {
         errorList.show();
@@ -85,7 +73,6 @@ function showModal(title, content, type, options) {
             content.forEach(function (item) {
                 var li = $('<li>');
                 if (typeof item === 'object' && item.campo) {
-                    // Formato { campo, problema [, ejemplo] }
                     var html = '<strong>Campo:</strong> ' + item.campo +
                                '<br><strong>Problema:</strong> ' + item.problema;
                     if (item.ejemplo) {
@@ -98,14 +85,11 @@ function showModal(title, content, type, options) {
                 errorList.append(li);
             });
         } else {
-            // String simple
             errorList.append($('<li>').text(content));
         }
     }
 
     modal.css('display', 'flex');
-
-    // Mueve el foco al botón cerrar (accesibilidad)
     modal.find('.close-button').focus();
 }
 
@@ -120,21 +104,34 @@ function hideModal() {
     $('#errorList').show();
 }
 
+/**
+ * Marca un input como erróneo (borde rojo).
+ * @param {jQuery} $input
+ */
+function inputError($input) {
+    $input.removeClass('input-ok').addClass('input-error');
+}
+
+/**
+ * Marca un input como válido / limpio (borde gris).
+ * @param {jQuery} $input
+ */
+function inputOk($input) {
+    $input.removeClass('input-error').addClass('input-ok');
+}
+
 // ============================================================
 // Eventos globales del modal (se registran una sola vez aquí)
 // ============================================================
 $(document).ready(function () {
-    // Cerrar con el botón ×
     $(document).on('click', '.close-button', function () {
         hideModal();
     });
 
-    // Cerrar al hacer clic en el fondo oscuro
     $(document).on('click', '#errorModal', function (e) {
         if (e.target === this) hideModal();
     });
 
-    // Cerrar con la tecla Escape
     $(document).on('keydown', function (e) {
         if (e.key === 'Escape' && $('#errorModal').is(':visible')) {
             hideModal();

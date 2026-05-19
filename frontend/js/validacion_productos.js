@@ -17,17 +17,15 @@ $(document).ready(function () {
 
         function addError(input, campo, problema, ejemplo) {
             errors.push({ campo: campo, problema: problema, ejemplo: ejemplo });
-            input.css('border', '2px solid red');
+            inputError(input);
             isValid = false;
         }
 
-        function limpiarEstilo(input) { input.css('border', '1px solid #ddd'); }
+        $.each([nombre, tipo, descripcion, precio, stock], function (i, inp) { inputOk(inp); });
 
-        $.each([nombre, tipo, descripcion, precio, stock], function (i, inp) { limpiarEstilo(inp); });
-
-        if (!nombre.val().trim())      addError(nombre,      'Nombre',      'No puede estar vacío.',      'Ej: Alas de Onix');
-        if (!tipo.val().trim())        addError(tipo,        'Tipo',        'No puede estar vacío.',      'Ej: Libro');
-        if (!descripcion.val().trim()) addError(descripcion, 'Descripción', 'No puede estar vacío.',      'Breve detalle');
+        if (!nombre.val().trim())      addError(nombre,      'Nombre',      'No puede estar vacío.', 'Ej: Alas de Onix');
+        if (!tipo.val().trim())        addError(tipo,        'Tipo',        'No puede estar vacío.', 'Ej: Libro');
+        if (!descripcion.val().trim()) addError(descripcion, 'Descripción', 'No puede estar vacío.', 'Breve detalle');
 
         var precioRegex = /^\d+(\.\d{1,2})?$/;
         if (!precio.val().trim()) {
@@ -50,7 +48,7 @@ $(document).ready(function () {
             if (!allowedTypes.includes(imagenFiles[0].type)) {
                 addError(imagen, 'Imagen', 'Debe ser JPG o PNG.', 'Selecciona otra foto.');
             } else {
-                limpiarEstilo(imagen);
+                inputOk(imagen);
             }
         }
 
@@ -78,7 +76,7 @@ $(document).ready(function () {
             success: function (data) {
                 showModal('Guardado con éxito', 'Producto registrado: ' + nombreGuardado, 'success');
                 form[0].reset();
-                $.each([nombre, tipo, descripcion, precio, stock, imagen], function (i, inp) { limpiarEstilo(inp); });
+                $.each([nombre, tipo, descripcion, precio, stock, imagen], function (i, inp) { inputOk(inp); });
             },
             error: function (xhr) {
                 var err = (xhr.responseJSON) ? xhr.responseJSON : {};

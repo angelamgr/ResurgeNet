@@ -1,0 +1,70 @@
+/* ============================================================
+   COMPONENTS.CSS — Clases de componentes dinámicos
+   ResurgeNet · Fase de optimización frontend
+   ============================================================
+   Este archivo centraliza todos los estilos que antes se
+   aplicaban mediante .css() inline en JavaScript.
+   Debe cargarse en TODOS los HTML, justo después de
+   estructura.css y antes de cualquier CSS de página.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   1. VALIDACIÓN DE FORMULARIOS
+   Clases añadidas/quitadas por JS al validar inputs.
+   ------------------------------------------------------------ */
+
+/* Campo con error de validación */
+.input-error {
+    border: 2px solid red !important;
+}
+
+/* Campo válido / reset tras corrección */
+.input-ok {
+    border: 1px solid #ddd !important;
+}
+
+
+/* ------------------------------------------------------------
+   2. MODAL — Botón de confirmación
+   Estilos base del botón #modal-confirm-btn.
+   El color de fondo se sigue asignando por JS porque es
+   dinámico (verde para activar, rojo para eliminar, etc.).
+   ------------------------------------------------------------ */
+
+#modal-confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    font-size: 15px;
+}
+
+
+/* ------------------------------------------------------------
+   3. MODAL — Color del título según tipo
+   El JS añade la clase modal-error / modal-success /
+   modal-confirm al #errorModal; desde aquí coloreamos el h3.
+   ------------------------------------------------------------ */
+
+#errorModal.modal-error   .modal-content h3 { color: #a94442; }
+#errorModal.modal-success .modal-content h3 { color: #155724; }
+#errorModal.modal-confirm .modal-content h3 { color: #856404; }
+
+
+/* ------------------------------------------------------------
+   4. MENSAJES DE LISTA VACÍA
+   Párrafos de «no hay datos» inyectados dinámicamente por JS
+   en contenedores de listas y grids.
+   ------------------------------------------------------------ */
+
+.lista-vacia {
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+    color: #555;
+}

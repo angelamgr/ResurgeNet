@@ -13,7 +13,7 @@ $(document).ready(function () {
                 contenedor.empty();
 
                 if (response.length === 0) {
-                    contenedor.append('<p style="text-align:center; padding:20px;">No hay comercios registrados.</p>');
+                    contenedor.append('<p class="lista-vacia">No hay comercios registrados.</p>');
                     return;
                 }
 
