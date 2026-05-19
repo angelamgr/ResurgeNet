@@ -3,36 +3,51 @@ $(document).ready(function () {
     cargarSolicitudes();
 });
 
-async function cargarSolicitudes() {
-    try {
-        var response = await fetch(API_BASE + '/solicitudes_comercios');
-        var data     = await response.json();
-        var container = document.querySelector('.comercios-container');
-        container.innerHTML = '';
+function cargarSolicitudes() {
+    $.ajax({
+        url:      API_BASE + '/solicitudes_comercios',
+        type:     'GET',
+        dataType: 'json',
+        success: function (data) {
+            var container = $('.comercios-container');
+            container.empty();
 
-        if (data.length === 0) {
-            container.innerHTML = '<p style="text-align:center; padding:20px;">No hay solicitudes pendientes.</p>';
-            return;
+            if (data.length === 0) {
+                container.append('<p style="text-align:center; padding:20px;">No hay solicitudes pendientes.</p>');
+                return;
+            }
+
+            $.each(data, function (i, solicitud) {
+                var row = $('<div class="comercio-row">')
+                    .append($('<span class="comercio-nombre">').text(solicitud.nombreComercio))
+                    .append($('<span class="motivo-solicitud-texto">').text(solicitud.motivoSolicitud))
+                    .append(
+                        $('<div class="acciones">')
+                            .append(
+                                $('<button class="btn-icon btn-aceptar"><span></span></button>')
+                                    .data('id',     solicitud.id_solicitud)
+                                    .data('nombre', solicitud.nombreComercio)
+                            )
+                            .append(
+                                $('<button class="btn-icon btn-denegar"><span></span></button>')
+                                    .data('id',     solicitud.id_solicitud)
+                                    .data('nombre', solicitud.nombreComercio)
+                            )
+                    );
+                container.append(row);
+            });
+        },
+        error: function () {
+            showModal('Error', 'No se pudieron cargar las solicitudes');
         }
-
-        data.forEach(function (solicitud) {
-            var row = document.createElement('div');
-            row.classList.add('comercio-row');
-            row.innerHTML =
-                '<span class="comercio-nombre">'         + solicitud.nombreComercio   + '</span>' +
-                '<span class="motivo-solicitud-texto">'  + solicitud.motivoSolicitud  + '</span>' +
-                '<div class="acciones">' +
-                    '<button class="btn-icon btn-aceptar" onclick="aceptar(' + solicitud.id_solicitud + ', \'' + solicitud.nombreComercio + '\')"><span></span></button>' +
-                    '<button class="btn-icon btn-denegar" onclick="denegar(' + solicitud.id_solicitud + ', \'' + solicitud.nombreComercio + '\')"><span></span></button>' +
-                '</div>';
-            container.appendChild(row);
-        });
-    } catch (error) {
-        showModal('Error', 'No se pudieron cargar las solicitudes');
-    }
+    });
 }
 
-async function denegar(id, nombre) {
+$(document).on('click', '.btn-denegar', function () {
+    var id     = $(this).data('id');
+    var nombre = $(this).data('nombre');
+    var fila   = $(this).closest('.comercio-row');
+
     showModal(
         'Confirmar Denegación',
         '¿Seguro que quieres denegar la solicitud de "' + nombre + '"?',
@@ -40,29 +55,32 @@ async function denegar(id, nombre) {
         {
             confirmText:  'Denegar solicitud',
             confirmColor: '#d9534f',
-            onConfirm: async function () {
-                try {
-                    var response = await fetch(API_BASE + '/denegar_solicitud/' + id, {
-                        method:  'PUT',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    var data = await response.json();
-                    if (response.ok) {
+            onConfirm: function () {
+                $.ajax({
+                    url:         API_BASE + '/denegar_solicitud/' + id,
+                    type:        'PUT',
+                    contentType: 'application/json',
+                    success: function (data) {
                         showModal('Éxito', data.message || 'Solicitud denegada', 'success');
-                        var btn = document.querySelector('.btn-denegar[onclick*="denegar(' + id + '"]');
-                        if (btn) btn.closest('.comercio-row').remove();
-                    } else {
-                        showModal('Error', data.error || 'No se pudo denegar');
+                        fila.remove();
+                    },
+                    error: function (xhr) {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.error)
+                            ? xhr.responseJSON.error
+                            : 'No se pudo denegar';
+                        showModal('Error', msg);
                     }
-                } catch (error) {
-                    showModal('Error', 'Error de conexión con el servidor');
-                }
+                });
             }
         }
     );
-}
+});
 
-async function aceptar(id, nombre) {
+$(document).on('click', '.btn-aceptar', function () {
+    var id     = $(this).data('id');
+    var nombre = $(this).data('nombre');
+    var fila   = $(this).closest('.comercio-row');
+
     showModal(
         'Confirmar Aceptación',
         '¿Seguro que quieres aceptar la solicitud de "' + nombre + '"?',
@@ -70,24 +88,23 @@ async function aceptar(id, nombre) {
         {
             confirmText:  'Aceptar solicitud',
             confirmColor: '#28a745',
-            onConfirm: async function () {
-                try {
-                    var response = await fetch(API_BASE + '/aceptar_solicitud/' + id, {
-                        method:  'PUT',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    var data = await response.json();
-                    if (response.ok) {
+            onConfirm: function () {
+                $.ajax({
+                    url:         API_BASE + '/aceptar_solicitud/' + id,
+                    type:        'PUT',
+                    contentType: 'application/json',
+                    success: function (data) {
                         showModal('Éxito', data.message || 'Solicitud aceptada', 'success');
-                        var btn = document.querySelector('.btn-aceptar[onclick*="aceptar(' + id + '"]');
-                        if (btn) btn.closest('.comercio-row').remove();
-                    } else {
-                        showModal('Error', data.error || 'No se pudo aceptar');
+                        fila.remove();
+                    },
+                    error: function (xhr) {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.error)
+                            ? xhr.responseJSON.error
+                            : 'No se pudo aceptar';
+                        showModal('Error', msg);
                     }
-                } catch (error) {
-                    showModal('Error', 'Error de conexión con el servidor');
-                }
+                });
             }
         }
     );
-}
+});

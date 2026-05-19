@@ -1,22 +1,22 @@
-// Maneja el evento de 'pageshow', que se dispara cuando se navega usando el historial
-// (botón 'atrás/adelante') o cuando se carga la página desde la caché (persisted).
-window.addEventListener('pageshow', function (event) {
-    // Comprobamos si la página se está cargando desde la caché del navegador.
-    if (event.persisted) {
-        // Si se cargó desde la caché, verificamos la sesión en el servidor.
-        fetch('http://localhost:8080/api/checkUserSession', { credentials: 'include' })
-            .then(res => res.json())
-            .then(data => {
-                // Si la sesión NO está activa, redirigimos.
+// Requiere: jquery, config.js
+// Comprueba la sesión cuando el navegador recupera la página desde caché
+// (botón 'atrás' o navegación por historial).
+$(window).on('pageshow', function (event) {
+    // event.originalEvent.persisted indica que la página viene de la caché bfcache
+    if (event.originalEvent && event.originalEvent.persisted) {
+        $.ajax({
+            url:       API_BASE + '/checkUserSession',
+            type:      'GET',
+            xhrFields: { withCredentials: true },
+            success: function (data) {
                 if (!data.active) {
-                    // Usamos replace() aquí también para evitar un ciclo en el historial
                     window.location.replace('index.html');
                 }
-            })
-            // Manejo básico de errores de red o servidor
-            .catch(() => {
-                // Asumimos que si hay error de conexión, es mejor cerrar la sesión.
+            },
+            error: function () {
+                // Si hay error de conexión, cerramos la sesión por seguridad
                 window.location.replace('index.html');
-            });
+            }
+        });
     }
 });
