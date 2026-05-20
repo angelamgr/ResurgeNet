@@ -13,7 +13,7 @@ $(document).ready(function () {
                 contenedor.empty();
 
                 if (usuarios.length === 0) {
-                    contenedor.append('<p style="text-align:center; width:100%;">No hay consumidores registrados.</p>');
+                    contenedor.append('<p class="lista-vacia">No hay consumidores registrados.</p>');
                     return;
                 }
 
@@ -29,7 +29,10 @@ $(document).ready(function () {
                 });
             },
             error: function (xhr) {
-                $('#lista-consumidores').html('<p>Error al cargar los datos.</p>');
+                var msg = (xhr.responseJSON && xhr.responseJSON.error)
+                    ? xhr.responseJSON.error
+                    : 'Error al cargar los datos.';
+                showModal('Error', msg);
             }
         });
     }
@@ -44,8 +47,8 @@ $(document).ready(function () {
         }
 
         showModal(
-            'Confirmar Eliminación',
-            '¿Estás seguro de que deseas eliminar al consumidor "' + nombre + '"?',
+            'Confirmar Eliminaci\u00f3n',
+            '\u00bfEst\u00e1s seguro de que deseas eliminar al consumidor "' + nombre + '"?',
             'confirm',
             {
                 confirmText:  'Eliminar permanentemente',
@@ -62,7 +65,7 @@ $(document).ready(function () {
                         error: function (xhr) {
                             var msg = (xhr.responseJSON && xhr.responseJSON.message)
                                 ? xhr.responseJSON.message
-                                : 'Error de comunicación.';
+                                : 'Error de comunicaci\u00f3n.';
                             showModal('Error', msg);
                         }
                     });

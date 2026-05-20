@@ -1,17 +1,21 @@
+// Requiere: jquery, config.js, utils.js
 $(document).ready(function () {
-    const params = new URLSearchParams(window.location.search);
-    const id_producto = params.get('id');
+    var params      = new URLSearchParams(window.location.search);
+    var id_producto = params.get('id');
 
     if (!id_producto) {
-        console.error("No se encontró el id del producto en la URL");
+        showModal(
+            'Error de navegaci\u00f3n',
+            'No se ha podido identificar el producto. Vuelve al listado y sel\u00e9ccionalo de nuevo.'
+        );
         return;
     }
 
     $.ajax({
-        url: `${API_BASE}/cargar_producto/${id_producto}`,
-        type: 'GET',
+        url:      API_BASE + '/cargar_producto/' + id_producto,
+        type:     'GET',
         dataType: 'json',
-        success: function(producto) {
+        success: function (producto) {
             if (!producto) return;
             $('#nombre_prod').val(producto.nombre);
             $('#tipo').val(producto.tipo);
@@ -19,8 +23,11 @@ $(document).ready(function () {
             $('#precio').val(producto.precio);
             $('#stock').val(producto.stock);
         },
-        error: function(err) {
-            console.error("Error al cargar el producto:", err);
+        error: function (xhr) {
+            var msg = (xhr.responseJSON && xhr.responseJSON.message)
+                ? xhr.responseJSON.message
+                : 'No se pudieron cargar los datos del producto. Int\u00e9ntalo de nuevo.';
+            showModal('Error al cargar producto', msg);
         }
     });
 });
