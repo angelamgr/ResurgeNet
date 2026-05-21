@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title> Controles Comercio </title>
+        <title>Controles Comercio</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="style/estructura.css" />
-        <link rel="stylesheet" type="text/css" href="style/admin_dashboard.css" />
+        <link rel="stylesheet" href="style/main.css" />
+        <link rel="stylesheet" href="style/components.css" />
+        <link rel="stylesheet" href="style/admin_dashboard.css" />
     </head>
     <body>
         <header>
-            <h1 id="nombre"> ResurgeNet </h1>
-            <a href="index.html"> <img id="logo" src="imagenes/logo .png" alt="Imagen logo " width="80" height="80" /> </a>
+            <h1 id="nombre">ResurgeNet</h1>
+            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Imagen logo" width="80" height="80" /></a>
             <img id="admin-icon" src="imagenes/foto_ini.png" alt="Icono Comercio" width="100" height="100" />
-            <p> Nombre comercio </p>
+            <p>Nombre comercio</p>
         </header>
-
         <nav class="sidebar">
-            <p class="toggle-btn">☰</p>
+            <p class="toggle-btn">&#9776;</p>
             <ul class="menu-items">
                 <li><a href="alta_productos.html">Alta de productos</a></li>
-                <li><a href="actualizar_producto.html">Actualización de productos</a></li>
+                <li><a href="actualizar_producto.html">Actualizacion de productos</a></li>
                 <li><a href="listado_productos_comercio.html">Listado de productos</a></li>
             </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
+            <button id="logout-btn" type="button">Cerrar Sesion</button>
         </nav>
-
         <main>
             <h2>Panel de Comercios</h2>
-            <p>Bienvenido al panel de administración para comercios. Despliega el menú para acceder a las funcionalidades.</p>
+            <p>Bienvenido al panel de administracion para comercios. Despliega el menu para acceder a las funcionalidades.</p>
         </main>
-
-        <footer>
-            <p>Quien somos</p>
-            <p>Contacto</p>
-        </footer>
-
-        <div id="errorModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>Mensaje</h3>
-                <p>Información:</p>
-                <ul id="errorList" class="error-list"></ul>
-            </div>
-        </div>
+        <footer><p>Quien somos</p><p>Contacto</p></footer>
+        <div id="errorModal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h3>Mensaje</h3><ul id="errorList" class="error-list"></ul></div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/config.js"></script>
         <script src="js/utils.js"></script>

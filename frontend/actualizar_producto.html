@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title> Actualizacion Productos </title>
+        <title>Actualizacion Productos</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="style/estructura.css" />
-        <link rel="stylesheet" type="text/css" href="style/admin_dashboard.css" />
-        <link rel="stylesheet" type="text/css" href="style/alta_productos.css" />
+        <link rel="stylesheet" href="style/main.css" />
+        <link rel="stylesheet" href="style/components.css" />
+        <link rel="stylesheet" href="style/admin_dashboard.css" />
+        <link rel="stylesheet" href="style/alta_productos.css" />
     </head>
     <body>
         <header>
-            <h1 id="nombre"> ResurgeNet </h1>
-            <a href="index.html"> <img id="logo" src="imagenes/logo .png" alt="Imagen logo " width="80" height="80" /> </a>
+            <h1 id="nombre">ResurgeNet</h1>
+            <a href="index.html"><img id="logo" src="imagenes/logo .png" alt="Imagen logo" width="80" height="80" /></a>
             <img id="admin-icon" src="imagenes/foto_ini.png" alt="Icono Comercio" width="100" height="100" />
-            <p> N. Comercio </p>
+            <p>N. Comercio</p>
         </header>
-
         <nav class="sidebar">
             <p class="toggle-btn">&#9776;</p>
             <ul class="menu-items">
@@ -23,57 +23,26 @@
                 <li><a href="alta_productos.html">Alta de productos</a></li>
                 <li><a href="listado_productos_comercio.html">Listado de productos</a></li>
             </ul>
-            <button id="logout-btn" type="submit" name="hecho">Cerrar Sesión</button>
+            <button id="logout-btn" type="button">Cerrar Sesion</button>
         </nav>
-
         <main>
             <h2>Actualiza tu producto</h2>
             <section class="form-container">
                 <form id="altaProduForm">
                     <div class="form-grid">
-                        <div>
-                            <label for="nombre_prod">Nombre</label>
-                            <input type="text" id="nombre_prod" name="nombre">
-                        </div>
-                        <div>
-                            <label for="tipo">Tipo</label>
-                            <input type="text" id="tipo" name="tipo" />
-                        </div>
-                        <div>
-                            <label for="descripcion">Descripcion</label>
-                            <input type="text" id="descripcion" name="descripcion" />
-                        </div>
-                        <div>
-                            <label for="precio">Precio</label>
-                            <input type="text" id="precio" name="precio" />
-                        </div>
-                        <div>
-                            <label for="stock">Stock</label>
-                            <input type="text" id="stock" name="stock" />
-                        </div>
-                        <div>
-                            <label for="imagen">Imagen</label>
-                            <input type="file" id="imagen" name="imagen" accept="image/*" />
-                        </div>
+                        <div><label for="nombre_prod">Nombre</label><input type="text" id="nombre_prod" name="nombre"></div>
+                        <div><label for="tipo">Tipo</label><input type="text" id="tipo" name="tipo" /></div>
+                        <div><label for="descripcion">Descripcion</label><input type="text" id="descripcion" name="descripcion" /></div>
+                        <div><label for="precio">Precio</label><input type="text" id="precio" name="precio" /></div>
+                        <div><label for="stock">Stock</label><input type="text" id="stock" name="stock" /></div>
+                        <div><label for="imagen">Imagen</label><input type="file" id="imagen" name="imagen" accept="image/*" /></div>
                     </div>
-                    <button type="submit" name="hecho">Guardar</button>
+                    <button type="submit">Guardar</button>
                 </form>
             </section>
         </main>
-
-        <footer>
-            <p>Quien somos</p>
-            <p>Contacto</p>
-        </footer>
-
-        <div id="errorModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3>Mensaje</h3>
-                <p>Información:</p>
-                <ul id="errorList" class="error-list"></ul>
-            </div>
-        </div>
+        <footer><p>Quien somos</p><p>Contacto</p></footer>
+        <div id="errorModal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h3>Mensaje</h3><ul id="errorList" class="error-list"></ul></div></div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/config.js"></script>
         <script src="js/utils.js"></script>
