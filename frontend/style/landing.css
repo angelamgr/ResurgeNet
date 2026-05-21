@@ -1,65 +1,7 @@
-.encabezado2{
-    height: 80px;
-    background-color: #4496DA;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 30px;
-    justify-content: space-between;
-    font-family: Railway, sans-serif;
-    font-weight: 100;
-}
-.encabezado2 > div {
-  flex: 1; 
-  text-align: center;
-}
-
-.encabezado2 .registro{
-    margin-left: 50px;
-    text-align: center;
-   
-}
-
-button{
-    font-family: Railway, sans-serif;
-    background-color: #7a0c00;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 100px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.servicios{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 30px;
-    justify-content: space-between;
-    font-family: Railway, sans-serif;
-}
-
-.servicios > section {
-  flex: 1; 
-  text-align: center;
-  background-color: #5089A5;
-  border-radius: 40px;
-  height: 220px;
-  margin: 10px;
-  padding: 20px;
-
-  /*Para ampliar los elementos verticalmente*/
-  display: flex;            
-  flex-direction: column;    
-}
-
-.servicios > section button {
-  margin-top: auto;           
-  align-self: center; 
-  width: auto;        
-  padding: 10px 20px; 
-}
-
-
-
+/* landing.css - solo estilos de index.html. Boton base y body vienen de main.css. */
+.encabezado2 { height: 80px; background-color: #4496DA; display: flex; flex-direction: row; align-items: center; padding: 30px; justify-content: space-between; font-family: var(--font-main); font-weight: 100; }
+.encabezado2 > div { flex: 1; text-align: center; }
+.encabezado2 .registro { margin-left: 50px; text-align: center; }
+.servicios { display: flex; flex-direction: row; align-items: center; padding: 30px; justify-content: space-between; font-family: var(--font-main); }
+.servicios > section { flex: 1; text-align: center; background-color: var(--color-primary-mid); border-radius: var(--radius-card-lg); height: 220px; margin: 10px; padding: 20px; display: flex; flex-direction: column; }
+.servicios > section button { margin-top: auto; align-self: center; width: auto; padding: 10px 20px; }
