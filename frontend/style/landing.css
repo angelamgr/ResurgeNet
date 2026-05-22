@@ -1,7 +1,64 @@
-/* landing.css - solo estilos de index.html. Boton base y body vienen de main.css. */
-.encabezado2 { height: 80px; background-color: #4496DA; display: flex; flex-direction: row; align-items: center; padding: 30px; justify-content: space-between; font-family: var(--font-main); font-weight: 100; }
-.encabezado2 > div { flex: 1; text-align: center; }
-.encabezado2 .registro { margin-left: 50px; text-align: center; }
-.servicios { display: flex; flex-direction: row; align-items: center; padding: 30px; justify-content: space-between; font-family: var(--font-main); }
-.servicios > section { flex: 1; text-align: center; background-color: var(--color-primary-mid); border-radius: var(--radius-card-lg); height: 220px; margin: 10px; padding: 20px; display: flex; flex-direction: column; }
-.servicios > section button { margin-top: auto; align-self: center; width: auto; padding: 10px 20px; }
+/* landing.css - estilos especificos de index.html */
+
+/* Banda azul del encabezado con imagen central */
+.encabezado2 {
+    background-color: #4496DA;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 30px;
+    justify-content: space-between;
+    font-family: var(--font-main);
+    font-weight: 100;
+    min-height: 240px;  /* suficiente para la imagen de 200px + padding */
+}
+
+.encabezado2 > div {
+    flex: 1;
+    text-align: center;
+}
+
+.encabezado2 .registro {
+    margin-left: 50px;
+    text-align: center;
+}
+
+/* Imagen central del encabezado */
+.encabezado2 .imagen-encabezado {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tres tarjetas de servicios */
+.servicios {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 30px;
+    justify-content: space-between;
+    font-family: var(--font-main);
+    /* Margen inferior para que el footer fijo no tape el contenido */
+    margin-bottom: 60px;
+}
+
+.servicios > section {
+    flex: 1;
+    text-align: center;
+    background-color: var(--color-primary-mid);
+    border-radius: var(--radius-card-lg);
+    min-height: 220px;
+    margin: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.servicios > section button {
+    margin-top: auto;
+    align-self: center;
+    width: auto;
+    padding: 10px 20px;
+    /* Hereda el boton base de main.css - rojo corporativo */
+}

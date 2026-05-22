@@ -1,4 +1,21 @@
-/* registro.css - solo layout del registro. Modal, .form-grid, header, footer vienen de main.css. */
-.form-container { display: flex; justify-content: center; padding: 5px 230px; margin-top: 30px; }
+/* registro.css - layout especifico del formulario de registro.
+   Modal, .form-grid base, header y footer vienen de main.css. */
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px 60px;
+    margin-top: 20px;
+    /* Margen inferior para el footer fijo */
+    padding-bottom: 80px;
+}
+
 .form-grid label { width: 150px; }
-section button { margin-top: 6px; }
+
+/* Boton de submit */
+section button[type="submit"] {
+    position: static;
+    transform: none;
+    display: block;
+    margin: 16px auto 0;
+}

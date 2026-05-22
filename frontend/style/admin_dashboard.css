@@ -1,12 +1,58 @@
-/* admin_dashboard.css - solo sidebar y toggle. Modal, boton, header, footer vienen de main.css. */
-.sidebar { width: 22.22vw; position: fixed; top: 127px; bottom: 105px; left: -33.33vw; background-color: var(--color-primary-mid); padding: 0; transition: left 0.3s; z-index: 1000; overflow-y: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+/* admin_dashboard.css - solo sidebar, toggle y logout.
+   Modal, header y footer vienen de main.css. */
+
+.sidebar {
+    width: 22.22vw;
+    position: fixed;
+    top: 90px;       /* alineado con la altura minima del header */
+    bottom: 50px;    /* espacio para el footer fijo */
+    left: -33.33vw;
+    background-color: var(--color-primary-mid);
+    padding: 0;
+    transition: left 0.3s;
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .sidebar.open { left: 0; }
-.toggle-btn { position: fixed; top: 110px; left: 10px; background-color: var(--color-primary); color: var(--color-white); border: none; padding: 10px 15px; cursor: pointer; z-index: 1100; transition: opacity 0.3s; font-size: 1.2rem; border-radius: 4px; }
+
+/* Boton hamburguesa - cancela el boton base de main.css */
+.toggle-btn {
+    position: fixed;
+    top: 95px;
+    left: 10px;
+    background-color: var(--color-primary) !important;
+    color: var(--color-white);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1100;
+    transition: opacity 0.3s;
+    font-size: 1.2rem;
+    border-radius: 4px !important;
+    width: auto;
+    font-family: var(--font-main);
+}
+
 .toggle-btn:focus { outline: 2px solid white; outline-offset: 2px; }
-.sidebar.open ~ .toggle-btn { opacity: 0; pointer-events: none; }
+
 .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
 .sidebar ul li { margin: 10px 0; }
-.sidebar ul li a { display: block; color: black; padding: 10px 20px; text-decoration: none; border-radius: 4px; }
+.sidebar ul li a {
+    display: block; color: black;
+    padding: 10px 20px; text-decoration: none; border-radius: 4px;
+}
 .sidebar ul li a:hover, .sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
+
+/* Boton de cierre de sesion dentro del sidebar */
+#logout-btn {
+    margin-top: 20px;
+    width: 80%;
+}
+
 .dashboard-content { margin-left: 20px; padding: 20px; transition: margin-left 0.3s; }
 .sidebar.open ~ .dashboard-content { margin-left: 33.33vw; }

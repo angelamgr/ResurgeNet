@@ -1,4 +1,44 @@
-/* incio_sesion.css - solo tarjeta de login. Modal, header, footer vienen de main.css. */
-.form-container { display: flex; justify-content: center; align-items: center; padding-top: 60px; }
-section.form-container > section { font-family: var(--font-main); background-color: var(--color-primary-mid); text-align: center; color: var(--color-white); padding: 20px; border-radius: 8px; box-shadow: 0 8px 14px rgba(0,0,0,0.25), 0 14px 34px rgba(0,0,0,0.15); max-width: 400px; width: 100%; margin: 50px auto; }
-section input { font-family: var(--font-main); width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: var(--radius-pill); }
+/* incio_sesion.css - tarjeta de login y reset de password.
+   Modal, header y footer vienen de main.css. */
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 60px;
+    /* Margen inferior para que el footer fijo no tape el formulario */
+    padding-bottom: 80px;
+}
+
+section.form-container > section {
+    font-family: var(--font-main);
+    background-color: var(--color-primary-mid);
+    text-align: center;
+    color: var(--color-white);
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 14px rgba(0,0,0,0.25), 0 14px 34px rgba(0,0,0,0.15);
+    max-width: 400px;
+    width: 100%;
+    margin: 50px auto;
+}
+
+section input {
+    font-family: var(--font-main);
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: var(--radius-pill);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Boton de submit dentro de la tarjeta de login */
+section.form-container button[type="submit"] {
+    position: static;
+    transform: none;
+    display: inline-block;
+    margin-top: 10px;
+}
