@@ -1,11 +1,11 @@
 /* admin_dashboard.css - solo sidebar, toggle y logout.
-   Modal, header y footer vienen de main.css. */
+   Modal, boton base, header y footer vienen de main.css. */
 
 .sidebar {
     width: 22.22vw;
     position: fixed;
-    top: 90px;       /* alineado con la altura minima del header */
-    bottom: 50px;    /* espacio para el footer fijo */
+    top: 90px;
+    bottom: 50px;
     left: -33.33vw;
     background-color: var(--color-primary-mid);
     padding: 0;
@@ -20,12 +20,13 @@
 
 .sidebar.open { left: 0; }
 
-/* Boton hamburguesa - cancela el boton base de main.css */
+/* El toggle-btn es un <p> en el HTML (no un <button>), por lo que
+   NO hereda el boton base de main.css. Se estiliza directamente. */
 .toggle-btn {
     position: fixed;
     top: 95px;
     left: 10px;
-    background-color: var(--color-primary) !important;
+    background-color: var(--color-primary);
     color: var(--color-white);
     border: none;
     padding: 10px 15px;
@@ -33,9 +34,14 @@
     z-index: 1100;
     transition: opacity 0.3s;
     font-size: 1.2rem;
-    border-radius: 4px !important;
+    border-radius: 4px;
     width: auto;
     font-family: var(--font-main);
+    /* Necesario porque es un <p>: resetear margenes por defecto */
+    margin: 0;
+    display: inline-block;
+    line-height: 1;
+    user-select: none;
 }
 
 .toggle-btn:focus { outline: 2px solid white; outline-offset: 2px; }
@@ -43,16 +49,30 @@
 .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
 .sidebar ul li { margin: 10px 0; }
 .sidebar ul li a {
-    display: block; color: black;
-    padding: 10px 20px; text-decoration: none; border-radius: 4px;
+    display: block;
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
 }
-.sidebar ul li a:hover, .sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
+.sidebar ul li a:hover,
+.sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
 
-/* Boton de cierre de sesion dentro del sidebar */
+/* Boton de cierre de sesion dentro del sidebar.
+   Hereda el boton base rojo de main.css. */
 #logout-btn {
     margin-top: 20px;
     width: 80%;
+    /* Cancela position:absolute heredada del boton del header
+       (el selector header > button no aplica aqui, pero por
+       seguridad lo forzamos estatico) */
+    position: static !important;
+    transform: none !important;
 }
 
-.dashboard-content { margin-left: 20px; padding: 20px; transition: margin-left 0.3s; }
-.sidebar.open ~ .dashboard-content { margin-left: 33.33vw; }
+/* El contenido principal de los dashboards necesita
+   margen izquierdo para no quedar tapado por el toggle-btn */
+main {
+    padding-top: 20px;
+    padding-left: 60px;
+}

@@ -1,5 +1,12 @@
 /* landing.css - estilos especificos de index.html */
 
+/* El main de la landing no necesita el text-align:center
+   global ni el padding-left del dashboard */
+main {
+    text-align: left;
+    padding-left: 0;
+}
+
 /* Banda azul del encabezado con imagen central */
 .encabezado2 {
     background-color: #4496DA;
@@ -10,7 +17,7 @@
     justify-content: space-between;
     font-family: var(--font-main);
     font-weight: 100;
-    min-height: 240px;  /* suficiente para la imagen de 200px + padding */
+    min-height: 240px;
 }
 
 .encabezado2 > div {
@@ -31,6 +38,15 @@
     justify-content: center;
 }
 
+/* Boton Registro dentro del encabezado.
+   Es hijo de <a> dentro de <div> dentro de <section> dentro de <main>,
+   por lo que hereda correctamente el boton base rojo de main.css.
+   Solo necesitamos cancelar cualquier position absoluta residual. */
+.encabezado2 button {
+    position: static !important;
+    transform: none !important;
+}
+
 /* Tres tarjetas de servicios */
 .servicios {
     display: flex;
@@ -39,7 +55,6 @@
     padding: 30px;
     justify-content: space-between;
     font-family: var(--font-main);
-    /* Margen inferior para que el footer fijo no tape el contenido */
     margin-bottom: 60px;
 }
 
@@ -55,10 +70,14 @@
     flex-direction: column;
 }
 
+/* Botones de las tarjetas de servicios.
+   Heredan el estilo base rojo de main.css (button {}).
+   Solo sobreescribimos layout: centrado y margenes. */
 .servicios > section button {
     margin-top: auto;
     align-self: center;
     width: auto;
     padding: 10px 20px;
-    /* Hereda el boton base de main.css - rojo corporativo */
+    position: static !important;
+    transform: none !important;
 }
