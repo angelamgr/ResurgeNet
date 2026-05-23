@@ -1,5 +1,4 @@
-/* admin_dashboard.css - solo sidebar, toggle y logout.
-   Modal, boton base, header y footer vienen de main.css. */
+/* admin_dashboard.css - solo sidebar, toggle y logout. */
 
 .sidebar {
     width: 22.22vw;
@@ -17,11 +16,9 @@
     justify-content: center;
     align-items: center;
 }
-
 .sidebar.open { left: 0; }
 
-/* El toggle-btn es un <p> en el HTML (no un <button>), por lo que
-   NO hereda el boton base de main.css. Se estiliza directamente. */
+/* toggle-btn es un <p> en el HTML, no hereda boton base */
 .toggle-btn {
     position: fixed;
     top: 95px;
@@ -37,42 +34,33 @@
     border-radius: 4px;
     width: auto;
     font-family: var(--font-main);
-    /* Necesario porque es un <p>: resetear margenes por defecto */
     margin: 0;
     display: inline-block;
     line-height: 1;
     user-select: none;
 }
-
 .toggle-btn:focus { outline: 2px solid white; outline-offset: 2px; }
 
 .sidebar ul { list-style-type: none; padding: 0; margin: 0; }
 .sidebar ul li { margin: 10px 0; }
 .sidebar ul li a {
-    display: block;
-    color: black;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
+    display: block; color: black;
+    padding: 10px 20px; text-decoration: none; border-radius: 4px;
 }
-.sidebar ul li a:hover,
-.sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
+.sidebar ul li a:hover, .sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
 
-/* Boton de cierre de sesion dentro del sidebar.
-   Hereda el boton base rojo de main.css. */
+/* Boton cerrar sesion del sidebar */
 #logout-btn {
     margin-top: 20px;
     width: 80%;
-    /* Cancela position:absolute heredada del boton del header
-       (el selector header > button no aplica aqui, pero por
-       seguridad lo forzamos estatico) */
     position: static !important;
     transform: none !important;
 }
 
-/* El contenido principal de los dashboards necesita
-   margen izquierdo para no quedar tapado por el toggle-btn */
+/* Contenido principal: padding-top para separar del header
+   y padding-left para no quedar tapado por el toggle-btn fijo */
 main {
     padding-top: 20px;
     padding-left: 60px;
+    padding-right: 20px;
 }

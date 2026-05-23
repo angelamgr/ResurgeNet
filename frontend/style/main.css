@@ -1,10 +1,5 @@
 /* ============================================================
    MAIN.CSS - Base global de ResurgeNet
-   ============================================================
-   Orden de carga en todos los HTML:
-     1. style/main.css
-     2. style/components.css
-     3. style/<pagina>.css
    ============================================================ */
 
 /* 1. VARIABLES */
@@ -38,17 +33,9 @@ body {
     font-family: var(--font-main);
     margin: 0;
 }
+main { text-align: center; }
 
-/* Centrado del contenido principal en todas las paginas */
-main {
-    text-align: center;
-}
-
-/* 3. BOTON BASE GLOBAL
-   Aplica a todos los <button> del proyecto excepto donde
-   se sobreescriba explicitamente (header, sidebar, modal, etc.).
-   Garantiza que los botones de la landing y los formularios
-   tengan el estilo corporativo rojo por defecto. */
+/* 3. BOTON BASE GLOBAL */
 button {
     font-family: var(--font-main);
     background-color: var(--color-accent);
@@ -64,11 +51,7 @@ button:focus {
     outline-offset: 2px;
 }
 
-/* 4. HEADER
-   position:relative para que los hijos con position:absolute
-   se ubiquen respecto al header y no al viewport.
-   min-height:90px garantiza que icono + texto de rol
-   no se solapen con el titulo central. */
+/* 4. HEADER */
 header {
     background-color: var(--color-primary);
     color: var(--color-white);
@@ -91,22 +74,26 @@ header img#logo {
     border-radius: 50px;
 }
 
-/* Icono de perfil esquina superior derecha */
+/* Icono de perfil esquina superior derecha.
+   width/height en CSS tienen prioridad sobre los atributos HTML.
+   Se usa 80px para que sea visible sin agrandar el header
+   (el header tiene min-height:90px, con 80px el icono encaja
+   con 5px de margen arriba y abajo gracias al centrado vertical). */
 header img#admin-icon {
     position: absolute;
     top: 50%;
     right: 3%;
     left: auto;
     transform: translateY(-50%);
-    border-radius: 50px;
-    width: 60px;
-    height: 60px;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
 }
 
-/* Nombre de rol debajo del icono de perfil */
+/* Nombre de rol justo debajo del icono de perfil */
 header p {
     position: absolute;
-    top: calc(50% + 32px);
+    top: calc(50% + 42px);
     right: 3%;
     left: auto;
     margin: 0;
@@ -115,9 +102,7 @@ header p {
     width: 80px;
 }
 
-/* Boton de accion en el header (Inicio Sesion, Registro...)
-   Sobreescribe el boton base: necesita position absolute
-   para anclarse a la esquina derecha del header. */
+/* Boton de accion en el header (Inicio Sesion, Registro...) */
 header > a > button,
 header > button {
     position: absolute;
@@ -147,9 +132,7 @@ footer {
 }
 footer p { margin-left: 30px; }
 
-/* 6. MODAL - definicion unica
-   El bloque completo del modal se define aqui una sola vez.
-   Antes estaba copiado en 5 archivos CSS de pagina. */
+/* 6. MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -175,7 +158,6 @@ footer p { margin-left: 30px; }
     border-bottom: 2px solid var(--color-border);
     padding-bottom: 10px;
 }
-/* El close-button sobreescribe el boton base: sin fondo rojo */
 .close-button {
     background: none !important;
     border: none;
@@ -190,38 +172,21 @@ footer p { margin-left: 30px; }
     width: auto;
     margin: 0;
 }
-.close-button:hover, .close-button:focus {
-    color: #d9534f;
-    outline: 2px solid #d9534f;
-    outline-offset: 2px;
-}
+.close-button:hover, .close-button:focus { color: #d9534f; outline: 2px solid #d9534f; outline-offset: 2px; }
 .error-list {
     list-style: none; padding: 0; margin: 0;
-    max-height: 250px; overflow-y: auto;
-    overflow-x: hidden; padding-right: 15px;
+    max-height: 250px; overflow-y: auto; overflow-x: hidden; padding-right: 15px;
 }
 .error-list li {
     margin-bottom: 10px; padding: 10px;
-    border-left: 5px solid #d9534f;
-    background-color: #fcebeb;
-    color: #a94442; border-radius: 6px;
-    font-size: 0.95em; line-height: 1.4;
+    border-left: 5px solid #d9534f; background-color: #fcebeb;
+    color: #a94442; border-radius: 6px; font-size: 0.95em; line-height: 1.4;
 }
-.error-list li strong {
-    color: var(--color-text-dark);
-    display: block; margin-bottom: 3px;
-}
+.error-list li strong { color: var(--color-text-dark); display: block; margin-bottom: 3px; }
 .modal.modal-success .modal-content h3 { border-bottom: 2px solid #c3e6cb; }
-.modal.modal-success .error-list li {
-    border-left: 5px solid #28a745;
-    background-color: #d4edda;
-    color: #155724;
-}
+.modal.modal-success .error-list li { border-left: 5px solid #28a745; background-color: #d4edda; color: #155724; }
 
-/* 7. FORM-GRID BASE
-   Grid de dos columnas compartido por registro, alta_productos
-   y mis_datos_consumidor. Cada CSS de pagina sobreescribe
-   solo el width del label si necesita uno diferente. */
+/* 7. FORM-GRID BASE */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -240,76 +205,51 @@ footer p { margin-left: 30px; }
     border-radius: var(--radius-input);
     font-size: 14px;
 }
-.form-grid input[type="file"] {
-    background-color: var(--color-white);
-    padding: 5px 15px; cursor: pointer;
-}
+.form-grid input[type="file"] { background-color: var(--color-white); padding: 5px 15px; cursor: pointer; }
 .form-grid input[type="file"]::file-selector-button {
-    background-color: var(--color-accent);
-    color: var(--color-white);
-    border: none; border-radius: 20px;
-    padding: 5px 12px; margin-right: 10px;
-    cursor: pointer; transition: background 0.3s;
+    background-color: var(--color-accent); color: var(--color-white);
+    border: none; border-radius: 20px; padding: 5px 12px;
+    margin-right: 10px; cursor: pointer; transition: background 0.3s;
 }
 .form-grid input[type="file"]::file-selector-button:hover { background-color: #a31100; }
 
-/* 8. FILAS PILDORA - listas de gestion
-   Compartido por gestion_alta, validador y listado_productos.
-   Los CSS de pagina solo anaden los colores e iconos especificos. */
+/* 8. FILAS PILDORA listas de gestion */
 .comercio-row {
-    background-color: var(--color-white);
-    color: var(--color-text-dark);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 75px;
-    margin-bottom: 15px;
-    border-radius: var(--radius-input);
-    box-shadow: var(--shadow-btn);
+    background-color: var(--color-white); color: var(--color-text-dark);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 75px; margin-bottom: 15px;
+    border-radius: var(--radius-input); box-shadow: var(--shadow-btn);
 }
 .comercio-nombre { font-weight: bold; font-size: 1.1rem; }
 .acciones { display: flex; align-items: center; gap: 0; }
-
-/* .btn-icon sobreescribe el boton base: sin fondo rojo,
-   sin border-radius pill, la forma circular viene del span interior */
 .btn-icon {
     width: 80px; height: 40px;
-    border: none;
-    background: none !important;
-    cursor: pointer;
-    display: flex; justify-content: center; align-items: center;
+    border: none; background: none !important;
+    cursor: pointer; display: flex; justify-content: center; align-items: center;
     transition: transform 0.2s;
-    border-radius: 0 !important;
-    padding: 0;
-    font-size: inherit;
-    font-family: inherit;
+    border-radius: 0 !important; padding: 0;
+    font-size: inherit; font-family: inherit;
 }
 .btn-icon span {
-    width: 32px; height: 32px;
-    border-radius: 50%;
+    width: 32px; height: 32px; border-radius: 50%;
     display: flex; justify-content: center; align-items: center;
-    color: var(--color-white);
-    font-size: 16px; font-weight: bold;
+    color: var(--color-white); font-size: 16px; font-weight: bold;
     box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3);
 }
 .btn-icon:hover { transform: scale(1.1); }
-
 .pagination-container {
     display: flex; justify-content: space-between;
     margin-top: 30px; padding: 0 20px;
     color: var(--color-text-black);
 }
 
-/* 9. TABLA HEADER - cabecera de las listas de gestion */
+/* 9. TABLA HEADER */
 .tabla-header {
     display: flex; justify-content: flex-end;
     padding-right: 75px; margin-bottom: 10px;
     font-weight: bold; color: var(--color-text-black); gap: 20px;
 }
-.header-label {
-    width: 80px; text-align: center;
-    font-size: 1.1rem; display: inline-block;
-}
+.header-label { width: 80px; text-align: center; font-size: 1.1rem; display: inline-block; }
 
 /* 10. UTILIDADES */
 .sr-only {

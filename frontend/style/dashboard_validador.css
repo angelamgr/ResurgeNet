@@ -1,10 +1,31 @@
-/* dashboard_validador.css - especifico del validador. .comercio-row, .btn-icon, .tabla-header vienen de main.css. */
+/* dashboard_validador.css - especifico del dashboard del validador.
+   .comercio-row, .btn-icon, .tabla-header vienen de main.css. */
+
+/* Cabecera de tabla con columna de motivo alineada a la izquierda */
 .tabla-header { justify-content: flex-start; padding: 0 75px; }
 .header-nombre { flex: 1; }
 .motivo-solicitud { width: 200px; text-align: left; font-size: 1.1rem; margin-right: 90px; }
 .motivo-solicitud-texto { width: 200px; text-align: center; }
+
+/* Botones de accion especificos */
 .btn-aceptar span { background-color: #2ecc71; }
 .btn-aceptar span::before { content: "\2713"; }
-.btn-denegar span { background-color: #e74c3c; }
+.btn-denegar span  { background-color: #e74c3c; }
 .btn-denegar span::before { content: "\2715"; }
-#logout-btn { margin-top: 130px; margin-left: 15px; }
+
+/* Boton cerrar sesion del validador.
+   Esta pagina no tiene sidebar, el logout esta suelto en el body.
+   Se posiciona de forma fija en la esquina inferior derecha
+   para que sea visible sin ocupar espacio vertical central
+   y sin tapar el footer fijo. */
+#logout-btn {
+    position: fixed;
+    bottom: 55px;    /* justo encima del footer fijo */
+    right: 20px;
+    width: auto;
+    padding: 10px 25px;
+    z-index: 500;
+    /* Cancela cualquier herencia de position:absolute del header */
+    transform: none !important;
+    top: auto !important;
+}
