@@ -24,6 +24,15 @@
     --shadow-card:  0 4px 15px rgba(0, 0, 0, 0.1);
     --shadow-modal: 0 10px 25px rgba(0, 0, 0, 0.3);
     --shadow-btn:   0 4px 6px rgba(0, 0, 0, 0.1);
+
+    /* Altura del header: usada por sidebar y toggle para
+       posicionarse exactamente debajo sin solaparlo.
+       Valor: padding-top(20) + line-height h1(~45px) + padding-bottom(20) = 85px
+       Se redondea a 90px para dar 5px de margen visual. */
+    --header-height: 90px;
+
+    /* Altura del footer fijo */
+    --footer-height: 45px;
 }
 
 /* 2. RESET MINIMO */
@@ -51,7 +60,9 @@ button:focus {
     outline-offset: 2px;
 }
 
-/* 4. HEADER */
+/* 4. HEADER
+   La altura se controla mediante --header-height.
+   Cambiar esa variable propaga el ajuste al sidebar y al toggle. */
 header {
     background-color: var(--color-primary);
     color: var(--color-white);
@@ -59,7 +70,7 @@ header {
     text-align: center;
     font-family: var(--font-main);
     position: relative;
-    min-height: 90px;
+    height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,11 +85,7 @@ header img#logo {
     border-radius: 50px;
 }
 
-/* Icono de perfil esquina superior derecha.
-   width/height en CSS tienen prioridad sobre los atributos HTML.
-   Se usa 80px para que sea visible sin agrandar el header
-   (el header tiene min-height:90px, con 80px el icono encaja
-   con 5px de margen arriba y abajo gracias al centrado vertical). */
+/* Icono de perfil esquina superior derecha */
 header img#admin-icon {
     position: absolute;
     top: 50%;
@@ -90,7 +97,7 @@ header img#admin-icon {
     height: 80px;
 }
 
-/* Nombre de rol justo debajo del icono de perfil */
+/* Nombre de rol debajo del icono */
 header p {
     position: absolute;
     top: calc(50% + 42px);
@@ -129,6 +136,7 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+    height: var(--footer-height);
 }
 footer p { margin-left: 30px; }
 

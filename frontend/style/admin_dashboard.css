@@ -1,10 +1,15 @@
-/* admin_dashboard.css - solo sidebar, toggle y logout. */
+/* admin_dashboard.css - sidebar, toggle y logout.
+   Usa --header-height y --footer-height de main.css
+   para posicionarse exactamente en el espacio entre ambos. */
 
+/* El sidebar ocupa exactamente el espacio entre header y footer.
+   top = --header-height (empieza justo donde termina el header)
+   bottom = --footer-height (termina justo donde empieza el footer) */
 .sidebar {
     width: 22.22vw;
     position: fixed;
-    top: 90px;
-    bottom: 50px;
+    top: var(--header-height);
+    bottom: var(--footer-height);
     left: -33.33vw;
     background-color: var(--color-primary-mid);
     padding: 0;
@@ -18,11 +23,13 @@
 }
 .sidebar.open { left: 0; }
 
-/* toggle-btn es un <p> en el HTML, no hereda boton base */
+/* toggle-btn es un <p> en el HTML (no un <button>), por lo que
+   no hereda el boton base de main.css y se estiliza directamente.
+   Se posiciona justo debajo del header usando --header-height. */
 .toggle-btn {
     position: fixed;
-    top: 95px;
-    left: 10px;
+    top: var(--header-height);
+    left: 0;
     background-color: var(--color-primary);
     color: var(--color-white);
     border: none;
@@ -31,7 +38,9 @@
     z-index: 1100;
     transition: opacity 0.3s;
     font-size: 1.2rem;
-    border-radius: 4px;
+    /* Sin border-radius en las esquinas superior izquierda
+       para que quede pegado al borde del header */
+    border-radius: 0 0 4px 0;
     width: auto;
     font-family: var(--font-main);
     margin: 0;
@@ -49,7 +58,7 @@
 }
 .sidebar ul li a:hover, .sidebar ul li a:focus { background-color: #3B6F89; outline: none; }
 
-/* Boton cerrar sesion del sidebar */
+/* Boton cerrar sesion dentro del sidebar */
 #logout-btn {
     margin-top: 20px;
     width: 80%;
@@ -57,8 +66,9 @@
     transform: none !important;
 }
 
-/* Contenido principal: padding-top para separar del header
-   y padding-left para no quedar tapado por el toggle-btn fijo */
+/* Contenido principal:
+   - padding-top para separar del borde superior
+   - padding-left para no quedar tapado por el toggle-btn fijo */
 main {
     padding-top: 20px;
     padding-left: 60px;
