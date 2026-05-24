@@ -25,14 +25,16 @@
     --shadow-modal: 0 10px 25px rgba(0, 0, 0, 0.3);
     --shadow-btn:   0 4px 6px rgba(0, 0, 0, 0.1);
 
-    /* Altura del header: usada por sidebar y toggle para
+    /* Altura exacta del header. Usada por sidebar y toggle para
        posicionarse exactamente debajo sin solaparlo.
-       Valor: padding-top(20) + line-height h1(~45px) + padding-bottom(20) = 85px
-       Se redondea a 90px para dar 5px de margen visual. */
+       padding-top(20) + h1 line-height(~50px) + padding-bottom(20) = ~90px */
     --header-height: 90px;
 
-    /* Altura del footer fijo */
-    --footer-height: 45px;
+    /* Altura exacta del footer fijo.
+       El footer tiene 2 <p> con margin:0, line-height:1.4 y font-size:16px:
+       padding-top(10) + p(22px) + gap(4px) + p(22px) + padding-bottom(10) = 68px.
+       Redondeado a 70px para dar margen de seguridad. */
+    --footer-height: 70px;
 }
 
 /* 2. RESET MINIMO */
@@ -60,9 +62,7 @@ button:focus {
     outline-offset: 2px;
 }
 
-/* 4. HEADER
-   La altura se controla mediante --header-height.
-   Cambiar esa variable propaga el ajuste al sidebar y al toggle. */
+/* 4. HEADER */
 header {
     background-color: var(--color-primary);
     color: var(--color-white);
@@ -75,8 +75,6 @@ header {
     align-items: center;
     justify-content: center;
 }
-
-/* Logo corporativo esquina superior izquierda */
 header img#logo {
     position: absolute;
     top: 50%;
@@ -84,8 +82,6 @@ header img#logo {
     transform: translateY(-50%);
     border-radius: 50px;
 }
-
-/* Icono de perfil esquina superior derecha */
 header img#admin-icon {
     position: absolute;
     top: 50%;
@@ -96,8 +92,6 @@ header img#admin-icon {
     width: 80px;
     height: 80px;
 }
-
-/* Nombre de rol debajo del icono */
 header p {
     position: absolute;
     top: calc(50% + 42px);
@@ -108,8 +102,6 @@ header p {
     text-align: center;
     width: 80px;
 }
-
-/* Boton de accion en el header (Inicio Sesion, Registro...) */
 header > a > button,
 header > button {
     position: absolute;
@@ -126,7 +118,10 @@ header > button {
     font-family: var(--font-main);
 }
 
-/* 5. FOOTER */
+/* 5. FOOTER
+   height fijado mediante --footer-height para que el sidebar
+   y el toggle sepan exactamente cuanto espacio ocupa.
+   Los <p> del footer tienen margin:0 para que no desborden. */
 footer {
     font-family: var(--font-main);
     background-color: var(--color-primary);
@@ -137,8 +132,12 @@ footer {
     bottom: 0;
     width: 100%;
     height: var(--footer-height);
+    overflow: hidden;
 }
-footer p { margin-left: 30px; }
+footer p {
+    margin: 0 0 4px 30px;
+    line-height: 1.4;
+}
 
 /* 6. MODAL */
 .modal {

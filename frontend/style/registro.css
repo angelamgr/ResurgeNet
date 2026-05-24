@@ -1,18 +1,14 @@
-/* registro.css - layout del formulario de registro.
-   Modal, .form-grid base, header y footer vienen de main.css. */
+/* registro.css - layout del formulario de registro. */
 
-/* Contenedor del formulario: centra horizontalmente
-   con padding lateral moderado para no comprimir el form-grid */
 .form-container {
     display: flex;
     justify-content: center;
-    padding: 30px 40px 80px 40px;
+    /* padding-bottom usando la variable del footer para que el formulario
+       nunca quede tapado por el footer fijo, independientemente de su altura */
+    padding: 30px 40px var(--footer-height) 40px;
     margin-top: 20px;
 }
 
-/* El formulario de registro necesita fondo azul igual que el login.
-   El selector apunta al <form> que es hijo directo de
-   section.form-container (estructura: main > section.form-container > form) */
 .form-container > form {
     background-color: var(--color-primary-mid);
     color: var(--color-white);
@@ -29,10 +25,8 @@
     color: var(--color-white);
 }
 
-/* Labels en blanco sobre fondo azul */
 .form-grid label { width: 150px; color: var(--color-white); }
 
-/* Boton de submit */
 .form-container > form button[type="submit"] {
     position: static;
     transform: none;
