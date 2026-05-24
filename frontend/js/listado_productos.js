@@ -2,11 +2,10 @@
 $(document).ready(function () {
 
     var paginaActual = 1;
-    var porPagina    = 5;
+    var porPagina    = 3; // <-- ELEMENTOS POR PAGINA
     var totalPaginas = 1;
 
     var id_comercio = localStorage.getItem('id_usuario_comercio');
-
     if (!id_comercio) {
         showModal('Error de sesión', 'No se detectó el ID del comercio. Por favor, inicia sesión de nuevo.');
         return;
@@ -45,36 +44,31 @@ $(document).ready(function () {
                 }
 
                 $.each(productos, function (i, producto) {
-                    var fila =
+                    contenedor.append(
                         '<div class="comercio-row" data-id="' + producto.id_producto + '">' +
                             '<span class="comercio-nombre">' + producto.nombre + '</span>' +
                             '<div class="acciones">' +
                                 '<button class="btn-icon btn-editar" title="Editar"><span></span></button>' +
                             '</div>' +
-                        '</div>';
-                    contenedor.append(fila);
+                        '</div>'
+                    );
                 });
 
                 actualizarBotones();
             },
             error: function (xhr) {
-                var msg = (xhr.responseJSON && xhr.responseJSON.error)
-                    ? xhr.responseJSON.error
-                    : 'Error al cargar los productos.';
-                showModal('Error', msg);
+                showModal('Error', (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : 'Error al cargar los productos.');
             }
         });
     }
 
     $(document).on('click', '.btn-editar:not(:disabled)', function () {
-        var id = $(this).closest('.comercio-row').data('id');
-        window.location.href = 'actualizar_producto.html?id=' + id;
+        window.location.href = 'actualizar_producto.html?id=' + $(this).closest('.comercio-row').data('id');
     });
 
     $('#btn-anterior').on('click', function () {
         if (paginaActual > 1) cargarProductosComercio(paginaActual - 1);
     });
-
     $('#btn-siguiente').on('click', function () {
         if (paginaActual < totalPaginas) cargarProductosComercio(paginaActual + 1);
     });

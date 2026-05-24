@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     var paginaActual = 1;
-    var porPagina    = 5;
+    var porPagina    = 3; // <-- ELEMENTOS POR PAGINA: cambia este valor para mostrar mas o menos
     var totalPaginas = 1;
 
     function actualizarBotones() {
@@ -75,7 +75,6 @@ $(document).ready(function () {
                             showModal('Éxito', 'Comercio activado correctamente', 'success');
                             elementoHTML.fadeOut(400, function () {
                                 $(this).remove();
-                                // Recarga la página actual por si quedan elementos
                                 cargarComerciosEspera(paginaActual);
                             });
                         },
@@ -94,7 +93,6 @@ $(document).ready(function () {
     $('#btn-anterior').on('click', function () {
         if (paginaActual > 1) cargarComerciosEspera(paginaActual - 1);
     });
-
     $('#btn-siguiente').on('click', function () {
         if (paginaActual < totalPaginas) cargarComerciosEspera(paginaActual + 1);
     });

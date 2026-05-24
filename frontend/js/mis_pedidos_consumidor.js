@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     var paginaActual = 1;
-    var porPagina    = 5;
+    var porPagina    = 3; // <-- ELEMENTOS POR PAGINA
     var totalPaginas = 1;
 
     var idUsuario = localStorage.getItem('id_usuario_comercio');
@@ -18,7 +18,7 @@ $(document).ready(function () {
             xhrFields: { withCredentials: true },
             success: function (data) {
                 totalPaginas = data.total_paginas || 1;
-                paginaActual = data.pagina_actual || 1;
+                paginaActual = data.pagina_actual  || 1;
 
                 var tbody = $('#lista-pedidos');
                 tbody.empty();
@@ -61,7 +61,6 @@ $(document).ready(function () {
     $('#btn-anterior').on('click', function () {
         if (paginaActual > 1) cargarPedidos(paginaActual - 1);
     });
-
     $('#btn-siguiente').on('click', function () {
         if (paginaActual < totalPaginas) cargarPedidos(paginaActual + 1);
     });

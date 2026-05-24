@@ -5,7 +5,7 @@ $(document).ready(function () {
     });
 
     var paginaActual = 1;
-    var porPagina    = 5;
+    var porPagina    = 3; // <-- ELEMENTOS POR PAGINA
     var totalPaginas = 1;
 
     function actualizarBotones() {
@@ -26,9 +26,9 @@ $(document).ready(function () {
             url:    API_BASE + '/gestion_consumidores?pagina=' + pagina + '&por_pagina=' + porPagina,
             method: 'GET',
             success: function (data) {
-                var usuarios     = Array.isArray(data) ? data : (data.usuarios || []);
-                totalPaginas     = data.total_paginas  || 1;
-                paginaActual     = data.pagina_actual   || pagina;
+                var usuarios  = Array.isArray(data) ? data : (data.usuarios || []);
+                totalPaginas  = data.total_paginas  || 1;
+                paginaActual  = data.pagina_actual   || pagina;
 
                 var contenedor = $('#lista-consumidores');
                 contenedor.empty();
@@ -85,7 +85,6 @@ $(document).ready(function () {
                         success: function (response) {
                             elementoAEliminar.fadeOut(400, function () { $(this).remove(); });
                             showModal('Eliminado', response.message || 'Usuario eliminado.', 'success');
-                            // Recarga la página actual para actualizar conteo
                             cargarConsumidores(paginaActual);
                         },
                         error: function (xhr) {
@@ -103,7 +102,6 @@ $(document).ready(function () {
     $('#btn-anterior').on('click', function () {
         if (paginaActual > 1) cargarConsumidores(paginaActual - 1);
     });
-
     $('#btn-siguiente').on('click', function () {
         if (paginaActual < totalPaginas) cargarConsumidores(paginaActual + 1);
     });
