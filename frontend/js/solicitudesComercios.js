@@ -1,23 +1,45 @@
 // Requiere: jquery, config.js, utils.js
 $(document).ready(function () {
-    cargarSolicitudes();
+    cargarSolicitudes(1);
 });
 
-function cargarSolicitudes() {
+var paginaActual = 1;
+var porPagina    = 5;
+var totalPaginas = 1;
+
+function actualizarBotones() {
+    if (paginaActual <= 1) {
+        $('#btn-anterior').addClass('nav-disabled').attr('disabled', true);
+    } else {
+        $('#btn-anterior').removeClass('nav-disabled').removeAttr('disabled');
+    }
+    if (paginaActual >= totalPaginas) {
+        $('#btn-siguiente').addClass('nav-disabled').attr('disabled', true);
+    } else {
+        $('#btn-siguiente').removeClass('nav-disabled').removeAttr('disabled');
+    }
+}
+
+function cargarSolicitudes(pagina) {
     $.ajax({
-        url:      API_BASE + '/solicitudes_comercios',
+        url:      API_BASE + '/solicitudes_comercios?pagina=' + pagina + '&por_pagina=' + porPagina,
         type:     'GET',
         dataType: 'json',
         success: function (data) {
+            var solicitudes = Array.isArray(data) ? data : (data.solicitudes || []);
+            totalPaginas    = data.total_paginas  || 1;
+            paginaActual    = data.pagina_actual   || pagina;
+
             var container = $('.comercios-container');
             container.empty();
 
-            if (data.length === 0) {
+            if (solicitudes.length === 0) {
                 container.append('<p class="lista-vacia">No hay solicitudes pendientes.</p>');
+                actualizarBotones();
                 return;
             }
 
-            $.each(data, function (i, solicitud) {
+            $.each(solicitudes, function (i, solicitud) {
                 var row = $('<div class="comercio-row">')
                     .append($('<span class="comercio-nombre">').text(solicitud.nombreComercio))
                     .append($('<span class="motivo-solicitud-texto">').text(solicitud.motivoSolicitud))
@@ -36,6 +58,8 @@ function cargarSolicitudes() {
                     );
                 container.append(row);
             });
+
+            actualizarBotones();
         },
         error: function () {
             showModal('Error', 'No se pudieron cargar las solicitudes');
@@ -63,6 +87,7 @@ $(document).on('click', '.btn-denegar', function () {
                     success: function (data) {
                         showModal('Éxito', data.message || 'Solicitud denegada', 'success');
                         fila.remove();
+                        cargarSolicitudes(paginaActual);
                     },
                     error: function (xhr) {
                         var msg = (xhr.responseJSON && xhr.responseJSON.error)
@@ -96,6 +121,7 @@ $(document).on('click', '.btn-aceptar', function () {
                     success: function (data) {
                         showModal('Éxito', data.message || 'Solicitud aceptada', 'success');
                         fila.remove();
+                        cargarSolicitudes(paginaActual);
                     },
                     error: function (xhr) {
                         var msg = (xhr.responseJSON && xhr.responseJSON.error)
@@ -107,4 +133,12 @@ $(document).on('click', '.btn-aceptar', function () {
             }
         }
     );
+});
+
+$(document).on('click', '#btn-anterior', function () {
+    if (paginaActual > 1) cargarSolicitudes(paginaActual - 1);
+});
+
+$(document).on('click', '#btn-siguiente', function () {
+    if (paginaActual < totalPaginas) cargarSolicitudes(paginaActual + 1);
 });

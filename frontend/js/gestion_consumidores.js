@@ -4,16 +4,38 @@ $(document).ready(function () {
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
 
-    function cargarConsumidores() {
+    var paginaActual = 1;
+    var porPagina    = 5;
+    var totalPaginas = 1;
+
+    function actualizarBotones() {
+        if (paginaActual <= 1) {
+            $('#btn-anterior').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-anterior').removeClass('nav-disabled').removeAttr('disabled');
+        }
+        if (paginaActual >= totalPaginas) {
+            $('#btn-siguiente').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-siguiente').removeClass('nav-disabled').removeAttr('disabled');
+        }
+    }
+
+    function cargarConsumidores(pagina) {
         $.ajax({
-            url:    API_BASE + '/gestion_consumidores',
+            url:    API_BASE + '/gestion_consumidores?pagina=' + pagina + '&por_pagina=' + porPagina,
             method: 'GET',
-            success: function (usuarios) {
+            success: function (data) {
+                var usuarios     = Array.isArray(data) ? data : (data.usuarios || []);
+                totalPaginas     = data.total_paginas  || 1;
+                paginaActual     = data.pagina_actual   || pagina;
+
                 var contenedor = $('#lista-consumidores');
                 contenedor.empty();
 
                 if (usuarios.length === 0) {
                     contenedor.append('<p class="lista-vacia">No hay consumidores registrados.</p>');
+                    actualizarBotones();
                     return;
                 }
 
@@ -27,6 +49,8 @@ $(document).ready(function () {
                         '</div>'
                     );
                 });
+
+                actualizarBotones();
             },
             error: function (xhr) {
                 var msg = (xhr.responseJSON && xhr.responseJSON.error)
@@ -47,8 +71,8 @@ $(document).ready(function () {
         }
 
         showModal(
-            'Confirmar Eliminaci\u00f3n',
-            '\u00bfEst\u00e1s seguro de que deseas eliminar al consumidor "' + nombre + '"?',
+            'Confirmar Eliminación',
+            '¿Estás seguro de que deseas eliminar al consumidor "' + nombre + '"?',
             'confirm',
             {
                 confirmText:  'Eliminar permanentemente',
@@ -61,11 +85,13 @@ $(document).ready(function () {
                         success: function (response) {
                             elementoAEliminar.fadeOut(400, function () { $(this).remove(); });
                             showModal('Eliminado', response.message || 'Usuario eliminado.', 'success');
+                            // Recarga la página actual para actualizar conteo
+                            cargarConsumidores(paginaActual);
                         },
                         error: function (xhr) {
                             var msg = (xhr.responseJSON && xhr.responseJSON.message)
                                 ? xhr.responseJSON.message
-                                : 'Error de comunicaci\u00f3n.';
+                                : 'Error de comunicación.';
                             showModal('Error', msg);
                         }
                     });
@@ -74,5 +100,13 @@ $(document).ready(function () {
         );
     });
 
-    cargarConsumidores();
+    $('#btn-anterior').on('click', function () {
+        if (paginaActual > 1) cargarConsumidores(paginaActual - 1);
+    });
+
+    $('#btn-siguiente').on('click', function () {
+        if (paginaActual < totalPaginas) cargarConsumidores(paginaActual + 1);
+    });
+
+    cargarConsumidores(paginaActual);
 });

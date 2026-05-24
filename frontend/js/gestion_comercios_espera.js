@@ -1,16 +1,38 @@
 // Requiere: jquery, config.js, utils.js
 $(document).ready(function () {
 
-    function cargarComerciosEspera() {
+    var paginaActual = 1;
+    var porPagina    = 5;
+    var totalPaginas = 1;
+
+    function actualizarBotones() {
+        if (paginaActual <= 1) {
+            $('#btn-anterior').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-anterior').removeClass('nav-disabled').removeAttr('disabled');
+        }
+        if (paginaActual >= totalPaginas) {
+            $('#btn-siguiente').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-siguiente').removeClass('nav-disabled').removeAttr('disabled');
+        }
+    }
+
+    function cargarComerciosEspera(pagina) {
         $.ajax({
-            url:    API_BASE + '/gestion_comercios_espera',
+            url:    API_BASE + '/gestion_comercios_espera?pagina=' + pagina + '&por_pagina=' + porPagina,
             method: 'GET',
-            success: function (comercios) {
+            success: function (data) {
+                var comercios = Array.isArray(data) ? data : (data.comercios || []);
+                totalPaginas  = data.total_paginas  || 1;
+                paginaActual  = data.pagina_actual   || pagina;
+
                 var contenedor = $('.grid-comercios');
                 contenedor.empty();
 
                 if (comercios.length === 0) {
                     contenedor.append('<p class="lista-vacia">No hay comercios pendientes de validación.</p>');
+                    actualizarBotones();
                     return;
                 }
 
@@ -24,8 +46,10 @@ $(document).ready(function () {
                         '</div>'
                     );
                 });
+
+                actualizarBotones();
             },
-            error: function (xhr) {
+            error: function () {
                 $('.grid-comercios').html('<p class="lista-vacia">Error al conectar con el servidor.</p>');
             }
         });
@@ -51,9 +75,8 @@ $(document).ready(function () {
                             showModal('Éxito', 'Comercio activado correctamente', 'success');
                             elementoHTML.fadeOut(400, function () {
                                 $(this).remove();
-                                if ($('.grid-comercios').children().length === 0) {
-                                    $('.grid-comercios').html('<p class="lista-vacia">No hay comercios pendientes de validación.</p>');
-                                }
+                                // Recarga la página actual por si quedan elementos
+                                cargarComerciosEspera(paginaActual);
                             });
                         },
                         error: function (xhr) {
@@ -68,5 +91,13 @@ $(document).ready(function () {
         );
     });
 
-    cargarComerciosEspera();
+    $('#btn-anterior').on('click', function () {
+        if (paginaActual > 1) cargarComerciosEspera(paginaActual - 1);
+    });
+
+    $('#btn-siguiente').on('click', function () {
+        if (paginaActual < totalPaginas) cargarComerciosEspera(paginaActual + 1);
+    });
+
+    cargarComerciosEspera(paginaActual);
 });

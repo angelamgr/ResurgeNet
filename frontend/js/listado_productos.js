@@ -1,29 +1,50 @@
 // Requiere: jquery, config.js, utils.js
 $(document).ready(function () {
-    cargarProductosComercio();
 
-    function cargarProductosComercio() {
-        var id_comercio = localStorage.getItem('id_usuario');
+    var paginaActual = 1;
+    var porPagina    = 5;
+    var totalPaginas = 1;
 
-        if (!id_comercio) {
-            showModal('Error de sesión', 'No se detectó el ID del comercio. Por favor, inicia sesión de nuevo.');
-            return;
+    var id_comercio = localStorage.getItem('id_usuario_comercio');
+
+    if (!id_comercio) {
+        showModal('Error de sesión', 'No se detectó el ID del comercio. Por favor, inicia sesión de nuevo.');
+        return;
+    }
+
+    function actualizarBotones() {
+        if (paginaActual <= 1) {
+            $('#btn-anterior').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-anterior').removeClass('nav-disabled').removeAttr('disabled');
         }
+        if (paginaActual >= totalPaginas) {
+            $('#btn-siguiente').addClass('nav-disabled').attr('disabled', true);
+        } else {
+            $('#btn-siguiente').removeClass('nav-disabled').removeAttr('disabled');
+        }
+    }
 
+    function cargarProductosComercio(pagina) {
         $.ajax({
-            url:      API_BASE + '/listado_productos_comercio/' + id_comercio,
+            url:      API_BASE + '/listado_productos_comercio/' + id_comercio + '?pagina=' + pagina + '&por_pagina=' + porPagina,
             type:     'GET',
             dataType: 'json',
-            success: function (response) {
+            success: function (data) {
+                var productos = Array.isArray(data) ? data : (data.productos || []);
+                totalPaginas  = data.total_paginas  || 1;
+                paginaActual  = data.pagina_actual   || pagina;
+
                 var contenedor = $('#contenedor-comercios');
                 contenedor.empty();
 
-                if (response.length === 0) {
+                if (productos.length === 0) {
                     contenedor.append('<p class="lista-vacia">No hay productos.</p>');
+                    actualizarBotones();
                     return;
                 }
 
-                $.each(response, function (i, producto) {
+                $.each(productos, function (i, producto) {
                     var fila =
                         '<div class="comercio-row" data-id="' + producto.id_producto + '">' +
                             '<span class="comercio-nombre">' + producto.nombre + '</span>' +
@@ -33,6 +54,8 @@ $(document).ready(function () {
                         '</div>';
                     contenedor.append(fila);
                 });
+
+                actualizarBotones();
             },
             error: function (xhr) {
                 var msg = (xhr.responseJSON && xhr.responseJSON.error)
@@ -47,4 +70,14 @@ $(document).ready(function () {
         var id = $(this).closest('.comercio-row').data('id');
         window.location.href = 'actualizar_producto.html?id=' + id;
     });
+
+    $('#btn-anterior').on('click', function () {
+        if (paginaActual > 1) cargarProductosComercio(paginaActual - 1);
+    });
+
+    $('#btn-siguiente').on('click', function () {
+        if (paginaActual < totalPaginas) cargarProductosComercio(paginaActual + 1);
+    });
+
+    cargarProductosComercio(paginaActual);
 });
