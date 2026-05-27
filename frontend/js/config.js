@@ -1,8 +1,9 @@
 // ============================================================
-// CONFIGURACIÓN GLOBAL DEL FRONTEND
+// CONFIGURACION GLOBAL DEL FRONTEND
 // ============================================================
-// Cambia esta URL si el backend cambia de host o puerto.
-// Este fichero debe cargarse ANTES que cualquier otro JS.
+// URL relativa: funciona en local y en produccion sin cambios.
+// El Nginx del frontend redirige /api al backend via proxy inverso.
+// Ver nginx/front.conf para la configuracion del proxy.
 // ============================================================
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = '/api';
