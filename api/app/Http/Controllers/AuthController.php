@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -69,47 +70,46 @@ class AuthController extends Controller
             $rutaImagen = null;
             if ($request->hasFile('imagen')) {
                 $file = $request->file('imagen');
-                $nombreImagen = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('uploads/productos'), $nombreImagen);
-                $rutaImagen = 'uploads/productos/' . $nombreImagen;
+
+                // Usar Storage::disk('public') que escribe en storage/app/public/
+                // y esta correctamente configurado con permisos en el contenedor.
+                // Se crea el subdirectorio productos si no existe.
+                $rutaImagen = $file->store('productos', 'public');
+
+                if (!$rutaImagen) {
+                    return response()->json(['message' => 'Error al guardar la imagen.'], 500);
+                }
             }
+
             $id_producto = DB::table('productos')->insertGetId([
-                'nombre' => $request->input('nombre'), 'tipo' => $request->input('tipo'),
-                'descripcion' => $request->input('descripcion'), 'precio' => $request->input('precio'),
-                'stock' => $request->input('stock'), 'imagen' => $rutaImagen, 'id_comercio' => $id_comercio,
+                'nombre'      => $request->input('nombre'),
+                'tipo'        => $request->input('tipo'),
+                'descripcion' => $request->input('descripcion'),
+                'precio'      => $request->input('precio'),
+                'stock'       => $request->input('stock'),
+                'imagen'      => $rutaImagen,
+                'id_comercio' => $id_comercio,
             ]);
+
             return response()->json(['message' => 'Producto registrado con éxito.', 'id_producto' => $id_producto], 201);
+
         } catch (\Exception $e) {
             \Log::error("Error al registrar producto: " . $e->getMessage());
             return response()->json(['message' => 'Error interno del servidor', 'error_real' => $e->getMessage()], 500);
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener consumidores con paginación (GET)
-    // -------------------------------------------------------
     public function getConsumers(Request $request) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total        = DB::table('usuario')->where('rol', 2)->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
-            $usuarios = DB::table('usuario')
-                ->where('rol', 2)
-                ->select('id_usuario', 'nombre')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'usuarios'      => $usuarios,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+            $usuarios = DB::table('usuario')->where('rol', 2)
+                ->select('id_usuario', 'nombre')->skip($offset)->take($porPagina)->get();
+            return response()->json(['usuarios' => $usuarios, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -127,31 +127,18 @@ class AuthController extends Controller
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener comercios en espera con paginación (GET)
-    // -------------------------------------------------------
     public function getComerciosEspera(Request $request) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total        = DB::table('solicitudComercio')->where('estado', 'aceptada')->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
-            $comercios = DB::table('solicitudComercio')
-                ->where('estado', 'aceptada')
+            $comercios = DB::table('solicitudComercio')->where('estado', 'aceptada')
                 ->select('id_solicitud', 'nombreComercio', 'email', 'ciudad')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'comercios'     => $comercios,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+                ->skip($offset)->take($porPagina)->get();
+            return response()->json(['comercios' => $comercios, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al obtener datos: ' . $e->getMessage()], 500);
         }
@@ -163,50 +150,35 @@ class AuthController extends Controller
             if (!$solicitud) return response()->json(['error' => 'Solicitud no encontrada'], 404);
             $idUsuario = DB::table('usuario')->where('usuario', $solicitud->nombreComercio)->value('id_usuario');
             if (!$idUsuario) return response()->json(['error' => 'Usuario no encontrado'], 404);
-            DB::table('comercio')->insert(['id' => $idUsuario, 'ciudad' => $solicitud->ciudad, 'direccion' => $solicitud->ciudad,
-                'n_telefono' => $solicitud->n_telefono, 'tiene_web' => $solicitud->tiene_web, 'estado' => 'activo', 'nombreComercio' => $solicitud->nombreComercio]);
+            DB::table('comercio')->insert([
+                'id' => $idUsuario, 'ciudad' => $solicitud->ciudad,
+                'direccion' => $solicitud->ciudad, 'n_telefono' => $solicitud->n_telefono,
+                'tiene_web' => $solicitud->tiene_web, 'estado' => 'activo',
+                'nombreComercio' => $solicitud->nombreComercio
+            ]);
             DB::table('solicitudComercio')->where('id_solicitud', $id)->update(['estado' => 'alta admin']);
-            $emailComercio  = $solicitud->email ?? null;
-            $nombreComercio = $solicitud->nombreComercio ?? 'Comercio';
-            if ($emailComercio) {
-                Mail::raw("Hola $nombreComercio,\nSu solicitud ha sido aceptada.\nUsuario: $solicitud->nombreComercio\nContraseña: $solicitud->nombreComercio\n\nSaludos,\nResurgeNet",
-                    function ($message) use ($emailComercio) { $message->to($emailComercio)->subject("Solicitud aceptada"); });
-            }
-            return response()->json(['message' => 'Comercio activado correctamente y email enviado'], 200);
+            return response()->json(['message' => 'Comercio activado correctamente'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener comercios dados de alta con paginación (GET)
-    // -------------------------------------------------------
     public function getComerciosGestion(Request $request) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total = DB::table('usuario')
                 ->join('comercio', 'usuario.id_usuario', '=', 'comercio.id')
-                ->whereIn('comercio.estado', ['activo', 'desactivado tmp'])
-                ->count();
+                ->whereIn('comercio.estado', ['activo', 'desactivado tmp'])->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
             $comercios = DB::table('usuario')
                 ->join('comercio', 'usuario.id_usuario', '=', 'comercio.id')
                 ->whereIn('comercio.estado', ['activo', 'desactivado tmp'])
                 ->select('usuario.id_usuario', 'comercio.nombreComercio', 'comercio.estado')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'comercios'     => $comercios,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+                ->skip($offset)->take($porPagina)->get();
+            return response()->json(['comercios' => $comercios, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
         }
@@ -243,43 +215,38 @@ class AuthController extends Controller
 
     public function solicitudComercio(Request $request){
         $validated = $request->validate([
-            'nombre_personal' => 'required|string|max:50', 'nombre_comercio' => 'required|string|max:50',
-            'email' => 'required|email|max:40', 'ciudad' => 'required|string|max:40',
-            'telefono' => 'required|string|max:10', 'motivo' => 'required|string|max:300', 'web_operativa' => 'required|in:si,no',
+            'nombre_personal' => 'required|string|max:50',
+            'nombre_comercio' => 'required|string|max:50',
+            'email'           => 'required|email|max:40',
+            'ciudad'          => 'required|string|max:40',
+            'telefono'        => 'required|string|max:10',
+            'motivo'          => 'required|string|max:300',
+            'web_operativa'   => 'required|in:si,no',
         ]);
         DB::table('solicitudComercio')->insert([
-            'nombrePropietario' => $validated['nombre_personal'], 'nombreComercio' => $validated['nombre_comercio'],
-            'email' => $validated['email'], 'ciudad' => $validated['ciudad'], 'n_telefono' => $validated['telefono'],
-            'motivoSolicitud' => $validated['motivo'], 'tiene_web' => $validated['web_operativa'] === 'si'
+            'nombrePropietario' => $validated['nombre_personal'],
+            'nombreComercio'    => $validated['nombre_comercio'],
+            'email'             => $validated['email'],
+            'ciudad'            => $validated['ciudad'],
+            'n_telefono'        => $validated['telefono'],
+            'motivoSolicitud'   => $validated['motivo'],
+            'tiene_web'         => $validated['web_operativa'] === 'si',
         ]);
         return response()->json(['message' => 'Tu solicitud ha sido enviada correctamente.']);
     }
 
-    // -------------------------------------------------------
-    // Obtener solicitudes de comercio con paginación (GET)
-    // -------------------------------------------------------
     public function getSolicitudesComercio(Request $request) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total        = DB::table('solicitudComercio')->where('estado', 'pendiente')->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
-            $solicitudes = DB::table('solicitudComercio')
-                ->where('estado', 'pendiente')
+            $solicitudes  = DB::table('solicitudComercio')->where('estado', 'pendiente')
                 ->select('id_solicitud', 'nombreComercio', 'motivoSolicitud')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'solicitudes'   => $solicitudes,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+                ->skip($offset)->take($porPagina)->get();
+            return response()->json(['solicitudes' => $solicitudes, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error: ' . $e->getMessage()], 500);
         }
@@ -290,12 +257,6 @@ class AuthController extends Controller
             DB::table('solicitudComercio')->where('id_solicitud', $id)->update(['estado' => 'denegada']);
             $solicitud = DB::table('solicitudComercio')->where('id_solicitud', $id)->first();
             if (!$solicitud) return response()->json(['error' => 'Solicitud no encontrada'], 404);
-            $emailComercio  = $solicitud->email ?? null;
-            $nombreComercio = $solicitud->nombreComercio ?? 'Comercio';
-            if ($emailComercio) {
-                Mail::raw("Hola $nombreComercio,\n\nLamentablemente su solicitud ha sido denegada.\n\nSaludos,\nResurgeNet",
-                    function ($message) use ($emailComercio) { $message->to($emailComercio)->subject("Solicitud denegada"); });
-            }
             return response()->json(['message' => 'Solicitud denegada correctamente']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -307,39 +268,30 @@ class AuthController extends Controller
             $solicitud = DB::table('solicitudComercio')->where('id_solicitud', $id)->first();
             if (!$solicitud) return response()->json(['error' => 'Solicitud no encontrada'], 404);
             DB::table('solicitudComercio')->where('id_solicitud', $id)->update(['estado' => 'aceptada']);
-            DB::table('usuario')->insert(['nombre' => $solicitud->nombrePropietario, 'usuario' => $solicitud->nombreComercio,
-                'password' => bcrypt($solicitud->nombreComercio), 'rol' => '3']);
+            DB::table('usuario')->insert([
+                'nombre'   => $solicitud->nombrePropietario,
+                'usuario'  => $solicitud->nombreComercio,
+                'password' => bcrypt($solicitud->nombreComercio),
+                'rol'      => '3',
+            ]);
             return response()->json(['message' => 'Solicitud aceptada y usuario creado correctamente']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener productos del comercio con paginación (GET)
-    // -------------------------------------------------------
     public function getProductosComercio(Request $request, $id_usuario) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total        = DB::table('productos')->where('id_comercio', $id_usuario)->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
-            $productos = DB::table('productos')
-                ->where('id_comercio', $id_usuario)
+            $productos    = DB::table('productos')->where('id_comercio', $id_usuario)
                 ->select('id_producto', 'nombre', 'id_comercio')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'productos'     => $productos,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+                ->skip($offset)->take($porPagina)->get();
+            return response()->json(['productos' => $productos, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -347,8 +299,11 @@ class AuthController extends Controller
 
     public function getInfoProducto($id_producto) {
         try {
-            return response()->json(DB::table('productos')->where('id_producto', $id_producto)
-                ->select('id_producto', 'nombre', 'tipo', 'descripcion', 'precio', 'stock', 'imagen')->first());
+            return response()->json(
+                DB::table('productos')->where('id_producto', $id_producto)
+                    ->select('id_producto', 'nombre', 'tipo', 'descripcion', 'precio', 'stock', 'imagen')
+                    ->first()
+            );
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -356,10 +311,20 @@ class AuthController extends Controller
 
     public function actualizarProducto(Request $request, $id_producto) {
         try {
-            $data = ['nombre' => $request->nombre, 'tipo' => $request->tipo, 'descripcion' => $request->descripcion,
-                'precio' => $request->precio, 'stock' => $request->stock];
+            $data = [
+                'nombre'      => $request->nombre,
+                'tipo'        => $request->tipo,
+                'descripcion' => $request->descripcion,
+                'precio'      => $request->precio,
+                'stock'       => $request->stock,
+            ];
             if ($request->hasFile('imagen')) {
-                $data['imagen'] = $request->file('imagen')->store('uploads/productos', 'public');
+                // Eliminar imagen anterior si existe
+                $productoActual = DB::table('productos')->where('id_producto', $id_producto)->value('imagen');
+                if ($productoActual && Storage::disk('public')->exists($productoActual)) {
+                    Storage::disk('public')->delete($productoActual);
+                }
+                $data['imagen'] = $request->file('imagen')->store('productos', 'public');
             }
             DB::table('productos')->where('id_producto', $id_producto)->update($data);
             return response()->json(['message' => 'Producto actualizado correctamente']);
@@ -368,9 +333,6 @@ class AuthController extends Controller
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener perfil completo del consumidor (GET)
-    // -------------------------------------------------------
     public function getPerfilConsumidor($id) {
         try {
             $perfil = DB::table('usuario')
@@ -389,10 +351,6 @@ class AuthController extends Controller
         }
     }
 
-    // -------------------------------------------------------
-    // Actualizar perfil del consumidor (PUT)
-    // Solo actualiza los campos que han cambiado realmente
-    // -------------------------------------------------------
     public function actualizarPerfilConsumidor(Request $request, $id) {
         try {
             $actual = DB::table('usuario')
@@ -412,11 +370,12 @@ class AuthController extends Controller
                 $fecha_sql = $date_object->format('Y-m-d');
             }
 
-            $datosUsuario = [];
+            $datosUsuario    = [];
+            $datosConsumidor = [];
+
             if ($request->input('nombre') !== $actual->nombre) $datosUsuario['nombre'] = $request->input('nombre');
             if ($request->input('password')) $datosUsuario['password'] = hash('sha256', $request->input('password'));
 
-            $datosConsumidor = [];
             if ($request->input('email')      !== $actual->email)      $datosConsumidor['email']      = $request->input('email');
             if ($request->input('ciudad')     !== $actual->ciudad)     $datosConsumidor['ciudad']     = $request->input('ciudad');
             if ($request->input('n_telefono') !== $actual->n_telefono) $datosConsumidor['n_telefono'] = $request->input('n_telefono');
@@ -437,35 +396,23 @@ class AuthController extends Controller
         }
     }
 
-    // -------------------------------------------------------
-    // Obtener pedidos del consumidor con paginación (GET)
-    // -------------------------------------------------------
     public function getPedidosConsumidor(Request $request, $id) {
         try {
-            $porPagina    = intval($request->query('por_pagina', 5));
+            $porPagina    = intval($request->query('por_pagina', 3));
             $paginaActual = intval($request->query('pagina', 1));
             $offset       = ($paginaActual - 1) * $porPagina;
-
             $total        = DB::table('pedido')->where('id_consumidor', $id)->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-
             $pedidos = DB::table('pedido')
                 ->join('comercio', 'pedido.id_comercio', '=', 'comercio.id')
                 ->where('pedido.id_consumidor', $id)
                 ->select('pedido.id_pedido', 'comercio.nombreComercio', 'pedido.estado', 'pedido.fecha')
                 ->orderBy('pedido.fecha', 'desc')
-                ->skip($offset)
-                ->take($porPagina)
-                ->get();
-
-            return response()->json([
-                'pedidos'       => $pedidos,
-                'total'         => $total,
-                'pagina_actual' => $paginaActual,
-                'total_paginas' => $totalPaginas,
-            ]);
+                ->skip($offset)->take($porPagina)->get();
+            return response()->json(['pedidos' => $pedidos, 'total' => $total,
+                'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
         } catch (\Exception $e) {
-            \Log::error('Error al obtener pedidos del consumidor: ' . $e->getMessage());
+            \Log::error('Error al obtener pedidos: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
