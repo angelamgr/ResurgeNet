@@ -10,18 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to your application's "home" route.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     */
     public function boot(): void
     {
         RateLimiter::for('api', function (Request $request) {
@@ -29,8 +19,16 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
+            // Sin prefijo 'api': las rutas de api.php se sirven
+            // exactamente como estan definidas (ej: /loginUser, /gestion_consumidores).
+            // El prefijo /api lo gestiona el frontend (API_BASE = '/api')
+            // y el proxy inverso Nginx lo reenvía completo al backend.
+            // Laravel recibe /api/loginUser y lo busca como /api/loginUser,
+            // que coincide con Route::post('/loginUser') bajo el grupo sin prefijo.
+            //
+            // ANTES tenia ->prefix('api') lo que causaba que Laravel
+            // buscara /api/api/loginUser (prefijo duplicado).
             Route::middleware('api')
-                ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
