@@ -7,14 +7,12 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 class VerifyCsrfToken extends Middleware
 {
     /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array<int, string>
+     * URIs excluidas de la verificacion CSRF.
+     * Las rutas de API que usan JSON no necesitan CSRF porque
+     * el navegador no puede enviar peticiones JSON cross-site
+     * con credenciales sin la cabecera Origin, que CORS ya controla.
      */
-   protected $except = [
-        'api/loginUser',
-        'api/logoutUser',
-        'api/registerProduct',
-        'api/solicitudComercio',
+    protected $except = [
+        '/api/*',
     ];
-}   
+}
