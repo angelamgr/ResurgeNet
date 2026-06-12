@@ -39,25 +39,53 @@ class AuthController extends Controller
     }
 
     public function registerConsumer(Request $request){
+        // Validar la fecha ANTES de abrir la transaccion para no
+        // iniciarla si los datos de entrada ya son incorrectos.
+        $fecha_raw = $request->input('fecha_nacimiento');
+        if (!$fecha_raw) {
+            return response()->json(['message' => 'La fecha de nacimiento es obligatoria.'], 400);
+        }
+        $date_object = \DateTime::createFromFormat('d/m/Y', $fecha_raw);
+        if ($date_object === false) {
+            return response()->json(['message' => 'Formato de fecha incorrecto. Use DD/MM/YYYY.'], 400);
+        }
+        if ($date_object >= new \DateTime('today')) {
+            return response()->json(['message' => 'La fecha de nacimiento no puede ser hoy ni una fecha futura.'], 400);
+        }
+        $fecha_sql = $date_object->format('Y-m-d');
+
         try {
-            $id_usuario = DB::table('usuario')->insertGetId([
-                'nombre' => $request->nombre, 'usuario' => $request->username,
-                'password' => hash('sha256', $request->password), 'rol' => 2,
-            ]);
-            if (!$id_usuario) return response()->json(['message' => 'Error al crear la cuenta de usuario.'], 500);
+            // DB::transaction() garantiza atomicidad:
+            // si cualquiera de los dos INSERT falla, el otro
+            // se deshace automaticamente (rollback).
+            // Esto evita que queden registros huerfanos en 'usuario'
+            // sin su correspondiente fila en 'consumidor'.
+            DB::transaction(function () use ($request, $fecha_sql) {
+                $id_usuario = DB::table('usuario')->insertGetId([
+                    'nombre'   => $request->nombre,
+                    'usuario'  => $request->username,
+                    'password' => hash('sha256', $request->password),
+                    'rol'      => 2,
+                ]);
 
-            $date_object = \DateTime::createFromFormat('d/m/Y', $request->input('fecha_nacimiento'));
-            if ($date_object === false) return response()->json(['message' => 'Formato de fecha incorrecto. Use DD/MM/YYYY.'], 400);
+                DB::table('consumidor')->insert([
+                    'id'         => $id_usuario,
+                    'direccion'  => $request->direccion,
+                    'ciudad'     => $request->ciudad,
+                    'cod_postal' => $request->cod_postal,
+                    'n_telefono' => $request->telefono,
+                    'email'      => $request->email,
+                    'fecha_nac'  => $fecha_sql,
+                ]);
+            });
 
-            DB::table('consumidor')->insert([
-                'id' => $id_usuario, 'direccion' => $request->direccion,
-                'ciudad' => $request->ciudad, 'cod_postal' => $request->cod_postal,
-                'n_telefono' => $request->telefono, 'email' => $request->email,
-                'fecha_nac' => $date_object->format('Y-m-d'),
+            return response()->json([
+                'message'  => 'Registro completado con éxito.',
+                'redirect' => 'inicio_sesion.html',
             ]);
-            return response()->json(['message' => 'Registro completado con éxito.', 'redirect' => 'inicio_sesion.html']);
+
         } catch (\Exception $e) {
-            \Log::error("Error de registro de consumidor: " . $e->getMessage());
+            \Log::error('Error de registro de consumidor: ' . $e->getMessage());
             return response()->json(['message' => 'Error interno del servidor.'], 500);
         }
     }
@@ -70,12 +98,7 @@ class AuthController extends Controller
             $rutaImagen = null;
             if ($request->hasFile('imagen')) {
                 $file = $request->file('imagen');
-
-                // Usar Storage::disk('public') que escribe en storage/app/public/
-                // y esta correctamente configurado con permisos en el contenedor.
-                // Se crea el subdirectorio productos si no existe.
                 $rutaImagen = $file->store('productos', 'public');
-
                 if (!$rutaImagen) {
                     return response()->json(['message' => 'Error al guardar la imagen.'], 500);
                 }
@@ -94,7 +117,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Producto registrado con éxito.', 'id_producto' => $id_producto], 201);
 
         } catch (\Exception $e) {
-            \Log::error("Error al registrar producto: " . $e->getMessage());
+            \Log::error('Error al registrar producto: ' . $e->getMessage());
             return response()->json(['message' => 'Error interno del servidor', 'error_real' => $e->getMessage()], 500);
         }
     }
@@ -106,7 +129,7 @@ class AuthController extends Controller
             $offset       = ($paginaActual - 1) * $porPagina;
             $total        = DB::table('usuario')->where('rol', 2)->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-            $usuarios = DB::table('usuario')->where('rol', 2)
+            $usuarios     = DB::table('usuario')->where('rol', 2)
                 ->select('id_usuario', 'nombre')->skip($offset)->take($porPagina)->get();
             return response()->json(['usuarios' => $usuarios, 'total' => $total,
                 'pagina_actual' => $paginaActual, 'total_paginas' => $totalPaginas]);
@@ -134,7 +157,7 @@ class AuthController extends Controller
             $offset       = ($paginaActual - 1) * $porPagina;
             $total        = DB::table('solicitudComercio')->where('estado', 'aceptada')->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-            $comercios = DB::table('solicitudComercio')->where('estado', 'aceptada')
+            $comercios    = DB::table('solicitudComercio')->where('estado', 'aceptada')
                 ->select('id_solicitud', 'nombreComercio', 'email', 'ciudad')
                 ->skip($offset)->take($porPagina)->get();
             return response()->json(['comercios' => $comercios, 'total' => $total,
@@ -151,10 +174,13 @@ class AuthController extends Controller
             $idUsuario = DB::table('usuario')->where('usuario', $solicitud->nombreComercio)->value('id_usuario');
             if (!$idUsuario) return response()->json(['error' => 'Usuario no encontrado'], 404);
             DB::table('comercio')->insert([
-                'id' => $idUsuario, 'ciudad' => $solicitud->ciudad,
-                'direccion' => $solicitud->ciudad, 'n_telefono' => $solicitud->n_telefono,
-                'tiene_web' => $solicitud->tiene_web, 'estado' => 'activo',
-                'nombreComercio' => $solicitud->nombreComercio
+                'id'             => $idUsuario,
+                'ciudad'         => $solicitud->ciudad,
+                'direccion'      => $solicitud->ciudad,
+                'n_telefono'     => $solicitud->n_telefono,
+                'tiene_web'      => $solicitud->tiene_web,
+                'estado'         => 'activo',
+                'nombreComercio' => $solicitud->nombreComercio,
             ]);
             DB::table('solicitudComercio')->where('id_solicitud', $id)->update(['estado' => 'alta admin']);
             return response()->json(['message' => 'Comercio activado correctamente'], 200);
@@ -172,7 +198,7 @@ class AuthController extends Controller
                 ->join('comercio', 'usuario.id_usuario', '=', 'comercio.id')
                 ->whereIn('comercio.estado', ['activo', 'desactivado tmp'])->count();
             $totalPaginas = $total > 0 ? ceil($total / $porPagina) : 1;
-            $comercios = DB::table('usuario')
+            $comercios    = DB::table('usuario')
                 ->join('comercio', 'usuario.id_usuario', '=', 'comercio.id')
                 ->whereIn('comercio.estado', ['activo', 'desactivado tmp'])
                 ->select('usuario.id_usuario', 'comercio.nombreComercio', 'comercio.estado')
@@ -319,7 +345,6 @@ class AuthController extends Controller
                 'stock'       => $request->stock,
             ];
             if ($request->hasFile('imagen')) {
-                // Eliminar imagen anterior si existe
                 $productoActual = DB::table('productos')->where('id_producto', $id_producto)->value('imagen');
                 if ($productoActual && Storage::disk('public')->exists($productoActual)) {
                     Storage::disk('public')->delete($productoActual);
