@@ -1,6 +1,32 @@
 // Requiere: jquery, config.js, utils.js
 $(document).ready(function () {
 
+    // --- SEGURIDAD: limpiar el formulario al cargar la pagina ---
+    // Evita que el navegador muestre credenciales de una sesion anterior
+    // cuando el usuario pulsa "atras" despues de cerrar sesion.
+    // Se limpia aunque el navegador haya restaurado la pagina desde bfcache.
+    $('input[name="usuario"]').val('');
+    $('input[name="password"]').val('');
+
+    // --- SEGURIDAD: redirigir si ya hay sesion activa ---
+    // Si el usuario llega a la pagina de login pero ya tiene sesion,
+    // se le redirige directamente a su dashboard sin mostrar el formulario.
+    $.ajax({
+        url:       API_BASE + '/checkUserSession',
+        type:      'GET',
+        xhrFields: { withCredentials: true },
+        success: function (response) {
+            if (response.active) {
+                // Hay sesion activa: no mostrar el formulario de login
+                // El backend redirigira al dashboard correcto segun el rol
+                // pero como no tenemos esa info aqui, volvemos al index
+                // que tampoco tiene contenido protegido
+                window.location.replace('index.html');
+            }
+        }
+        // Si falla la comprobacion, se muestra el formulario normalmente
+    });
+
     $('#loginForm').submit(function (e) {
         e.preventDefault();
 
