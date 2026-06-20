@@ -1,126 +1,136 @@
-# 🌟 ResurgeNet 🌟
+# ResurgeNet
 
-Bienvenido al repositorio de mi TFG. El proyecto se basa en la gestión de comercios afectados por una catástrofe natural.  
-Este proyecto está compuesto por un **frontend** con HTML, CSS y JS, un **backend** con PHP y el marco **Laravel**, y una base de datos **MySQL**, todo desplegado en **Docker**.
+Plataforma web para la gestión y recuperación de comercios locales afectados por catástrofes naturales. Permite a los comercios solicitar incorporación, gestionar sus productos y recibir pedidos de consumidores, con paneles diferenciados por rol de usuario.
+
+Desarrollado como Trabajo de Fin de Grado (TFG).
 
 ---
 
-## 📁 Estructura del Proyecto
+## Tecnologías
 
-```plaintext
-📂 
-├── 📁 api          # Código PHP del backend con Laravel
-├── 📁 frontend     # Archivos HTML, CSS, JS del frontend
-├── 📁 nginx        # Configuraciones de Nginx para frontend y backend
-├── 📁 db_data      # Datos persistentes de la base de datos MySQL
-├── docker-compose.yml # Orquesta todos los contenedores
+| Capa | Tecnología |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript, jQuery 3.6.0 |
+| Backend | PHP 8, Laravel 10 |
+| Base de datos | MySQL 8 |
+| Servidor web | Nginx |
+| Despliegue | Docker / Docker Compose |
+
+---
+
+## Estructura del repositorio
 
 ```
+ResurgeNet/
+├── api/                     # Backend Laravel
+│   ├── app/Http/
+│   │   ├── Controllers/     # AuthController: logica de negocio
+│   │   └── Middleware/      # VerificarSesion: autenticacion y control de roles
+│   ├── config/              # Configuracion Laravel (sesion, CORS, BD)
+│   ├── routes/api.php       # Rutas REST agrupadas por rol
+│   └── .env                 # Variables de entorno (no incluido en el repo)
+├── frontend/
+│   ├── js/
+│   │   ├── config.js        # URL base de la API
+│   │   ├── utils.js         # showModal, hideModal, inputError, inputOk
+│   │   ├── evitar_atras.js  # Proteccion contra navegacion por historial
+│   │   └── *.js             # Logica especifica de cada pagina
+│   ├── style/
+│   │   ├── main.css         # Variables CSS globales y estilos base
+│   │   ├── components.css   # Clases dinamicas (validacion de formularios, modal)
+│   │   └── *.css            # Estilos especificos de cada pagina
+│   └── *.html               # Paginas de la aplicacion
+├── nginx/
+│   ├── front.conf           # Nginx frontend: estaticos + proxy inverso a /api/
+│   └── back.conf            # Nginx backend: PHP-FPM + Laravel
+├── db_backup/               # Script SQL de inicializacion de la BD
+├── claude-integration/      # Documentacion tecnica del proceso de optimizacion
+└── docker-compose.yml       # Orquestacion de contenedores
+```
 
-### 📂 api
-Contiene el código PHP del backend. Utilizamos el framework Laravel para su desarrollo
+---
 
+## Roles del sistema
 
-### 📂 frontend
-Aquí van los archivos HTML, CSS, JS del frontend para el que usaremos la librería jQuery de JavaScrpit. Esta librería no hay que instalarla para usarla es suficiente añadirla como un script en los HTMLs.
+| Rol | Valor | Acceso |
+|---|---|---|
+| Administrador | 1 | Gestion de consumidores y comercios |
+| Consumidor | 2 | Perfil propio y pedidos |
+| Validador | 3 | Revision y aprobacion de solicitudes de comercios |
+| Comercio | 4 | Gestion de productos propios |
 
-### 📂 nginx
-Contiene las configuraciones de Nginx:
+---
 
-- front.conf → configura Nginx para servir el frontend estático en el puerto 3000.
+## Arquitectura de despliegue
 
-- back.conf → configura Nginx para hacer proxy hacia la API Laravel en el puerto 8080
+```
+Navegador (localhost:3000)
+    |
+    v
+frontend  [Nginx]  — sirve HTML/CSS/JS
+    |               — proxy inverso: /api/* -> backend
+    v
+backend   [Nginx]  — procesa PHP via FastCGI
+    v
+api       [PHP-FPM + Laravel]
+    v
+db        [MySQL]
+```
 
-### 📂 db_data
-Contiene los archivos de datos de la base de datos montada en MySQL, son archivos binarios que MySQL utiliza para gestionar los datos de cada base de datos. También contiene los archivos de configuración y logs.
+Frontend y backend comparten origen (`localhost:3000`) gracias al proxy inverso, eliminando problemas de CORS y permitiendo cookies de sesion sin configuracion adicional.
 
-He creado una BD dentro de MySQL para el proyecto, que se llama ResurgeNet. Para conectarnos a la BD tenemos que hacer los siguientes pasos:
+---
 
-    docker exec -it bd_new bash #Comando en la terminal para acceder a MySQL
-    mysql -u root -p #ponemos la contraseña rootpassword
-    USE ResurgeNet #una vez dentro de MySQL nos conectamos a la BD del proyecto
+## Puesta en marcha
 
-Este volumen asegura que los datos de la base de datos persistan incluso después de reiniciar los contenedores
+### Requisitos
 
-## 🚀 Despliegue con Docker
-Para ejecutar el proyecto, utiliza el archivo docker-compose.yml en la raíz del repositorio:
+- Docker Engine >= 24
+- Docker Compose >= 2
+
+### Arrancar
 
 ```bash
-docker-compose up --build
+git clone https://github.com/angelamgr/ResurgeNet.git
+cd ResurgeNet
+docker compose up -d
 ```
-Este comando construirá y ejecutará los contenedores para cada servicio (base de datos, backend y frontend).
 
-para parar ```CTRL-C```
+Acceder en `http://localhost:3000`.
 
-para borrar ```docker compose down```
+### Comandos utiles
 
-___
-## Docker
-
-### Instalación
-
-Para la instalación de docker seguir los pasos de la documentación oficial disponible en este [enlace](https://docs.docker.com/engine/install/)
-
-TLDR (Ubuntu):
 ```bash
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+docker compose ps                # estado de los contenedores
+docker compose logs -f           # logs en tiempo real
+docker compose up -d --build     # reconstruir tras cambios en Dockerfile
+docker compose down              # parar y eliminar contenedores
 ```
 
-Para comprobar si se ha instalado correctamente: ```docker run hello-world```.
+### Acceso a la base de datos
 
-En el caso de errores revisar el estado de servicio y habilitarlo de ser necesario:
-```
-# Ver el estado
-systemctl status dockerd
-
-# Activar
-systemctl start dockerd
-
-# Habilitar para que se auto inicie siempre
-systemctl enable dockerd
+```bash
+docker exec -it bd_new mysql -u root -prootpassword
 ```
 
+---
 
-### Configuración
-En el archivo ```docker-compose.yml``` vienen definidos los servicios que se van a desplegar y son los siguientes:
-- webapp (nginx)
-- db (mysql)
-- api (php)
+## Variables de entorno para produccion
 
-Para la información sobre la sintáxis consultar la documentación oficial disponible en este  [enlace](https://docs.docker.com/compose/)
+Crear `api/.env` con:
 
-### Despliegue
-Haremos uso del modulo docker compose para desplegar una serie de contenedores dependientes. Para ello abrir terminal
-en la raiz del proyecto y ejecutar ```docker compose up``` y para parar  CTRL-C
-
-TLDR:
-
-```
-# desplegar contenedores
-docker compose up
-
-#  elimnar contenedores junto con sus redes y volumenes
-docker compose down
-
-# si he cambiado la configuración -> reconstruir
-docker compose up --build
+```env
+APP_ENV=production
+APP_KEY=                    # php artisan key:generate
+DB_HOST=db
+DB_DATABASE=ResurgeNet
+DB_USERNAME=user
+DB_PASSWORD=password
+SESSION_SECURE_COOKIE=true
 ```
 
+---
 
+## Documentacion tecnica
+
+La carpeta `claude-integration/` contiene la documentacion del proceso de optimizacion del proyecto: auditorias, decisiones de arquitectura y registro de cambios. Punto de entrada: `claude-integration/indice-optimizaciones.md`.
