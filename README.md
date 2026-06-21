@@ -128,9 +128,3 @@ DB_USERNAME=user
 DB_PASSWORD=password
 SESSION_SECURE_COOKIE=true
 ```
-
----
-
-## Documentacion tecnica
-
-La carpeta `claude-integration/` contiene la documentacion del proceso de optimizacion del proyecto: auditorias, decisiones de arquitectura y registro de cambios. Punto de entrada: `claude-integration/indice-optimizaciones.md`.
